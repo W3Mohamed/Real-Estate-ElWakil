@@ -1,0 +1,272 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Proprietes - GROUPIMMO{% endblock %}
+
+{% block body %}
+    <!-- Même head que votre base.html.twig -->
+    <style>
+        .property-filter {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        .property-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .pagination li a {
+            transition: all 0.3s ease;
+        }
+        .pagination li.active a {
+            background-color: #004165;
+            color: white;
+        }
+    </style>
+
+    <!-- Hero Section -->
+    <section class="relative bg-[#004165] h-[70vh] text-white py-28">
+        <div class="absolute inset-0">
+            <img src="{{asset('img/biens.jpg')}}" 
+                alt="Agence immobilière GROUPIMMO" 
+                class="w-full h-full object-cover object-center">
+            <div class="absolute inset-0 bg-[#004165] opacity-70"></div>
+        </div>
+        <div class="container mx-auto px-6 text-center relative">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">Nos biens immobiliers</h1>
+            <p class="text-xl md:text-2xl max-w-2xl mx-auto">Découvrez notre sélection exclusive de propriétés en Algérie</p>
+        </div>
+        
+        <!-- Vague décorative -->
+        <div class="absolute bottom-0 left-0 right-0 z-20">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="w-full h-24 md:h-32">
+                <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V120H0V0Z" 
+                    opacity=".25" fill="white"></path>
+                <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V120H0V0Z" 
+                    opacity=".5" fill="white"></path>
+                <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V120H0V0Z" 
+                    fill="white"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Barre de recherche et filtres -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="property-filter p-6 rounded-xl shadow-lg">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <!-- Barre de recherche -->
+                    <div class="md:col-span-2">
+                        <div class="relative">
+                            <input type="text" placeholder="Rechercher par lieu, mot-clé..." 
+                                   class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
+                            <svg class="absolute left-3 top-3.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <!-- Filtre type de transaction -->
+                    <div>
+                        <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
+                            <option value="">Tous les types</option>
+                            <option value="vente">À vendre</option>
+                            <option value="location">À louer</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Bouton recherche -->
+                    <div>
+                        <button class="w-full bg-[#004165] text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-800 transition">
+                            Rechercher
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Filtres avancés -->
+                <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                        <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
+                            <option value="">Type de bien</option>
+                            <option value="appartement">Appartement</option>
+                            <option value="villa">Villa</option>
+                            <option value="studio">Studio</option>
+                            <option value="terrain">Terrain</option>
+                        </select>
+                    </div>
+                    <div>
+                        <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
+                            <option value="">Budget</option>
+                            <option value="1">Moins de 5M DZD</option>
+                            <option value="2">5M - 10M DZD</option>
+                            <option value="3">10M - 20M DZD</option>
+                            <option value="4">Plus de 20M DZD</option>
+                        </select>
+                    </div>
+                    <div>
+                        <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
+                            <option value="">Surface</option>
+                            <option value="1">Moins de 50m²</option>
+                            <option value="2">50m² - 100m²</option>
+                            <option value="3">100m² - 200m²</option>
+                            <option value="4">Plus de 200m²</option>
+                        </select>
+                    </div>
+                    <div>
+                        <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
+                            <option value="">Pièces</option>
+                            <option value="1">1-2 pièces</option>
+                            <option value="2">3-4 pièces</option>
+                            <option value="3">5+ pièces</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Liste des propriétés -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="text-2xl font-bold text-[#004165]">12 biens disponibles</h2>
+                <div class="flex items-center">
+                    <span class="mr-2 text-gray-600">Trier par :</span>
+                    <select class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
+                        <option>Plus récents</option>
+                        <option>Prix croissant</option>
+                        <option>Prix décroissant</option>
+                        <option>Surface</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Grille des propriétés -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Propriété 1 -->
+                <a href="{{path('detail')}}" class="property-card bg-white rounded-xl overflow-hidden border border-gray-100">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" 
+                             alt="Appartement à vendre" 
+                             class="w-full h-48 object-cover">
+                        <div class="absolute top-4 right-4 bg-[#fddb36] text-[#004165] font-bold px-3 py-1 rounded-md">À vendre</div>
+                        <div class="absolute bottom-4 left-4 bg-white text-[#004165] font-bold px-3 py-1 rounded-md flex items-center">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            24
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-[#004165] mb-2">Appartement spacieux</h3>
+                        <p class="text-gray-600 mb-3 flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            Alger Centre
+                        </p>
+                        <div class="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                </svg>
+                                3 pièces
+                            </span>
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+                                </svg>
+                                120 m²
+                            </span>
+                        </div>
+                        <div class="text-[#004165] font-bold text-xl">4 500 000 DZD</div>
+                    </div>
+                </a>
+                
+                <!-- Propriété 2 (exemple supplémentaire) -->
+                <a href="{{path('detail')}}" class="property-card bg-white rounded-xl overflow-hidden border border-gray-100">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" 
+                             alt="Villa moderne" 
+                             class="w-full h-48 object-cover">
+                        <div class="absolute top-4 right-4 bg-[#004165] text-white font-bold px-3 py-1 rounded-md">À louer</div>
+                        <div class="absolute bottom-4 left-4 bg-white text-[#004165] font-bold px-3 py-1 rounded-md flex items-center">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            18
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-[#004165] mb-2">Villa moderne avec piscine</h3>
+                        <p class="text-gray-600 mb-3 flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            Hydra, Alger
+                        </p>
+                        <div class="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                </svg>
+                                5 pièces
+                            </span>
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+                                </svg>
+                                250 m²
+                            </span>
+                        </div>
+                        <div class="text-[#004165] font-bold text-xl">120 000 DZD/mois</div>
+                    </div>
+                </a>
+                
+                <!-- Ajoutez ici les autres propriétés (4 de plus pour compléter la grille) -->
+                
+            </div>
+            
+            <!-- Pagination -->
+            <div class="mt-16 flex justify-center">
+                <ul class="pagination flex space-x-2">
+                    <li><a href="#" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">&laquo;</a></li>
+                    <li class="active"><a href="#" class="px-4 py-2 border border-gray-300 rounded-lg">1</a></li>
+                    <li><a href="#" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">2</a></li>
+                    <li><a href="#" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">3</a></li>
+                    <li><a href="#" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">&raquo;</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-[#f8f9fa]">
+        <div class="container mx-auto px-6">
+            <div class="bg-white rounded-xl shadow-xl overflow-hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    <div class="p-12 bg-[#004165] text-white">
+                        <h2 class="text-3xl font-bold mb-6">Vous avez un bien à vendre ou louer ?</h2>
+                        <p class="text-xl mb-8">Confiez-nous votre bien et bénéficiez de notre expertise pour une transaction rapide et au meilleur prix.</p>
+                        <a href="{{path('accueil')}}#vendre" class="inline-block bg-[#fddb36] text-[#004165] font-bold py-3 px-8 rounded-lg hover:bg-yellow-400 transition">
+                            Proposer un bien
+                        </a>
+                    </div>
+                    <div class="p-12">
+                        <h2 class="text-3xl font-bold text-[#004165] mb-6">Des questions sur nos biens ?</h2>
+                        <p class="text-xl text-gray-600 mb-8">Notre équipe est disponible pour vous conseiller et organiser des visites.</p>
+                        <a href="{{path('contact')}}" class="inline-block border-2 border-[#004165] text-[#004165] font-bold py-3 px-8 rounded-lg hover:bg-[#004165] hover:text-white transition">
+                            Contactez-nous
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

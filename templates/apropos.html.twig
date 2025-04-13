@@ -1,0 +1,440 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - À propos de GROUPIMMO{% endblock %}
+
+{% block body %}
+    <!-- Hero Section About -->
+    <section class="relative min-h-[500px] bg-gray-900 overflow-hidden">
+        <!-- Image de fond avec filtre -->
+        <div class="absolute inset-0 z-0">
+            <div class="relative h-full w-full overflow-hidden">
+                <img 
+                    src="{{asset('img/about-hero.jpg')}}"
+                    alt="Équipe GROUPIMMO" 
+                    class="w-full h-full object-cover object-center">
+                <div class="absolute inset-0 bg-[#004165] opacity-70"></div>
+            </div>
+        </div>
+
+        <!-- Contenu -->
+        <div class="relative z-10 container mx-auto px-16 py-32 flex flex-col items-center justify-center h-full text-center">
+            <h1 class="text-white text-4xl md:text-6xl font-bold leading-tight mb-6">
+                À propos de <span class="text-[#fddb36]">GROUPIMMO</span>
+            </h1>
+            <p class="text-white text-lg md:text-xl mb-8 max-w-2xl">
+                Découvrez notre histoire, notre mission et les valeurs qui guident notre agence immobilière internationale.
+            </p>
+        </div>
+
+        <!-- Vague décorative -->
+        <div class="absolute bottom-0 left-0 right-0 z-20">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="w-full h-24 md:h-32">
+                <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V120H0V0Z" 
+                    opacity=".25" fill="#fddb36"></path>
+                <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V120H0V0Z" 
+                    opacity=".5" fill="#fddb36"></path>
+                <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V120H0V0Z" 
+                    fill="#fddb36"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Notre Histoire -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <div class="lg:w-1/2">
+                    <div class="relative rounded-2xl overflow-hidden shadow-xl h-96">
+                        <img src="{{asset('img/history.jpg')}}" 
+                             alt="Fondation de GROUPIMMO" 
+                             class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#004165] to-transparent opacity-30"></div>
+                        <div class="absolute bottom-0 left-0 p-6 text-white">
+                            <p class="text-sm opacity-80">Fondation en 2010</p>
+                            <h3 class="text-xl font-bold">Nos débuts à Alger</h3>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/2">
+                    <h2 class="text-3xl font-bold text-[#004165] mb-6">Notre Histoire</h2>
+                    <p class="text-gray-700 mb-4">
+                        Fondée en 2010 à Alger, GROUPIMMO a commencé comme une petite agence immobilière locale avec une vision ambitieuse : révolutionner l'expérience immobilière en Algérie.
+                    </p>
+                    <p class="text-gray-700 mb-4">
+                        En 2015, nous avons ouvert notre première agence internationale à Bruxelles, suivie en 2018 par notre implantation au Luxembourg. Cette expansion nous a permis d'offrir à nos clients une expertise transfrontalière unique.
+                    </p>
+                    <p class="text-gray-700 mb-6">
+                        Aujourd'hui, avec plus de 10 ans d'expérience et des milliers de transactions réussies, nous continuons à innover tout en restant fidèles à nos valeurs fondatrices : intégrité, excellence et service client.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                            <div class="text-3xl font-bold text-[#004165] mb-2">10+</div>
+                            <div class="text-sm text-gray-600">Années d'expérience</div>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                            <div class="text-3xl font-bold text-[#004165] mb-2">3</div>
+                            <div class="text-sm text-gray-600">Pays d'implantation</div>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                            <div class="text-3xl font-bold text-[#004165] mb-2">5K+</div>
+                            <div class="text-sm text-gray-600">Clients satisfaits</div>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg text-center">
+                            <div class="text-3xl font-bold text-[#004165] mb-2">50+</div>
+                            <div class="text-sm text-gray-600">Collaborateurs</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Notre Mission -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-[#004165] mb-4">Notre Mission</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Transformer votre projet immobilier en une expérience simple, transparente et réussie.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition duration-300">
+                    <div class="w-14 h-14 bg-[#fddb36] rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-[#004165]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#004165] mb-3">Conseil Transfrontalier</h3>
+                    <p class="text-gray-600">
+                        Guider nos clients à travers les complexités des marchés immobiliers algérien, belge et luxembourgeois avec une expertise locale dans chaque pays.
+                    </p>
+                </div>
+                
+                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition duration-300">
+                    <div class="w-14 h-14 bg-[#fddb36] rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-[#004165]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#004165] mb-3">Sécurité des Transactions</h3>
+                    <p class="text-gray-600">
+                        Garantir des transactions sécurisées grâce à notre connaissance approfondie des réglementations locales et internationales.
+                    </p>
+                </div>
+                
+                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition duration-300">
+                    <div class="w-14 h-14 bg-[#fddb36] rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-[#004165]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#004165] mb-3">Réseau International</h3>
+                    <p class="text-gray-600">
+                        Mettre à profit notre réseau de partenaires internationaux pour offrir des opportunités uniques à nos clients.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nos Valeurs -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-[#004165] mb-4">Nos Valeurs</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Les principes fondamentaux qui guident chaque décision chez GROUPIMMO
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-[#004165] text-white p-8 rounded-xl">
+                    <div class="w-14 h-14 bg-[#fddb36] rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-[#004165]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Transparence</h3>
+                    <p>
+                        Nous croyons en des relations claires et honnêtes avec nos clients, sans frais cachés ni surprises.
+                    </p>
+                </div>
+                
+                <div class="bg-[#fddb36] text-[#004165] p-8 rounded-xl">
+                    <div class="w-14 h-14 bg-white rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-[#004165]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Innovation</h3>
+                    <p>
+                        Nous adoptons les dernières technologies pour simplifier et accélérer vos transactions immobilières.
+                    </p>
+                </div>
+                
+                <div class="bg-white border-2 border-[#004165] text-[#004165] p-8 rounded-xl">
+                    <div class="w-14 h-14 bg-[#004165] rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Confidentialité</h3>
+                    <p>
+                        Vos données et projets sont traités avec la plus grande discrétion et protection.
+                    </p>
+                </div>
+                
+                <div class="bg-[#004165] text-white p-8 rounded-xl">
+                    <div class="w-14 h-14 bg-[#fddb36] rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-[#004165]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Excellence</h3>
+                    <p>
+                        Nous visons l'excellence dans chaque service, de l'accueil à la finalisation de votre projet.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Notre Équipe -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-[#004165] mb-4">Notre Équipe</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Rencontrez les experts qui font la force de GROUPIMMO
+                </p>
+            </div>
+            
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Membre 1 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+                    <div class="h-64 overflow-hidden">
+                        <img src="{{asset('img/team1.jpg')}}" 
+                             alt="Karim Belaid - Directeur Général" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-[#004165]">Karim Belaid</h3>
+                        <p class="text-gray-600 mb-3">Directeur Général</p>
+                        <div class="flex space-x-3">
+                            <a href="#" class="text-gray-500 hover:text-[#004165] transition">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-[#004165] transition">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-[#004165] transition">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Membre 2 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+                    <div class="h-64 overflow-hidden">
+                        <img src="{{asset('img/team2.jpg')}}" 
+                             alt="Amel Khalfallah - Directrice Algérie" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-[#004165]">Amel Khalfallah</h3>
+                        <p class="text-gray-600 mb-3">Directrice Algérie</p>
+                        <div class="flex space-x-3">
+                            <a href="#" class="text-gray-500 hover:text-[#004165] transition">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-[#004165] transition">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-[#004165] transition">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Membre 3 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+                    <div class="h-64 overflow-hidden">
+                        <img src="{{asset('img/team3.jpg')}}" 
+                             alt="Jean Dubois - Directeur Europe" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-[#004165]">Jean Dubois</h3>
+                        <p class="text-gray-600 mb-3">Directeur Europe</p>
+                        <div class="flex space-x-3">
+                            <a href="#" class="text-gray-500 hover:text-[#004165] transition">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-[#004165] transition">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-[#004165] transition">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Membre 4 -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+                    <div class="h-64 overflow-hidden">
+                        <img src="{{asset('img/team4.jpg')}}" 
+                             alt="Leila Mansouri - Responsable Clientèle" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-[#004165]">Leila Mansouri</h3>
+                        <p class="text-gray-600 mb-3">Responsable Clientèle</p>
+                        <div class="flex space-x-3">
+                            <a href="#" class="text-gray-500 hover:text-[#004165] transition">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-[#004165] transition">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="text-gray-500 hover:text-[#004165] transition">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="{{path('contact')}}" class="inline-block bg-[#004165] text-white font-bold py-3 px-8 rounded-lg hover:bg-blue-800 transition hover:-translate-y-1">
+                    Rencontrer notre équipe
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Témoignages -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-[#004165] mb-4">Ce que disent nos clients</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Les avis de ceux qui nous ont fait confiance
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Témoignage 1 -->
+                <div class="bg-gray-50 p-8 rounded-xl relative">
+                    <div class="absolute -top-4 -left-4 w-10 h-10 bg-[#fddb36] rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 text-[#004165]" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-gray-700 mb-6 italic">
+                        "GROUPIMMO m'a aidé à trouver la maison parfaite à Alger. Leur connaissance du marché local et leur professionnalisme ont fait toute la différence."
+                    </p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                            <img src="{{asset('img/client1.jpg')}}" alt="Mohamed K." class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-[#004165]">Mohamed K.</h4>
+                            <p class="text-sm text-gray-600">Acheteur à Alger</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Témoignage 2 -->
+                <div class="bg-gray-50 p-8 rounded-xl relative">
+                    <div class="absolute -top-4 -left-4 w-10 h-10 bg-[#fddb36] rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 text-[#004165]" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-gray-700 mb-6 italic">
+                        "En tant qu'expatrié, vendre mon appartement à distance semblait compliqué. GROUPIMMO a tout géré de A à Z avec une transparence impeccable."
+                    </p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                            <img src="{{asset('img/client2.jpg')}}" alt="Sophie D." class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-[#004165]">Sophie D.</h4>
+                            <p class="text-sm text-gray-600">Vendeuse depuis la Belgique</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Témoignage 3 -->
+                <div class="bg-gray-50 p-8 rounded-xl relative">
+                    <div class="absolute -top-4 -left-4 w-10 h-10 bg-[#fddb36] rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 text-[#004165]" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                        </svg>
+                    </div>
+                    <p class="text-gray-700 mb-6 italic">
+                        "Leur équipe m'a accompagné dans l'achat d'un investissement locatif au Luxembourg. Leur réseau international est un vrai plus !"
+                    </p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                            <img src="{{asset('img/client3.jpg')}}" alt="Ali B." class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-[#004165]">Ali B.</h4>
+                            <p class="text-sm text-gray-600">Investisseur</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-16 bg-[#004165] text-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold mb-6">Prêt à concrétiser votre projet immobilier ?</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">
+                Que vous cherchiez à acheter, vendre ou louer, notre équipe est à votre disposition pour vous accompagner.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="{{path('contact')}}" class="bg-[#fddb36] text-[#004165] font-bold py-3 px-8 rounded-lg hover:bg-yellow-400 transition hover:-translate-y-1">
+                    Nous contacter
+                </a>
+                <a href="tel:+213123456789" class="border-2 border-white text-white font-bold py-3 px-8 rounded-lg hover:bg-white hover:text-[#004165] transition hover:-translate-y-1">
+                    Appeler maintenant
+                </a>
+            </div>
+        </div>
+    </section>
+{% endblock %}

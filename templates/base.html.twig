@@ -1,17 +1,279 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GROUPIMMO - Agence Immobilière en Algérie{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Police Spartan -->
+    <link href="https://fonts.googleapis.com/css2?family=Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- SplideJS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
+    
+    <style>
+        body {
+            font-family: 'Spartan', sans-serif;
+        }
+        
+        .hexagon-bg {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0L93.3013 25V75L50 100L6.69873 75V25L50 0Z' fill='%23fddb3610'/%3E%3C/svg%3E");
+            background-size: 60px;
+        }
+        
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+        
+        .property-card {
+            transition: transform 0.3s ease;
+        }
+        
+        .property-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+    
+    {% block stylesheets %}{% endblock %}
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-gray-900 shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 lg:px-6">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="{{path('accueil')}}" class="flex items-center">
+                        <div class="flex -space-x-2">
+                            {# <div class="w-8 h-8 bg-[#004165] rounded-sm transform rotate-45"></div>
+                            <div class="w-8 h-8 bg-[#fddb36] rounded-sm transform rotate-45"></div> #}
+                            <img src="{{asset('img/logo.png')}}" class="w-8 h-8" alt="GROUPIMMO Agence immobiliere en Algerie">
+                        </div>
+                        <span class="ml-3 text-2xl font-bold text-white">GROUP<span class="text-[#fddb36]">IMMO</span></span>
+                    </a>
+                </div>
+                
+                <!-- Menu principal -->
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a href="{{path('accueil')}}#vendre" class="text-white font-medium hover:text-[#fddb36] transition duration-300">Vendre</a>
+                    
+                    <!-- Dropdown Acheter -->
+                    <div class="relative group">
+                        <button class="text-white font-medium hover:text-[#fddb36] transition duration-300 flex items-center focus:outline-none group-hover:text-[#fddb36]">
+                            Acheter 
+                            <svg class="ml-1 w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="absolute hidden bg-[#004165] shadow-xl rounded-md mt-2 py-2 w-48 z-10 group-hover:block transition-all duration-300 ease-in-out transform origin-top scale-y-0 group-hover:scale-y-100">
+                            <a href="{{path('biens')}}?type=appartement" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">Appartement</a>
+                            <a href="{{path('biens')}}?type=villa" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">Villa</a>
+                            <a href="{{path('biens')}}?type=studio" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">Studio</a>
+                            <a href="{{path('biens')}}?type=terrain" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">Terrain</a>
+                            <a href="{{path('biens')}}?type=bureau" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">Bureau</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Dropdown Louer -->
+                    <div class="relative group">
+                        <button class="text-white font-medium hover:text-[#fddb36] transition duration-300 flex items-center focus:outline-none group-hover:text-[#fddb36]">
+                            Louer 
+                            <svg class="ml-1 w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="absolute hidden bg-[#004165] shadow-xl rounded-md mt-2 py-2 w-48 z-10 group-hover:block transition-all duration-300 ease-in-out transform origin-top scale-y-0 group-hover:scale-y-100">
+                            <a href="{{path('biens')}}?type=appartement" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">Appartement</a>
+                            <a href="{{path('biens')}}?type=villa" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">Villa</a>
+                            <a href="{{path('biens')}}?type=studio" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">Studio</a>
+                            <a href="{{path('biens')}}?type=bureau" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">Bureau</a>
+                        </div>
+                    </div>
+                    
+                    <a href="{{path('about')}}" class="text-white font-medium hover:text-[#fddb36] transition duration-300">À propos</a>                    
+                    <!-- Bouton Contact Direct -->
+                    <a href="{{path('contact')}}" class="bg-[#fddb36] text-[#004165] font-bold py-2 px-4 rounded-lg hover:bg-yellow-400 transition duration-300 hover:-translate-y-1">
+                        Nous contacter
+                    </a>
+                </div>
+                
+                <!-- Bouton mobile -->
+                <div class="lg:hidden">
+                    <button id="mobile-menu-button" class="text-white focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Menu mobile -->
+            <div id="mobile-menu" class="hidden lg:hidden pb-4">
+                <a href="{{path('accueil')}}#vendre" class="block py-3 text-white font-medium hover:text-[#fddb36] transition duration-200">Vendre</a>
+                
+                <div class="py-2">
+                    <button class="mobile-dropdown-btn flex items-center text-white font-medium w-full justify-between focus:outline-none hover:text-[#fddb36] py-2" data-target="mobile-buy-menu">
+                        Acheter
+                        <svg class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="mobile-dropdown-menu pl-4 hidden bg-[#004165] rounded-md my-1" id="mobile-buy-menu">
+                        <a href="{{path('biens')}}?type=appartement" class="block py-2 px-3 text-white hover:text-[#fddb36]">Appartement</a>
+                        <a href="{{path('biens')}}?type=villa" class="block py-2 px-3 text-white hover:text-[#fddb36]">Villa</a>
+                        <a href="{{path('biens')}}?type=studio" class="block py-2 px-3 text-white hover:text-[#fddb36]">Studio</a>
+                        <a href="{{path('biens')}}?type=terrain" class="block py-2 px-3 text-white hover:text-[#fddb36]">Terrain</a>
+                        <a href="{{path('biens')}}?type=bureau" class="block py-2 px-3 text-white hover:text-[#fddb36]">Bureau</a>
+                    </div>
+                </div>
+                
+                <div class="py-2">
+                    <button class="mobile-dropdown-btn flex items-center text-white font-medium w-full justify-between focus:outline-none hover:text-[#fddb36] py-2" data-target="mobile-rent-menu">
+                        Louer
+                        <svg class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="mobile-dropdown-menu pl-4 hidden bg-[#004165] rounded-md my-1" id="mobile-rent-menu">
+                        <a href="{{path('biens')}}?type=appartement" class="block py-2 px-3 text-white hover:text-[#fddb36]">Appartement</a>
+                        <a href="{{path('biens')}}?type=villa" class="block py-2 px-3 text-white hover:text-[#fddb36]">Villa</a>
+                        <a href="{{path('biens')}}?type=studio" class="block py-2 px-3 text-white hover:text-[#fddb36]">Studio</a>
+                        <a href="{{path('biens')}}?type=bureau" class="block py-2 px-3 text-white hover:text-[#fddb36]">Bureau</a>
+                    </div>
+                </div>
+                
+                <a href="{{path('about')}}" class="block py-3 text-white font-medium hover:text-[#fddb36] transition duration-200">À propos</a>
+                
+                <div class="mt-4">
+                    <a href="{{path('contact')}}" class="block text-center bg-[#fddb36] text-[#004165] font-bold py-2 px-4 rounded-lg hover:bg-yellow-400 transition duration-300">
+                        Nous contacter
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+    <!-- JavaScript pour le fonctionnement du menu -->
+    <script>
+        // Toggles the mobile menu visibility
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Setup all mobile dropdown menus
+        document.querySelectorAll('.mobile-dropdown-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const targetMenu = document.getElementById(targetId);
+                
+                // Toggle this specific dropdown
+                targetMenu.classList.toggle('hidden');
+                
+                // Rotate arrow icon
+                const arrow = this.querySelector('svg');
+                arrow.classList.toggle('rotate-180');
+            });
+        });
+    </script>
+
+    {% block body %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="bg-[#004165] text-white py-12 hexagon-bg">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <div class="flex -space-x-2">
+                            {# <div class="w-8 h-8 bg-white rounded-sm transform rotate-45"></div>
+                            <div class="w-8 h-8 bg-[#fddb36] rounded-sm transform rotate-45"></div> #}
+                            <img src="{{asset('img/logo.png')}}" class="w-8 h-8" alt="GROUPIMMO Agence immobiliere en Algerie">                           
+                        </div>
+                        <span class="ml-2 text-2xl font-bold text-white">GROUPEIMMO</span>
+                    </div>
+                    <p class="text-gray-300">Votre partenaire immobilier en Algérie, Belgique et Luxembourg.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4 text-[#fddb36]">Liens rapides</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{{path('accueil')}}" class="hover:text-[#fddb36] transition">Accueil</a></li>
+                        <li><a href="{{path('biens')}}" class="hover:text-[#fddb36] transition">Acheter</a></li>
+                        <li><a href="{{path('biens')}}" class="hover:text-[#fddb36] transition">Louer</a></li>
+                        <li><a href="{{path('accueil')}}#vendre" class="hover:text-[#fddb36] transition">Vendre</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4 text-[#fddb36]">Entreprise</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{{path('about')}}" class="hover:text-[#fddb36] transition">À propos</a></li>
+                        <li><a href="{{path('contact')}}" class="hover:text-[#fddb36] transition">Contact</a></li>
+                        <li><a href="#" class="hover:text-[#fddb36] transition">Carrières</a></li>
+                        <li><a href="#" class="hover:text-[#fddb36] transition">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4 text-[#fddb36]">Contact</h3>
+                    <address class="not-italic">
+                        <p class="mb-2">123 Rue des Immobilier</p>
+                        <p class="mb-2">Alger, Algérie</p>
+                        <p class="mb-2">Tél: +213 123 456 789</p>
+                        <p class="mb-2">Email: contact@groupimmo.dz</p>
+                    </address>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; {{ "now"|date("Y") }} GROUPIMMO. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SplideJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+
+    <script>
+        // Initialisation des carrousels
+        document.addEventListener('DOMContentLoaded', function() {
+            // Carrousel à vendre
+            if (document.getElementById('properties-for-sale')) {
+                new Splide('#properties-for-sale', {
+                    type: 'loop',
+                    perPage: 3,
+                    perMove: 1,
+                    gap: '1.5rem',
+                    breakpoints: {
+                        1024: { perPage: 2 },
+                        768: { perPage: 1 }
+                    }
+                }).mount();
+            }
+            
+            // Carrousel à louer
+            if (document.getElementById('properties-for-rent')) {
+                new Splide('#properties-for-rent', {
+                    type: 'loop',
+                    perPage: 3,
+                    perMove: 1,
+                    gap: '1.5rem',
+                    breakpoints: {
+                        1024: { perPage: 2 },
+                        768: { perPage: 1 }
+                    }
+                }).mount();
+            }
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
 </html>
