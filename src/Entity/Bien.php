@@ -29,12 +29,6 @@ class Bien
     #[ORM\JoinColumn(nullable: false)]
     private ?Type $type = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $wilaya = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $commune = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $adresse = null;
 
@@ -61,6 +55,14 @@ class Bien
      */
     #[ORM\OneToMany(targetEntity: Images::class, mappedBy: 'Bien', orphanRemoval: true)]
     private Collection $images;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Wilaya $wilaya = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Commune $commune = null;
 
     public function __construct()
     {
@@ -117,30 +119,6 @@ class Bien
     public function setType(?Type $type): static
     {
         $this->type = $type;
-
-        return $this;
-    }
-
-    public function getWilaya(): ?string
-    {
-        return $this->wilaya;
-    }
-
-    public function setWilaya(string $wilaya): static
-    {
-        $this->wilaya = $wilaya;
-
-        return $this;
-    }
-
-    public function getCommune(): ?string
-    {
-        return $this->commune;
-    }
-
-    public function setCommune(string $commune): static
-    {
-        $this->commune = $commune;
 
         return $this;
     }
@@ -261,6 +239,30 @@ class Bien
                 $image->setBien(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getWilaya(): ?Wilaya
+    {
+        return $this->wilaya;
+    }
+
+    public function setWilaya(?Wilaya $wilaya): static
+    {
+        $this->wilaya = $wilaya;
+
+        return $this;
+    }
+
+    public function getCommune(): ?Commune
+    {
+        return $this->commune;
+    }
+
+    public function setCommune(?Commune $commune): static
+    {
+        $this->commune = $commune;
 
         return $this;
     }
