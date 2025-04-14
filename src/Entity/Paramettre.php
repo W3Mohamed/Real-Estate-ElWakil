@@ -78,7 +78,7 @@ class Paramettre
         return $this->email;
     }
 
-    public function setEamil(string $email): static
+    public function setEmail(string $email): static
     {
         $this->email = $email;
 

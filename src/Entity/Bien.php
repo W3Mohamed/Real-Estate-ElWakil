@@ -56,9 +56,16 @@ class Bien
     #[ORM\OneToMany(targetEntity: Equipement::class, mappedBy: 'bien')]
     private Collection $equipements;
 
+    /**
+     * @var Collection<int, Images>
+     */
+    #[ORM\OneToMany(targetEntity: Images::class, mappedBy: 'Bien', orphanRemoval: true)]
+    private Collection $images;
+
     public function __construct()
     {
         $this->equipements = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -222,6 +229,36 @@ class Bien
             // set the owning side to null (unless already changed)
             if ($equipement->getBien() === $this) {
                 $equipement->setBien(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Images>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Images $image): static
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setBien($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Images $image): static
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getBien() === $this) {
+                $image->setBien(null);
             }
         }
 
