@@ -1,0 +1,8 @@
+easy_admin:
+    site_name: 'GROUPIMMO'
+    design:
+        assets:
+            js:
+                - 'build/admin/app.js'
+        form_theme:
+            - '@EasyAdmin/crud/form_theme.html.twig'

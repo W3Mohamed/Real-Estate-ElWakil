@@ -45,12 +45,6 @@ class Bien
     private ?string $description = null;
 
     /**
-     * @var Collection<int, Equipement>
-     */
-    #[ORM\OneToMany(targetEntity: Equipement::class, mappedBy: 'bien')]
-    private Collection $equipements;
-
-    /**
      * @var Collection<int, Images>
      */
     #[ORM\OneToMany(targetEntity: Images::class, mappedBy: 'Bien', orphanRemoval: true)]
@@ -64,10 +58,13 @@ class Bien
     #[ORM\JoinColumn(nullable: false)]
     private ?Commune $commune = null;
 
+    // #[ORM\OneToMany(targetEntity: Equipement::class, mappedBy: 'bien', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    // private Collection $equipements;
+
     public function __construct()
     {
-        $this->equipements = new ArrayCollection();
         $this->images = new ArrayCollection();
+        // $this->equipements = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -182,36 +179,32 @@ class Bien
 
         return $this;
     }
+    // /**
+    //  * @return Collection<int, Equipement>
+    //  */
+    // public function getEquipements(): Collection
+    // {
+    //     return $this->equipements;
+    // }
 
-    /**
-     * @return Collection<int, Equipement>
-     */
-    public function getEquipements(): Collection
-    {
-        return $this->equipements;
-    }
+    // public function addEquipement(Equipement $equipement): static
+    // {
+    //     if (!$this->equipements->contains($equipement)) {
+    //         $this->equipements->add($equipement);
+    //         $equipement->setBien($this);
+    //     }
+    //     return $this;
+    // }
 
-    public function addEquipement(Equipement $equipement): static
-    {
-        if (!$this->equipements->contains($equipement)) {
-            $this->equipements->add($equipement);
-            $equipement->setBien($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEquipement(Equipement $equipement): static
-    {
-        if ($this->equipements->removeElement($equipement)) {
-            // set the owning side to null (unless already changed)
-            if ($equipement->getBien() === $this) {
-                $equipement->setBien(null);
-            }
-        }
-
-        return $this;
-    }
+    // public function removeEquipement(Equipement $equipement): static
+    // {
+    //     if ($this->equipements->removeElement($equipement)) {
+    //         if ($equipement->getBien() === $this) {
+    //             $equipement->setBien(null);
+    //         }
+    //     }
+    //     return $this;
+    // }
 
     /**
      * @return Collection<int, Images>
