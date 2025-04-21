@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Contact;
 use App\Entity\Proposition;
+use App\Repository\ParamettreRepository;
 use App\Repository\TypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,11 +15,13 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HomeController extends AbstractController
 {
     #[Route('/', name: 'accueil')]
-    public function index(TypeRepository $typeRepository): Response
+    public function index(TypeRepository $typeRepository,ParamettreRepository $paramettreRepository): Response
     {
         $types = $typeRepository->findAll();
+        $parametres = $paramettreRepository->find(1); // Récupère l'entrée avec id=1
         return $this->render('index.html.twig',[
-            'types' => $types
+            'types' => $types,
+            'parametres' => $parametres
         ]);
     }
 
@@ -58,11 +61,14 @@ final class HomeController extends AbstractController
     }
 
     #[Route('/contact', name: 'contact')]
-    public function contact(TypeRepository $typeRepository): Response
+    public function contact(TypeRepository $typeRepository,ParamettreRepository $paramettreRepository): Response
     {
         $types = $typeRepository->findAll();
+        $parametres = $paramettreRepository->find(1); // Récupère l'entrée avec id=1
+
         return $this->render('contact.html.twig',[
-            'types' => $types
+            'types' => $types,
+            'parametres' => $parametres
         ]);
     }
 
