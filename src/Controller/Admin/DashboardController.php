@@ -3,7 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Bien;
+use App\Entity\Contact;
 use App\Entity\Paramettre;
+use App\Entity\Proposition;
 use App\Entity\Type;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -38,9 +40,10 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Bien', 'fas fa-list', Bien::class);
+        yield MenuItem::linkToCrud('Bien', 'fas fa-home', Bien::class);
         yield MenuItem::linkToCrud('Type', 'fas fa-list', Type::class);
-       // yield MenuItem::linkToCrud('Paramètres', 'fas fa-cog', Paramettre::class);
+        yield MenuItem::linkToCrud('Propositions', 'fas fa-envelope', Proposition::class);
+        yield MenuItem::linkToCrud('Contacts', 'fas fa-address-book', Contact::class);
         yield MenuItem::linkToCrud('Paramètres', 'fas fa-cog', Paramettre::class)
             ->setAction('edit')
             ->setEntityId(1); // ID de votre unique entrée

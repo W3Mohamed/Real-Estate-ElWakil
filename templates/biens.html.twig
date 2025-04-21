@@ -89,10 +89,9 @@
                     <div>
                         <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
                             <option value="">Type de bien</option>
-                            <option value="appartement">Appartement</option>
-                            <option value="villa">Villa</option>
-                            <option value="studio">Studio</option>
-                            <option value="terrain">Terrain</option>
+                            {% for type in types %}
+                                <option value="{{ type.id }}">{{ type.libelle }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div>

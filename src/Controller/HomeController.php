@@ -94,9 +94,12 @@ final class HomeController extends AbstractController
     }
 
     #[Route('/biens', name: 'biens')]
-    public function biens(): Response
+    public function biens(TypeRepository $typeRepository): Response
     {
-        return $this->render('biens.html.twig');
+        $types = $typeRepository->findAll();
+        return $this->render('biens.html.twig',[
+            'types' => $types
+        ]);
     }
 
     #[Route('/detail', name: 'detail')]

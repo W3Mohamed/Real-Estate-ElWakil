@@ -1,0 +1,6 @@
+{# templates/admin/fields/type_libelle.html.twig #}
+{% if field.value %}
+    <span class="badge badge-secondary">{{ field.value }}</span>
+{% else %}
+    <span class="text-muted">Non spécifié</span>
+{% endif %}
