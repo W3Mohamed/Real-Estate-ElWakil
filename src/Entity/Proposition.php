@@ -23,7 +23,8 @@ class Proposition
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[ORM\ManyToOne(cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Type $type = null;
 
     #[ORM\Column(length: 255)]

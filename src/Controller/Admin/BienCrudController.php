@@ -3,10 +3,12 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Bien;
+use App\Repository\CommuneRepository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
@@ -24,9 +26,12 @@ class BienCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield TextField::new('libelle', 'Libellé');
-        yield IntegerField::new('prix', 'Prix');
-        yield TextField::new('transaction', 'Type de transaction');
-        
+        yield IntegerField::new('prix', 'Prix'); 
+        yield ChoiceField::new('transaction')
+            ->setChoices([
+                'Vente' => 'vente',
+                'Location' => 'location',
+            ]);
         yield AssociationField::new('type', 'Type de bien')
             ->setFormTypeOption('choice_label', 'libelle')
             ->setFormTypeOption('query_builder', function (EntityRepository $er): QueryBuilder {
@@ -44,12 +49,15 @@ class BienCrudController extends AbstractCrudController
 
         yield AssociationField::new('commune')
             ->setFormTypeOptions([
-                'choices' => [],
                 'choice_label' => 'nom',
                 'placeholder' => 'Choisissez d\'abord une wilaya',
+                'query_builder' => function(CommuneRepository $repo) {
+            return $repo->createQueryBuilder('c')
+                ->where('c.id = 0'); // Retourne volontairement un résultat vide initial
+        },
                 'attr' => [
                     'data-widget' => 'commune-selector',
-                    'disabled' => true
+                    //'disabled' => true
                 ]
             ]);
 
