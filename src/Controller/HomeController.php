@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Contact;
 use App\Entity\Proposition;
 use App\Repository\TypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -57,9 +58,39 @@ final class HomeController extends AbstractController
     }
 
     #[Route('/contact', name: 'contact')]
-    public function contact(): Response
+    public function contact(TypeRepository $typeRepository): Response
     {
-        return $this->render('contact.html.twig');
+        $types = $typeRepository->findAll();
+        return $this->render('contact.html.twig',[
+            'types' => $types
+        ]);
+    }
+
+    #[Route('/contact/envoyer', name: 'contacter')]
+    public function contacter(Request $request, EntityManagerInterface $entityManager, TypeRepository $typeRepository): Response
+    {
+        $data = $request->request->all();
+         // Validation minimale
+        if (empty($data['phone']) && empty($data['email'])) {
+            $this->addFlash('error', 'Le N° de téléphone ou l\'email sont obligatoire');
+            return $this->redirectToRoute('contact', ['_fragment' => 'contact-form']);
+        }
+    
+        // Création et enregistrement du contact
+        $contact = new Contact();
+        $contact->setPrenom($data['firstname'])
+                ->setNom($data['lastname'])
+                ->setEmail($data['email'])
+                ->setTelephone($data['phone'])
+                ->setSujet($data['subject'])
+                ->setMessage($data['message']);
+    
+        $entityManager->persist($contact);
+        $entityManager->flush();
+    
+        // Redirection avec message de succès
+        $this->addFlash('success', 'Votre message a bien été envoyé !');
+        return $this->redirectToRoute('contact', ['_fragment' => 'contact-form']);
     }
 
     #[Route('/biens', name: 'biens')]
