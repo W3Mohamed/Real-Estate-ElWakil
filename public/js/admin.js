@@ -5,71 +5,64 @@ document.addEventListener('DOMContentLoaded', function() {
     const wilayaSelect = document.querySelector('select[name$="[wilaya]"]');
     const communeSelect = document.querySelector('select[name$="[commune]"]');
     
-    console.log('Wilaya select found:', wilayaSelect);
-    console.log('Commune select found:', communeSelect);
-    
     if (wilayaSelect && communeSelect) {
-        // Initialiser avec une option vide
-        communeSelect.innerHTML = '<option value="">Sélectionnez une wilaya d\'abord</option>';
-        communeSelect.disabled = true;
+        // On récupère les instances Tom Select
+        const wilayaTomSelect = wilayaSelect.tomselect;
+        const communeTomSelect = communeSelect.tomselect;
         
-        wilayaSelect.addEventListener('change', async function() {
-            const wilayaId = this.value;
+        if (!wilayaTomSelect || !communeTomSelect) {
+            console.error('Tom Select non trouvé');
+            return;
+        }
+        
+        // Désactiver le sélecteur de commune par défaut
+        communeTomSelect.disable();
+        communeTomSelect.clear();
+        communeTomSelect.clearOptions();
+        communeTomSelect.addOption({value: '', text: 'Sélectionnez une wilaya d\'abord'});
+        
+        // Écouter le changement de wilaya via Tom Select
+        wilayaTomSelect.on('change', async function(wilayaId) {
             console.log('Wilaya changed to:', wilayaId);
             
-            communeSelect.innerHTML = '<option value="">Chargement...</option>';
-            communeSelect.disabled = true;
+            // Désactiver et vider le sélecteur de commune pendant le chargement
+            communeTomSelect.disable();
+            communeTomSelect.clear();
+            communeTomSelect.clearOptions();
+            communeTomSelect.addOption({value: '', text: 'Chargement...'});
             
             if (!wilayaId) {
-                communeSelect.innerHTML = '<option value="">Sélectionnez une wilaya d\'abord</option>';
+                communeTomSelect.addOption({value: '', text: 'Sélectionnez une wilaya d\'abord'});
                 return;
             }
 
-
             try {
                 const url = `/admin/api/communes?wilayaId=${wilayaId}`;
-                console.log('Fetching communes from:', url);
-                
+
                 const response = await fetch(url);
                 if (!response.ok) throw new Error('Erreur réseau');
                 
                 const communes = await response.json();
-                console.log('Communes received:', communes);
-                console.log('Nombre de communes:', communes.length);
+
+                // Vider les options existantes
+                communeTomSelect.clearOptions();
                 
-                // Vider et recréer le sélecteur pour éviter les conflits
-                communeSelect.innerHTML = '';
-                communeSelect.appendChild(new Option('Choisissez une commune', ''));
+                // Ajouter l'option par défaut
+                communeTomSelect.addOption({value: '', text: 'Choisissez une commune'});
                 
+                // Ajouter les nouvelles options
                 communes.forEach(commune => {
-                    console.log('Ajout commune:', commune);
-                    const option = document.createElement('option');
-                    option.value = commune.id;
-                    option.textContent = commune.text;
-                    communeSelect.appendChild(option);
+                    communeTomSelect.addOption({value: commune.id, text: commune.text});
                 });
                 
-                // Essayer plusieurs méthodes pour activer le select
-                communeSelect.disabled = false;
-                communeSelect.removeAttribute('disabled');
+                // Réactiver le sélecteur
+                communeTomSelect.enable();
                 
-                console.log('État final du select:', {
-                    options: communeSelect.options.length,
-                    disabled: communeSelect.disabled,
-                    firstOption: communeSelect.options[0]?.textContent
-                });
-                
-                // Forcer un rafraîchissement du DOM
-                setTimeout(() => {
-                    console.log('État après timeout:', communeSelect.disabled);
-                }, 200);
             } catch (error) {
                 console.error('Erreur:', error);
-                communeSelect.innerHTML = '<option value="">Erreur de chargement</option>';
+                communeTomSelect.clearOptions();
+                communeTomSelect.addOption({value: '', text: 'Erreur de chargement'});
             }
-
-
-
         });
     } else {
         console.error('Sélecteurs non trouvés:');

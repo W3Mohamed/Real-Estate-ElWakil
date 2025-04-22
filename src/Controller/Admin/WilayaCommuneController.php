@@ -23,7 +23,7 @@ class WilayaCommuneController extends AbstractController
         return $this->json(array_map(function($commune) {
             return [
                 'id' => $commune->getId(),
-                'text' => sprintf('%s (%s)', $commune->getNom(), $commune->getCodePostal())
+                'text' => sprintf('%s', $commune->getNom())
             ];
         }, $communes));
     }
