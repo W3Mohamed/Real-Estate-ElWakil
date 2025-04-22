@@ -66,36 +66,5 @@ class BienCrudController extends AbstractCrudController
         yield IntegerField::new('superficie', 'Superficie (m²)');
         yield IntegerField::new('etage', 'Étage');
         yield TextareaField::new('description', 'Description')->hideOnIndex();
-    
-        // yield ChoiceField::new('equipementsField', 'Équipements')
-        // ->setFormType(ChoiceType::class)
-        // ->setFormTypeOptions([
-        //     'choices' => $this->getEquipementChoices(),
-        //     'multiple' => true,
-        //     'expanded' => true, // Pour avoir des checkboxes
-        //     'required' => false,
-        //     'mapped' => false // Ce champ n'est pas lié directement à l'entité
-        // ])
-        // ->formatValue(function ($value, Bien $bien) {
-        //     // Affiche les équipements dans l'index
-        //     return implode(', ', $bien->getEquipements()->map(fn($e) => $e->getEquipement())->toArray());
-        // });
-        
-
-    }
-    private function getEquipementChoices(): array
-    {
-        return [
-            'Piscine chauffée' => 'Piscine chauffée',
-            'Wifi haut débit' => 'Wifi haut débit',
-            'Climatisation' => 'Climatisation',
-            'Jardin paysager' => 'Jardin paysager',
-            'Système de sécurité' => 'Système de sécurité',
-            'Chauffage central' => 'Chauffage central',
-            'Smart Home' => 'Smart Home',
-            'Garage' => 'Garage',
-            'Cave' => 'Cave',
-            // Ajoutez d'autres équipements si nécessaire
-        ];
     }
 }

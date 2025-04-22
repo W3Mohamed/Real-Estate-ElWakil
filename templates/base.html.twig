@@ -75,11 +75,9 @@
                             </svg>
                         </button>
                         <div class="absolute hidden bg-[#004165] shadow-xl rounded-md mt-2 py-2 w-48 z-10 group-hover:block transition-all duration-300 ease-in-out transform origin-top scale-y-0 group-hover:scale-y-100">
-                            <a href="{{path('biens')}}?type=appartement" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">Appartement</a>
-                            <a href="{{path('biens')}}?type=villa" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">Villa</a>
-                            <a href="{{path('biens')}}?type=studio" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">Studio</a>
-                            <a href="{{path('biens')}}?type=terrain" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">Terrain</a>
-                            <a href="{{path('biens')}}?type=bureau" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">Bureau</a>
+                            {% for type in types %}
+                                <a href="{{path('biens')}}?type={{type.id}}" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">{{type.libelle}}</a>
+                            {% endfor %}
                         </div>
                     </div>
                     
@@ -92,10 +90,9 @@
                             </svg>
                         </button>
                         <div class="absolute hidden bg-[#004165] shadow-xl rounded-md mt-2 py-2 w-48 z-10 group-hover:block transition-all duration-300 ease-in-out transform origin-top scale-y-0 group-hover:scale-y-100">
-                            <a href="{{path('biens')}}?type=appartement" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">Appartement</a>
-                            <a href="{{path('biens')}}?type=villa" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">Villa</a>
-                            <a href="{{path('biens')}}?type=studio" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">Studio</a>
-                            <a href="{{path('biens')}}?type=bureau" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">Bureau</a>
+                            {% for type in types %}
+                                <a href="{{path('biens')}}?type={{type.id}}" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">{{type.libelle}}</a>
+                            {% endfor %}
                         </div>
                     </div>
                     
@@ -128,12 +125,10 @@
                         </svg>
                     </button>
                     <div class="mobile-dropdown-menu pl-4 hidden bg-[#004165] rounded-md my-1" id="mobile-buy-menu">
-                        <a href="{{path('biens')}}?type=appartement" class="block py-2 px-3 text-white hover:text-[#fddb36]">Appartement</a>
-                        <a href="{{path('biens')}}?type=villa" class="block py-2 px-3 text-white hover:text-[#fddb36]">Villa</a>
-                        <a href="{{path('biens')}}?type=studio" class="block py-2 px-3 text-white hover:text-[#fddb36]">Studio</a>
-                        <a href="{{path('biens')}}?type=terrain" class="block py-2 px-3 text-white hover:text-[#fddb36]">Terrain</a>
-                        <a href="{{path('biens')}}?type=bureau" class="block py-2 px-3 text-white hover:text-[#fddb36]">Bureau</a>
-                    </div>
+                        {% for type in types %}
+                                <a href="{{path('biens')}}?type={{type.id}}" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">{{type.libelle}}</a>
+                        {% endfor %}
+                     </div>
                 </div>
                 
                 <div class="py-2">
@@ -144,10 +139,9 @@
                         </svg>
                     </button>
                     <div class="mobile-dropdown-menu pl-4 hidden bg-[#004165] rounded-md my-1" id="mobile-rent-menu">
-                        <a href="{{path('biens')}}?type=appartement" class="block py-2 px-3 text-white hover:text-[#fddb36]">Appartement</a>
-                        <a href="{{path('biens')}}?type=villa" class="block py-2 px-3 text-white hover:text-[#fddb36]">Villa</a>
-                        <a href="{{path('biens')}}?type=studio" class="block py-2 px-3 text-white hover:text-[#fddb36]">Studio</a>
-                        <a href="{{path('biens')}}?type=bureau" class="block py-2 px-3 text-white hover:text-[#fddb36]">Bureau</a>
+                        {% for type in types %}
+                                <a href="{{path('biens')}}?type={{type.id}}" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">{{type.libelle}}</a>
+                        {% endfor %}    
                     </div>
                 </div>
                 
@@ -199,7 +193,7 @@
                             <div class="w-8 h-8 bg-[#fddb36] rounded-sm transform rotate-45"></div> #}
                             <img src="{{asset('img/logo.png')}}" class="w-8 h-8" alt="GROUPIMMO Agence immobiliere en Algerie">                           
                         </div>
-                        <span class="ml-2 text-2xl font-bold text-white">GROUPEIMMO</span>
+                        <span class="ml-2 text-2xl font-bold text-white">GROUPIMMO</span>
                     </div>
                     <p class="text-gray-300">Votre partenaire immobilier en Algérie, Belgique et Luxembourg.</p>
                 </div>
@@ -219,18 +213,16 @@
                     <ul class="space-y-2">
                         <li><a href="{{path('about')}}" class="hover:text-[#fddb36] transition">À propos</a></li>
                         <li><a href="{{path('contact')}}" class="hover:text-[#fddb36] transition">Contact</a></li>
-                        <li><a href="#" class="hover:text-[#fddb36] transition">Carrières</a></li>
-                        <li><a href="#" class="hover:text-[#fddb36] transition">Blog</a></li>
                     </ul>
                 </div>
                 
                 <div>
                     <h3 class="text-lg font-bold mb-4 text-[#fddb36]">Contact</h3>
                     <address class="not-italic">
-                        <p class="mb-2">123 Rue des Immobilier</p>
-                        <p class="mb-2">Alger, Algérie</p>
-                        <p class="mb-2">Tél: +213 123 456 789</p>
-                        <p class="mb-2">Email: contact@groupimmo.dz</p>
+                        <p class="mb-2">{{ parametres.adresse }}</p>
+                        {# <p class="mb-2">Alger, Algérie</p> #}
+                        <p class="mb-2">Tél: {{ parametres.telephone }}</p>
+                        <p class="mb-2">Email: {{ parametres.email }}</p>
                     </address>
                 </div>
             </div>

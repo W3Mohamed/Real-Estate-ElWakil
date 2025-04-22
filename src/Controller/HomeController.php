@@ -100,23 +100,35 @@ final class HomeController extends AbstractController
     }
 
     #[Route('/biens', name: 'biens')]
-    public function biens(TypeRepository $typeRepository): Response
+    public function biens(TypeRepository $typeRepository, ParamettreRepository $paramettreRepository): Response
     {
         $types = $typeRepository->findAll();
+        $parametres = $paramettreRepository->find(1); 
         return $this->render('biens.html.twig',[
-            'types' => $types
+            'types' => $types,
+            'parametres' => $parametres
         ]);
     }
 
     #[Route('/detail', name: 'detail')]
-    public function detail(): Response
+    public function detail(TypeRepository $typeRepository, ParamettreRepository $paramettreRepository): Response
     {
-        return $this->render('detail.html.twig');
+        $types = $typeRepository->findAll();
+        $parametres = $paramettreRepository->find(1); 
+        return $this->render('detail.html.twig',[
+            'types' => $types,
+            'parametres' => $parametres
+        ]);
     }
 
     #[Route('/apropos', name: 'about')]
-    public function about(): Response
+    public function about(TypeRepository $typeRepository,ParamettreRepository $paramettreRepository): Response
     {
-        return $this->render('apropos.html.twig');
+        $types = $typeRepository->findAll();
+        $parametres = $paramettreRepository->find(1); 
+        return $this->render('apropos.html.twig',[
+            'types' => $types,
+            'parametres' => $parametres
+        ]);
     }
 }
