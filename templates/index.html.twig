@@ -105,9 +105,9 @@
             <div id="properties-for-sale" class="splide">
                 <div class="splide__track">
                     <ul class="splide__list">
-                        <!-- Property 1 -->
+                        {% for bien in biensAVendre %}
                         <li class="splide__slide">
-                            <a href="{{path('detail')}}" class="block property-card bg-white rounded-xl overflow-hidden h-full">
+                            <a href="{{path('detail')}}?id={{bien.id}}" class="block property-card bg-white rounded-xl overflow-hidden h-full">
                                 <div class="relative">
                                     <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" 
                                          alt="Appartement à vendre" 
@@ -115,124 +115,43 @@
                                     <div class="absolute top-4 right-4 bg-[#fddb36] text-[#004165] font-bold px-3 py-1 rounded-md">À vendre</div>
                                 </div>
                                 <div class="p-6">
-                                    <h3 class="text-xl font-bold text-[#004165] mb-2">Appartement spacieux</h3>
+                                    <h3 class="text-xl font-bold text-[#004165] mb-2">{{ bien.libelle }}</h3>
                                     <p class="text-gray-600 mb-3 flex items-center">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                         </svg>
-                                        Alger Centre
+                                        {{ bien.commune.nom }}, {{ bien.wilaya.nom }}
                                     </p>
                                     <div class="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
                                         <span class="flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                                             </svg>
-                                            3 pièces
+                                            {{ bien.piece }} pièces
                                         </span>
                                         <span class="flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
                                             </svg>
-                                            120 m²
+                                            {{ bien.superficie }} m²
                                         </span>
                                         <span class="flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                             </svg>
-                                            3ème étage
+                                            {% if bien.etage == 0 %}
+                                                Rez-de-chaussée
+                                            {% else %}
+                                                {{ bien.etage }}{% if bien.etage == 1 %}er{% else %}ème{% endif %} étage
+                                            {% endif %}
                                         </span>
                                     </div>
-                                    <div class="text-[#004165] font-bold text-xl">4 500 000 DZD</div>
+                                    <div class="text-[#004165] font-bold text-xl">{{ bien.prix|number_format(0, ',', ' ') }} DZD</div>
                                 </div>
                             </a>
                         </li>
-                        
-                        <!-- Property 2 -->
-                        <li class="splide__slide">
-                            <a href="{{path('detail')}}" class="block property-card bg-white rounded-xl overflow-hidden h-full">
-                                <div class="relative">
-                                    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" 
-                                         alt="Villa à vendre" 
-                                         class="w-full h-48 object-cover">
-                                    <div class="absolute top-4 right-4 bg-[#fddb36] text-[#004165] font-bold px-3 py-1 rounded-md">À vendre</div>
-                                </div>
-                                <div class="p-6">
-                                    <h3 class="text-xl font-bold text-[#004165] mb-2">Villa moderne</h3>
-                                    <p class="text-gray-600 mb-3 flex items-center">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                        </svg>
-                                        Hydra, Alger
-                                    </p>
-                                    <div class="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
-                                        <span class="flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                                            </svg>
-                                            5 pièces
-                                        </span>
-                                        <span class="flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
-                                            </svg>
-                                            250 m²
-                                        </span>
-                                        <span class="flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                                            </svg>
-                                            RDC + 1
-                                        </span>
-                                    </div>
-                                    <div class="text-[#004165] font-bold text-xl">25 000 000 DZD</div>
-                                </div>
-                            </a>
-                        </li>
-                        
-                        <!-- Property 3 -->
-                        <li class="splide__slide">
-                            <a href="property-detail.html" class="block property-card bg-white rounded-xl overflow-hidden h-full">
-                                <div class="relative">
-                                    <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" 
-                                         alt="Studio à vendre" 
-                                         class="w-full h-48 object-cover">
-                                    <div class="absolute top-4 right-4 bg-[#fddb36] text-[#004165] font-bold px-3 py-1 rounded-md">À vendre</div>
-                                </div>
-                                <div class="p-6">
-                                    <h3 class="text-xl font-bold text-[#004165] mb-2">Studio meublé</h3>
-                                    <p class="text-gray-600 mb-3 flex items-center">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                        </svg>
-                                        Bab Ezzouar
-                                    </p>
-                                    <div class="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
-                                        <span class="flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                                            </svg>
-                                            1 pièce
-                                        </span>
-                                        <span class="flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
-                                            </svg>
-                                            45 m²
-                                        </span>
-                                        <span class="flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                                            </svg>
-                                            5ème étage
-                                        </span>
-                                    </div>
-                                    <div class="text-[#004165] font-bold text-xl">2 800 000 DZD</div>
-                                </div>
-                            </a>
-                        </li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
@@ -252,9 +171,9 @@
             <div id="properties-for-rent" class="splide">
                 <div class="splide__track">
                     <ul class="splide__list">
-                        <!-- Property 1 -->
+                        {% for bien in biensALouer %}
                         <li class="splide__slide">
-                            <a href="{{path('detail')}}" class="block property-card bg-white rounded-xl overflow-hidden h-full">
+                            <a href="{{path('detail')}}?id={{bien.id}}" class="block property-card bg-white rounded-xl overflow-hidden h-full">
                                 <div class="relative">
                                     <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" 
                                          alt="Appartement à louer" 
@@ -262,124 +181,43 @@
                                     <div class="absolute top-4 right-4 bg-[#004165] text-white font-bold px-3 py-1 rounded-md">À louer</div>
                                 </div>
                                 <div class="p-6">
-                                    <h3 class="text-xl font-bold text-[#004165] mb-2">Appartement lumineux</h3>
+                                    <h3 class="text-xl font-bold text-[#004165] mb-2">{{bien.libelle}}</h3>
                                     <p class="text-gray-600 mb-3 flex items-center">
                                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                         </svg>
-                                        Sidi Yahia
+                                        {{ bien.commune.nom }}, {{ bien.wilaya.nom }}
                                     </p>
                                     <div class="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
                                         <span class="flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                                             </svg>
-                                            2 pièces
+                                            {{bien.piece}} pièces
                                         </span>
                                         <span class="flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
                                             </svg>
-                                            80 m²
+                                            {{bien.superficie}} m²
                                         </span>
                                         <span class="flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                             </svg>
-                                            2ème étage
+                                            {% if bien.etage == 0 %}
+                                                Rez-de-chaussée
+                                            {% else %}
+                                                {{ bien.etage }}{% if bien.etage == 1 %}er{% else %}ème{% endif %} étage
+                                            {% endif %}
                                         </span>
                                     </div>
-                                    <div class="text-[#004165] font-bold text-xl">45 000 DZD/mois</div>
+                                    <div class="text-[#004165] font-bold text-xl">{{ bien.prix|number_format(0, ',', ' ') }} DZD/mois</div>
                                 </div>
                             </a>
                         </li>
-                        
-                        <!-- Property 2 -->
-                        <li class="splide__slide">
-                            <a href="property-detail.html" class="block property-card bg-white rounded-xl overflow-hidden h-full">
-                                <div class="relative">
-                                    <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" 
-                                         alt="Villa à louer" 
-                                         class="w-full h-48 object-cover">
-                                    <div class="absolute top-4 right-4 bg-[#004165] text-white font-bold px-3 py-1 rounded-md">À louer</div>
-                                </div>
-                                <div class="p-6">
-                                    <h3 class="text-xl font-bold text-[#004165] mb-2">Villa avec jardin</h3>
-                                    <p class="text-gray-600 mb-3 flex items-center">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                        </svg>
-                                        El Biar, Alger
-                                    </p>
-                                    <div class="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
-                                        <span class="flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                                            </svg>
-                                            4 pièces
-                                        </span>
-                                        <span class="flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
-                                            </svg>
-                                            180 m²
-                                        </span>
-                                        <span class="flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                                            </svg>
-                                            RDC + 1
-                                        </span>
-                                    </div>
-                                    <div class="text-[#004165] font-bold text-xl">120 000 DZD/mois</div>
-                                </div>
-                            </a>
-                        </li>
-                        
-                        <!-- Property 3 -->
-                        <li class="splide__slide">
-                            <a href="property-detail.html" class="block property-card bg-white rounded-xl overflow-hidden h-full">
-                                <div class="relative">
-                                    <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" 
-                                         alt="Bureau à louer" 
-                                         class="w-full h-48 object-cover">
-                                    <div class="absolute top-4 right-4 bg-[#004165] text-white font-bold px-3 py-1 rounded-md">À louer</div>
-                                </div>
-                                <div class="p-6">
-                                    <h3 class="text-xl font-bold text-[#004165] mb-2">Bureau spacieux</h3>
-                                    <p class="text-gray-600 mb-3 flex items-center">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                        </svg>
-                                        Bab Ezzouar
-                                    </p>
-                                    <div class="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
-                                        <span class="flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                                            </svg>
-                                            1 pièce
-                                        </span>
-                                        <span class="flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
-                                            </svg>
-                                            60 m²
-                                        </span>
-                                        <span class="flex items-center">
-                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                                            </svg>
-                                            7ème étage
-                                        </span>
-                                    </div>
-                                    <div class="text-[#004165] font-bold text-xl">65 000 DZD/mois</div>
-                                </div>
-                            </a>
-                        </li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>

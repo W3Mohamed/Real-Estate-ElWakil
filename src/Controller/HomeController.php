@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Contact;
 use App\Entity\Proposition;
+use App\Repository\BienRepository;
 use App\Repository\ParamettreRepository;
 use App\Repository\TypeRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,13 +16,23 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HomeController extends AbstractController
 {
     #[Route('/', name: 'accueil')]
-    public function index(TypeRepository $typeRepository,ParamettreRepository $paramettreRepository): Response
+    public function index(TypeRepository $typeRepository,
+        ParamettreRepository $paramettreRepository,
+        BienRepository $bienRepository): Response
     {
         $types = $typeRepository->findAll();
+
         $parametres = $paramettreRepository->find(1); // Récupère l'entrée avec id=1
+
+        // Récupérer les biens séparés par type de transaction
+        $biensALouer = $bienRepository->findBiensALouer();
+        $biensAVendre = $bienRepository->findBiensAVendre();
+
         return $this->render('index.html.twig',[
             'types' => $types,
-            'parametres' => $parametres
+            'parametres' => $parametres,
+            'biensALouer' => $biensALouer,
+            'biensAVendre' => $biensAVendre
         ]);
     }
 
