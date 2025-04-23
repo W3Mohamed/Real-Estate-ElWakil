@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Contact;
 use App\Entity\Proposition;
+use App\Entity\Reservation;
 use App\Repository\BienRepository;
 use App\Repository\ParamettreRepository;
 use App\Repository\TypeRepository;
@@ -122,14 +123,68 @@ final class HomeController extends AbstractController
     }
 
     #[Route('/detail', name: 'detail')]
-    public function detail(TypeRepository $typeRepository, ParamettreRepository $paramettreRepository): Response
+    public function detail(TypeRepository $typeRepository,
+     Request $request,
+     ParamettreRepository $paramettreRepository,
+     BienRepository $bienRepository): Response
     {
+        $bienId = $request->query->get('id');
+        $bien = $bienRepository->find($bienId);
+
+        if (!$bien) {
+            throw $this->createNotFoundException('Le bien demandé n\'existe pas');
+        }
+
         $types = $typeRepository->findAll();
         $parametres = $paramettreRepository->find(1); 
         return $this->render('detail.html.twig',[
+            'bien' => $bien,
             'types' => $types,
             'parametres' => $parametres
         ]);
+    }
+
+    #[Route('/reserver', name: 'app_reservation', methods: ['POST'])]
+    public function reserver(
+        Request $request,
+        BienRepository $bienRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
+        // Récupérer les données du formulaire
+        $nom = $request->request->get('nom');
+        $email = $request->request->get('email');
+        $telephone = $request->request->get('tel'); // Notez que c'est 'tel' dans le formulaire
+        $message = $request->request->get('message');
+        $bienId = $request->request->get('bien');
+
+        // Validation basique
+        if (empty($nom) || empty($email) || empty($telephone) || empty($bienId)) {
+            $this->addFlash('error', 'Veuillez remplir tous les champs obligatoires.');
+            return $this->redirectToRoute('detail', ['id' => $bienId]);
+        }
+
+        // Trouver le bien
+        $bien = $bienRepository->find($bienId);
+        if (!$bien) {
+            $this->addFlash('error', 'Le bien demandé n\'existe pas.');
+            return $this->redirectToRoute('accueil');
+        }
+
+        // Créer la réservation
+        $reservation = new Reservation();
+        $reservation->setNom($nom);
+        $reservation->setEmail($email);
+        $reservation->setTelephone($telephone);
+        $reservation->setMessage($message ?? ''); // Message optionnel
+        $reservation->setBien($bien);
+
+        // Enregistrer en base
+        $entityManager->persist($reservation);
+        $entityManager->flush();
+
+        // Redirection avec message de succès
+        $this->addFlash('success', 'Votre demande de réservation a bien été envoyée !');
+        return $this->redirectToRoute('detail', ['id' => $bienId]);
     }
 
     #[Route('/apropos', name: 'about')]

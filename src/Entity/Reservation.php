@@ -26,6 +26,10 @@ class Reservation
     #[ORM\Column(type: Types::TEXT)]
     private ?string $message = null;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Bien $Bien = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +79,18 @@ class Reservation
     public function setMessage(string $message): static
     {
         $this->message = $message;
+
+        return $this;
+    }
+
+    public function getBien(): ?Bien
+    {
+        return $this->Bien;
+    }
+
+    public function setBien(?Bien $Bien): static
+    {
+        $this->Bien = $Bien;
 
         return $this;
     }
