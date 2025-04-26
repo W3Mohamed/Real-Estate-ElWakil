@@ -212,12 +212,15 @@ final class HomeController extends AbstractController
             throw $this->createNotFoundException('Le bien demandé n\'existe pas');
         }
 
+        $similarBiens = $bienRepository->findSimilarBiens($bien);
         $types = $typeRepository->findAll();
         $parametres = $paramettreRepository->find(1); 
+
         return $this->render('detail.html.twig',[
             'bien' => $bien,
             'types' => $types,
-            'parametres' => $parametres
+            'parametres' => $parametres,
+            'similarBiens' => $similarBiens
         ]);
     }
 

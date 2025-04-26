@@ -35,4 +35,19 @@ class BienRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findSimilarBiens(Bien $currentBien, int $maxResults = 6)
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.transaction = :transaction')
+            ->andWhere('b.type = :type')
+            ->andWhere('b.id != :currentId')
+            ->setParameter('transaction', $currentBien->getTransaction())
+            ->setParameter('type', $currentBien->getType())
+            ->setParameter('currentId', $currentBien->getId())
+            ->orderBy('b.id', 'DESC')
+            ->setMaxResults($maxResults)
+            ->getQuery()
+            ->getResult();
+    }
 }
