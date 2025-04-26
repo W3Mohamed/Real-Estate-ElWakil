@@ -112,13 +112,90 @@ final class HomeController extends AbstractController
     }
 
     #[Route('/biens', name: 'biens')]
-    public function biens(TypeRepository $typeRepository, ParamettreRepository $paramettreRepository): Response
+    public function biens(Request $request, BienRepository $bienRepository, TypeRepository $typeRepository, ParamettreRepository $paramettreRepository): Response
     {
+        $transaction = $request->query->get('t');
+        $typeId = $request->query->get('type');
+        $pieces = $request->query->get('pieces');
+        $superficie = $request->query->get('superficie');
+        $prix = $request->query->get('prix');
+
+        $queryBuilder = $bienRepository->createQueryBuilder('b')
+        ->orderBy('b.id', 'DESC');
+
+        if ($transaction) {
+            $queryBuilder->andWhere('b.transaction = :transaction')
+                ->setParameter('transaction', $transaction);
+        }
+        
+        if ($typeId) {
+            $queryBuilder->andWhere('b.type = :typeId')
+                ->setParameter('typeId', $typeId);
+        }
+
+        if ($pieces) {
+            switch ($pieces) {
+                case '1': // 1-2 pièces
+                    $queryBuilder->andWhere('b.piece BETWEEN 1 AND 2');
+                    break;
+                case '2': // 3-4 pièces
+                    $queryBuilder->andWhere('b.piece BETWEEN 3 AND 4');
+                    break;
+                case '3': // 5+ pièces
+                    $queryBuilder->andWhere('b.piece >= 5');
+                    break;
+            }
+        }
+    
+        // Filtre par superficie
+        if ($superficie) {
+            switch ($superficie) {
+                case '1': // Moins de 50m²
+                    $queryBuilder->andWhere('b.superficie < 50');
+                    break;
+                case '2': // 50m² - 100m²
+                    $queryBuilder->andWhere('b.superficie BETWEEN 50 AND 100');
+                    break;
+                case '3': // 100m² - 200m²
+                    $queryBuilder->andWhere('b.superficie BETWEEN 100 AND 200');
+                    break;
+                case '4': // Plus de 200m²
+                    $queryBuilder->andWhere('b.superficie > 200');
+                    break;
+            }
+        }
+    
+        // Filtre par prix
+        if ($prix) {
+            switch ($prix) {
+                case '1': // Moins de 5M DZD
+                    $queryBuilder->andWhere('b.prix < 5000000');
+                    break;
+                case '2': // 5M - 10M DZD
+                    $queryBuilder->andWhere('b.prix BETWEEN 5000000 AND 10000000');
+                    break;
+                case '3': // 10M - 20M DZD
+                    $queryBuilder->andWhere('b.prix BETWEEN 10000000 AND 20000000');
+                    break;
+                case '4': // Plus de 20M DZD
+                    $queryBuilder->andWhere('b.prix > 20000000');
+                    break;
+            }
+        }
+
+        $biens = $queryBuilder->getQuery()->getResult();
         $types = $typeRepository->findAll();
         $parametres = $paramettreRepository->find(1); 
+
         return $this->render('biens.html.twig',[
             'types' => $types,
-            'parametres' => $parametres
+            'parametres' => $parametres,
+            'biens' => $biens,
+            'currentTransaction' => $transaction,
+            'currentType' => $typeId,
+            'currentPieces' => $pieces,
+            'currentSuperficie' => $superficie,
+            'currentPrix' => $prix
         ]);
     }
 

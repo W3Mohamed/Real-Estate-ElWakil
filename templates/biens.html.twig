@@ -69,55 +69,69 @@
                     
                     <!-- Filtre type de transaction -->
                     <div>
-                        <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
-                            <option value="">Tous les types</option>
-                            <option value="vente">À vendre</option>
-                            <option value="location">À louer</option>
+                        <select onchange="window.location.href=this.value" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
+                            <option value="{{ path('biens') }}{{ currentTransaction ? '?t=' ~ currentTransaction : '' }}">Tous les types</option>
+                            <option value="{{ path('biens') }}?t=vente">À vendre</option>
+                            <option value="{{ path('biens') }}?t=location">À louer</option>
                         </select>
                     </div>
                     
                     <!-- Bouton recherche -->
                     <div>
-                        <button class="w-full bg-[#004165] text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-800 transition">
+                        {# <button class="w-full bg-[#004165] text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-800 transition">
                             Rechercher
-                        </button>
+                        </button> #}
+                         <a href="{{ path('biens') }}" class="inline-block bg-[#004165] text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-800 transition">
+        Réinitialiser les filtres
+    </a>
                     </div>
                 </div>
                 
                 <!-- Filtres avancés -->
                 <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                     <div>
-                        <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
+                        <select onchange="window.location.href=this.value" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
                             <option value="">Type de bien</option>
                             {% for type in types %}
-                                <option value="{{ type.id }}">{{ type.libelle }}</option>
+                                <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ type.id }}&pieces={{ currentPieces }}&superficie={{ currentSuperficie }}&prix={{ currentPrix }}">{{ type.libelle }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div>
-                        <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
-                            <option value="">Budget</option>
-                            <option value="1">Moins de 5M DZD</option>
-                            <option value="2">5M - 10M DZD</option>
-                            <option value="3">10M - 20M DZD</option>
-                            <option value="4">Plus de 20M DZD</option>
+                        <select onchange="window.location.href=this.value" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
+                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&pieces={{ currentPieces }}&superficie={{ currentSuperficie }}">Budget</option>
+                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&pieces={{ currentPieces }}&superficie={{ currentSuperficie }}&prix=1"
+                                {{ currentPrix == '1' ? 'selected' : '' }}>Moins de 5M DZD</option>
+                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&pieces={{ currentPieces }}&superficie={{ currentSuperficie }}&prix=2"
+                                {{ currentPrix == '2' ? 'selected' : '' }}>5M - 10M DZD</option>
+                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&pieces={{ currentPieces }}&superficie={{ currentSuperficie }}&prix=3"
+                                {{ currentPrix == '3' ? 'selected' : '' }}>10M - 20M DZD</option>
+                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&pieces={{ currentPieces }}&superficie={{ currentSuperficie }}&prix=4"
+                                {{ currentPrix == '4' ? 'selected' : '' }}>Plus de 20M DZD</option>
                         </select>
                     </div>
                     <div>
-                        <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
-                            <option value="">Surface</option>
-                            <option value="1">Moins de 50m²</option>
-                            <option value="2">50m² - 100m²</option>
-                            <option value="3">100m² - 200m²</option>
-                            <option value="4">Plus de 200m²</option>
+                        <select onchange="window.location.href=this.value" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
+                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&pieces={{ currentPieces }}&prix={{ currentPrix }}">Surface</option>
+                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&pieces={{ currentPieces }}&prix={{ currentPrix }}&superficie=1"
+                                {{ currentSuperficie == '1' ? 'selected' : '' }}>Moins de 50m²</option>
+                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&pieces={{ currentPieces }}&prix={{ currentPrix }}&superficie=2"
+                                {{ currentSuperficie == '2' ? 'selected' : '' }}>50m² - 100m²</option>
+                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&pieces={{ currentPieces }}&prix={{ currentPrix }}&superficie=3"
+                                {{ currentSuperficie == '3' ? 'selected' : '' }}>100m² - 200m²</option>
+                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&pieces={{ currentPieces }}&prix={{ currentPrix }}&superficie=4"
+                                {{ currentSuperficie == '4' ? 'selected' : '' }}>Plus de 200m²</option>
                         </select>
                     </div>
                     <div>
-                        <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
-                            <option value="">Pièces</option>
-                            <option value="1">1-2 pièces</option>
-                            <option value="2">3-4 pièces</option>
-                            <option value="3">5+ pièces</option>
+                        <select  onchange="window.location.href=this.value" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
+                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&superficie={{ currentSuperficie }}&prix={{ currentPrix }}">Pièces</option>
+                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&superficie={{ currentSuperficie }}&prix={{ currentPrix }}&pieces=1"
+                                {{ currentPieces == '1' ? 'selected' : '' }}>1-2 pièces</option>
+                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&superficie={{ currentSuperficie }}&prix={{ currentPrix }}&pieces=2"
+                                {{ currentPieces == '2' ? 'selected' : '' }}>3-4 pièces</option>
+                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&superficie={{ currentSuperficie }}&prix={{ currentPrix }}&pieces=3"
+                                {{ currentPieces == '3' ? 'selected' : '' }}>5+ pièces</option>
                         </select>
                     </div>
                 </div>
@@ -129,7 +143,7 @@
     <section class="py-16 bg-white">
         <div class="container mx-auto px-6">
             <div class="flex justify-between items-center mb-10">
-                <h2 class="text-2xl font-bold text-[#004165]">12 biens disponibles</h2>
+                <h2 class="text-2xl font-bold text-[#004165]">{{ biens|length }} biens disponibles</h2>
                 <div class="flex items-center">
                     <span class="mr-2 text-gray-600">Trier par :</span>
                     <select class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
@@ -143,92 +157,55 @@
             
             <!-- Grille des propriétés -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Propriété 1 -->
-                <a href="{{path('detail')}}" class="property-card bg-white rounded-xl overflow-hidden border border-gray-100">
+                {% for bien in biens %}
+                <a href="{{path('detail')}}?id={{bien.id}}" class="property-card bg-white rounded-xl overflow-hidden border border-gray-100">
                     <div class="relative">
                         <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" 
-                             alt="Appartement à vendre" 
+                             alt="GROUPIMMO DZ Algerie {{bien.libelle}}" 
                              class="w-full h-48 object-cover">
-                        <div class="absolute top-4 right-4 bg-[#fddb36] text-[#004165] font-bold px-3 py-1 rounded-md">À vendre</div>
-                        <div class="absolute bottom-4 left-4 bg-white text-[#004165] font-bold px-3 py-1 rounded-md flex items-center">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                            24
-                        </div>
+                        {% if bien.transaction == "vente" %}
+                            <div class="absolute top-4 right-4 bg-[#fddb36] text-[#004165] font-bold px-3 py-1 rounded-md">À vendre</div>                        
+                        {% else %}
+                            <div class="absolute top-4 right-4 bg-[#004165] text-white font-bold px-3 py-1 rounded-md">À louer</div>
+                        {% endif %}
                     </div>
                     <div class="p-6">
-                        <h3 class="text-xl font-bold text-[#004165] mb-2">Appartement spacieux</h3>
+                        <h3 class="text-xl font-bold text-[#004165] mb-2">{{bien.libelle}}</h3>
                         <p class="text-gray-600 mb-3 flex items-center">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                             </svg>
-                            Alger Centre
+                            {{bien.commune.nom}}, {{bien.wilaya.nom}}
                         </p>
                         <div class="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
                             <span class="flex items-center">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                                 </svg>
-                                3 pièces
+                                {{bien.piece}} pièces
                             </span>
                             <span class="flex items-center">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
                                 </svg>
-                                120 m²
-                            </span>
-                        </div>
-                        <div class="text-[#004165] font-bold text-xl">4 500 000 DZD</div>
-                    </div>
-                </a>
-                
-                <!-- Propriété 2 (exemple supplémentaire) -->
-                <a href="{{path('detail')}}" class="property-card bg-white rounded-xl overflow-hidden border border-gray-100">
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" 
-                             alt="Villa moderne" 
-                             class="w-full h-48 object-cover">
-                        <div class="absolute top-4 right-4 bg-[#004165] text-white font-bold px-3 py-1 rounded-md">À louer</div>
-                        <div class="absolute bottom-4 left-4 bg-white text-[#004165] font-bold px-3 py-1 rounded-md flex items-center">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                            18
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-[#004165] mb-2">Villa moderne avec piscine</h3>
-                        <p class="text-gray-600 mb-3 flex items-center">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                            Hydra, Alger
-                        </p>
-                        <div class="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
-                            <span class="flex items-center">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                                </svg>
-                                5 pièces
+                                {{bien.superficie}} m²
                             </span>
                             <span class="flex items-center">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                 </svg>
-                                250 m²
+                                {% if bien.etage == 0 %}
+                                    Rez-de-chaussée
+                                {% else %}
+                                    {{ bien.etage }}{% if bien.etage == 1 %}er{% else %}ème{% endif %} étage
+                                {% endif %}
                             </span>
                         </div>
-                        <div class="text-[#004165] font-bold text-xl">120 000 DZD/mois</div>
+                        <div class="text-[#004165] font-bold text-xl">{{bien.prix|number_format(0, ',', ' ')}} DZD</div>
                     </div>
                 </a>
-                
-                <!-- Ajoutez ici les autres propriétés (4 de plus pour compléter la grille) -->
-                
+                {% endfor %}
             </div>
             
             <!-- Pagination -->
