@@ -1,0 +1,26 @@
+/* Style pour le drag and drop */
+.field-collection.dragover {
+    border: 2px dashed #1e88e5;
+    background-color: #e3f2fd;
+}
+
+/* Prévisualisation des images */
+.image-preview {
+    max-width: 150px;
+    max-height: 150px;
+    margin-top: 10px;
+    display: block;
+}
+
+/* Boutons d'ajout/suppression */
+.field-collection-item {
+    position: relative;
+    margin-bottom: 15px;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+
+.field-collection-add-button {
+    margin-top: 10px;
+}

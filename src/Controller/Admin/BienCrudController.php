@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Bien;
+use App\Entity\Images;
 use App\Repository\CommuneRepository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -14,7 +15,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use App\Form\ImageFormType;
 
 
 class BienCrudController extends AbstractCrudController
@@ -87,5 +89,30 @@ class BienCrudController extends AbstractCrudController
         yield IntegerField::new('superficie', 'Superficie (m²)');
         yield IntegerField::new('etage', 'Étage');
         yield TextareaField::new('description', 'Description')->hideOnIndex();
+
+
+        yield CollectionField::new('images')
+            ->setEntryType(ImageFormType::class)
+            ->setFormTypeOption('by_reference', false)
+            ->onlyOnForms()
+            ->setEntryIsComplex(true)
+            ->setRequired(true)
+            ->setHelp('Ajoutez jusqu\'à 15 images. La première image sera utilisée comme image principale.')
+            ->setFormTypeOptions([
+                'entry_options' => [
+                    'attr' => [
+                        'data-max-files' => 15
+                    ]
+                ],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'by_reference' => false,
+                'delete_empty' => true,
+                'attr' => [
+                    'class' => 'images-collection',
+                    'data-max-items' => 15
+                ]
+            ]);
     }
 }

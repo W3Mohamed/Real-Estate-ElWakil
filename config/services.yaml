@@ -20,5 +20,13 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\Service\ImageUploader:
+        arguments:
+            $targetDirectory: '%kernel.project_dir%/public/uploads/biens'
+            $slugger: '@Symfony\Component\String\Slugger\SluggerInterface'
+
+    App\EventSubscriber\BienImageSubscriber:
+        tags: ['kernel.event_subscriber']
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

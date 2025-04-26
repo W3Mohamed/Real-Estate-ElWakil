@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\ImagesRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: ImagesRepository::class)]
 class Images
@@ -19,6 +21,14 @@ class Images
     #[ORM\ManyToOne(inversedBy: 'images')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Bien $Bien = null;
+
+    #[Assert\Image(
+        maxSize: '5M',
+        mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+        maxWidth: 4000,
+        maxHeight: 4000
+    )]
+    private $imageFile;
 
     public function getId(): ?int
     {
@@ -46,6 +56,17 @@ class Images
     {
         $this->Bien = $Bien;
 
+        return $this;
+    }
+    
+    public function getImageFile()
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile($imageFile): self
+    {
+        $this->imageFile = $imageFile;
         return $this;
     }
 }
