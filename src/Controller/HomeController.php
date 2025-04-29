@@ -121,7 +121,12 @@ final class HomeController extends AbstractController
         $prix = $request->query->get('prix');
 
         $queryBuilder = $bienRepository->createQueryBuilder('b')
-        ->orderBy('b.id', 'DESC');
+            ->leftJoin('b.images', 'i', 'WITH', 'i.id = (
+                SELECT MIN(i2.id) FROM App\Entity\Images i2 
+                WHERE i2.Bien = b.id
+            )')
+            ->addSelect('i') // Charge uniquement la première image
+            ->orderBy('b.id', 'DESC');
 
         if ($transaction) {
             $queryBuilder->andWhere('b.transaction = :transaction')
@@ -206,7 +211,7 @@ final class HomeController extends AbstractController
      BienRepository $bienRepository): Response
     {
         $bienId = $request->query->get('id');
-        $bien = $bienRepository->find($bienId);
+        $bien = $bienRepository->findWithImages($bienId);
 
         if (!$bien) {
             throw $this->createNotFoundException('Le bien demandé n\'existe pas');

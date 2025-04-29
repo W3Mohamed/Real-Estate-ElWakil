@@ -109,8 +109,8 @@
                         <li class="splide__slide">
                             <a href="{{path('detail')}}?id={{bien.id}}" class="block property-card bg-white rounded-xl overflow-hidden h-full">
                                 <div class="relative">
-                                    <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" 
-                                         alt="Appartement à vendre" 
+                                    <img src="{% if bien.images|length > 0 %}{{ asset('uploads/biens/' ~ bien.images.last.image) }}{% else %}https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60{% endif %}" 
+                                         alt="GROUPIMMO DZ proprietes a vendre, vente des proprietes" 
                                          class="w-full h-48 object-cover">
                                     <div class="absolute top-4 right-4 bg-[#fddb36] text-[#004165] font-bold px-3 py-1 rounded-md">À vendre</div>
                                 </div>
@@ -175,8 +175,8 @@
                         <li class="splide__slide">
                             <a href="{{path('detail')}}?id={{bien.id}}" class="block property-card bg-white rounded-xl overflow-hidden h-full">
                                 <div class="relative">
-                                    <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" 
-                                         alt="Appartement à louer" 
+                                    <img src="{% if bien.images|length > 0 %}{{ asset('uploads/biens/' ~ bien.images.first.image) }}{% else %}https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60{% endif %}" 
+                                         alt="GROUPIMMO DZ proprietes a louer, location des proprietes" 
                                          class="w-full h-48 object-cover">
                                     <div class="absolute top-4 right-4 bg-[#004165] text-white font-bold px-3 py-1 rounded-md">À louer</div>
                                 </div>
