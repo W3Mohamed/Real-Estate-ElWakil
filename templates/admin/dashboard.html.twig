@@ -1,0 +1,177 @@
+{% extends '@EasyAdmin/layout.html.twig' %}
+
+{% block head_stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .dashboard-card {
+            transition: transform 0.3s;
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        .card-sale { border-left: 4px solid #28a745; }
+        .card-rent { border-left: 4px solid #17a2b8; }
+        .card-contact { border-left: 4px solid #ffc107; }
+        .card-reservation { border-left: 4px solid #007bff; }
+        .stat-number { font-size: 2rem; font-weight: bold; }
+        .recent-item {
+            border-left: 3px solid #004165;
+            transition: all 0.3s;
+        }
+        .recent-item:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
+{% endblock %}
+
+{% block content_title %}{{ dashboard_title }}{% endblock %}
+
+{% block main %}
+    <div class="container-fluid">
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card dashboard-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-muted">Total Biens</h6>
+                                <h2 class="stat-number text-primary">{{ stats.biens }}</h2>
+                            </div>
+                            <i class="fas fa-home fa-3x text-primary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card dashboard-card card-sale h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-muted">À vendre</h6>
+                                <h2 class="stat-number text-success">{{ stats.biens_vente }}</h2>
+                            </div>
+                            <i class="fas fa-tag fa-3x text-success"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card dashboard-card card-rent h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-muted">À louer</h6>
+                                <h2 class="stat-number text-info">{{ stats.biens_location }}</h2>
+                            </div>
+                            <i class="fas fa-key fa-3x text-info"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card dashboard-card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-muted">Réservations</h6>
+                                <h2 class="stat-number text-warning">{{ stats.reservations }}</h2>
+                            </div>
+                            <i class="fas fa-calendar-check fa-3x text-warning"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Content -->
+        <div class="row">
+            <!-- Derniers biens -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Derniers biens ajoutés</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush">
+                            {% for bien in stats.latest_biens %}
+                            <a href="{{ ea_url().setController('App\\Controller\\Admin\\BienCrudController').setAction('edit').setEntityId(bien.id) }}" 
+                               class="list-group-item list-group-item-action recent-item">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <strong>{{ bien.libelle }}</strong>
+                                        <div class="text-muted small">
+                                            {{ bien.type.libelle }} - {{ bien.transaction == 'vente' ? 'À vendre' : 'À louer' }}
+                                        </div>
+                                    </div>
+                                    <span class="badge badge-primary">{{ bien.prix|number_format(0, ',', ' ') }} DZD</span>
+                                </div>
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Derniers contacts -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">Derniers messages</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush">
+                            {% for contact in stats.latest_contacts %}
+                            <a href="{{ ea_url().setController('App\\Controller\\Admin\\ContactCrudController').setAction('edit').setEntityId(contact.id) }}" 
+                               class="list-group-item list-group-item-action recent-item">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <strong>{{ contact.nom }}</strong>
+                                        <div class="text-muted small">{{ contact.email }}</div>
+                                    </div>
+                                    <div class="text-right">
+                                        {# <small class="text-muted">{{ contact.createdAt|date('d/m/Y H:i') }}</small> #}
+                                        <div class="text-truncate" style="max-width: 200px;">{{ contact.message }}</div>
+                                    </div>
+                                </div>
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Actions rapides</h5>
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="{{ ea_url().setController('App\\Controller\\Admin\\BienCrudController').setAction('new') }}" 
+                               class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>Ajouter un bien
+                            </a>
+                            <a href="{{ ea_url().setController('App\\Controller\\Admin\\ReservationCrudController') }}" 
+                               class="btn btn-success">
+                                <i class="fas fa-calendar-check me-2"></i>Voir les réservations
+                            </a>
+                            <a href="{{ ea_url().setController('App\\Controller\\Admin\\ContactCrudController') }}" 
+                               class="btn btn-info">
+                                <i class="fas fa-envelope me-2"></i>Voir les messages
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

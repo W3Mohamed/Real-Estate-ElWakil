@@ -209,15 +209,34 @@
             </div>
             
             <!-- Pagination -->
+            {% if pagesCount > 1 %}
             <div class="mt-16 flex justify-center">
                 <ul class="pagination flex space-x-2">
-                    <li><a href="#" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">&laquo;</a></li>
-                    <li class="active"><a href="#" class="px-4 py-2 border border-gray-300 rounded-lg">1</a></li>
-                    <li><a href="#" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">2</a></li>
-                    <li><a href="#" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">3</a></li>
-                    <li><a href="#" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">&raquo;</a></li>
+                    <li>
+                        <a href="{{ path('biens', app.request.query.all|merge({page: currentPage > 1 ? currentPage - 1 : 1})) }}" 
+                        class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 {{ currentPage == 1 ? 'opacity-50 cursor-not-allowed' : '' }}">
+                            &laquo;
+                        </a>
+                    </li>
+                    
+                    {% for i in 1..pagesCount %}
+                        <li>
+                            <a href="{{ path('biens', app.request.query.all|merge({page: i})) }}" 
+                            class="px-4 py-2 border border-gray-300 rounded-lg {{ currentPage == i ? 'bg-[#004165] text-white' : 'hover:bg-gray-100' }}">
+                                {{ i }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                    
+                    <li>
+                        <a href="{{ path('biens', app.request.query.all|merge({page: currentPage < pagesCount ? currentPage + 1 : pagesCount})) }}" 
+                        class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 {{ currentPage == pagesCount ? 'opacity-50 cursor-not-allowed' : '' }}">
+                            &raquo;
+                        </a>
+                    </li>
                 </ul>
             </div>
+            {% endif %}
         </div>
     </section>
 

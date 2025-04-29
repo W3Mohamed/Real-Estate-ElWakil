@@ -189,6 +189,20 @@ final class HomeController extends AbstractController
         }
 
         $biens = $queryBuilder->getQuery()->getResult();
+        $query = $queryBuilder->getQuery();
+    
+        // Pagination
+        $page = $request->query->getInt('page', 1);
+        $limit = 9; // Nombre d'items par page
+        
+        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $totalItems = count($paginator);
+        $pagesCount = ceil($totalItems / $limit);
+        
+        $paginator
+            ->getQuery()
+            ->setFirstResult($limit * ($page - 1)) // Offset
+            ->setMaxResults($limit); // Limit
         $types = $typeRepository->findAll();
         $parametres = $paramettreRepository->find(1); 
 
@@ -197,6 +211,9 @@ final class HomeController extends AbstractController
             'parametres' => $parametres,
             'biens' => $biens,
             'currentTransaction' => $transaction,
+            'biens' => $paginator,
+            'currentPage' => $page,
+            'pagesCount' => $pagesCount,
             'currentType' => $typeId,
             'currentPieces' => $pieces,
             'currentSuperficie' => $superficie,
