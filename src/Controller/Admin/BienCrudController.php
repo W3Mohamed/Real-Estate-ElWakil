@@ -26,6 +26,21 @@ class BienCrudController extends AbstractCrudController
         return Bien::class;
     }
 
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setEntityLabelInSingular('Bien')
+            ->setEntityLabelInPlural('Biens')
+            ->setPageTitle('edit', fn (Bien $bien) => sprintf('Modifier le bien %s', $bien->getLibelle()))
+            ->setPageTitle('new', 'Ajouter un bien')
+            ->setPageTitle('index', 'Liste des biens')
+            ->setPageTitle('detail', fn (Bien $bien) => sprintf('Détails du bien %s', $bien->getLibelle()))
+            ->setDefaultSort(['id' => 'DESC'])
+            ->overrideTemplates([
+                'crud/edit' => 'admin/bien/edit.html.twig',
+            ]);
+    }
+
     public function configureFields(string $pageName): iterable
     {
         yield TextField::new('libelle', 'Libellé');
@@ -63,26 +78,13 @@ class BienCrudController extends AbstractCrudController
                 'query_builder' => function(CommuneRepository $repo) {
                     return $repo->createQueryBuilder('c')
                         ->orderBy('c.nom', 'ASC');
-                },
-                'attr' => [
-                    'data-widget' => 'commune-selector',
-                ]
+                }
             ])
+            // Supprimez les autres options qui pourraient interférer
             ->formatValue(function ($value, $entity) {
                 return $entity->getCommune() ? $entity->getCommune()->getNom() : '';
-            })
-            ->setFormTypeOption('attr', function ($value, $entity) {
-                $attributes = [
-                    'data-widget' => 'commune-selector',
-                ];
-                
-                // Si nous sommes en mode édition et que l'entité a une commune
-                if ($entity instanceof Bien && $entity->getCommune()) {
-                    $attributes['data-selected-commune'] = $entity->getCommune()->getId();
-                }
-                
-                return $attributes;
             });
+
 
         yield TextField::new('adresse', 'Adresse')->hideOnIndex();
         yield IntegerField::new('piece', 'Nombre de pièces');

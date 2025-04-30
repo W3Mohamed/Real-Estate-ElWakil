@@ -1,0 +1,14 @@
+{% extends '@EasyAdmin/crud/edit.html.twig' %}
+
+{% block body_javascript %}
+    {{ parent() }}
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Debug info
+            {% if entity is defined and entity is not null and entity.instance.commune is not null %}
+                console.log('Current commune ID:', {{ entity.instance.commune.id }});
+            {% endif %}
+        });
+    </script>
+{% endblock %}
