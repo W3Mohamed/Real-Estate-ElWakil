@@ -1,267 +1,251 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Proprietes - GROUPIMMO{% endblock %}
+{% block title %}ElWakil - Nos biens immobiliers{% endblock %}
 
 {% block body %}
-    <!-- Même head que votre base.html.twig -->
-    <style>
-        .property-filter {
-            backdrop-filter: blur(10px);
-            background-color: rgba(255, 255, 255, 0.9);
-        }
-        .property-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .property-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        .pagination li a {
-            transition: all 0.3s ease;
-        }
-        .pagination li.active a {
-            background-color: #004165;
-            color: white;
-        }
-    </style>
-
-    <!-- Hero Section -->
-    <section class="relative bg-[#004165] h-[70vh] text-white py-28">
-        <div class="absolute inset-0">
-            <img src="{{asset('img/biens.jpg')}}" 
-                alt="Agence immobilière GROUPIMMO" 
-                class="w-full h-full object-cover object-center">
-            <div class="absolute inset-0 bg-[#004165] opacity-70"></div>
-        </div>
-        <div class="container mx-auto px-6 text-center relative">
-            <h1 class="text-4xl md:text-5xl font-bold mb-6">Nos biens immobiliers</h1>
-            <p class="text-xl md:text-2xl max-w-2xl mx-auto">Découvrez notre sélection exclusive de propriétés en Algérie</p>
-        </div>
-        
-        <!-- Vague décorative -->
-        <div class="absolute bottom-0 left-0 right-0 z-20">
-            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="w-full h-24 md:h-32">
-                <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V120H0V0Z" 
-                    opacity=".25" fill="white"></path>
-                <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V120H0V0Z" 
-                    opacity=".5" fill="white"></path>
-                <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V120H0V0Z" 
-                    fill="white"></path>
-            </svg>
-        </div>
-    </section>
-
-    <!-- Barre de recherche et filtres -->
-    <section class="py-12 bg-gray-50">
-        <div class="container mx-auto px-6">
-            <div class="property-filter p-6 rounded-xl shadow-lg">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <!-- Barre de recherche -->
-                    <div class="md:col-span-2">
-                        <div class="relative">
-                            <input type="text" placeholder="Rechercher par lieu, mot-clé..." 
-                                   class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
-                            <svg class="absolute left-3 top-3.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    
-                    <!-- Filtre type de transaction -->
-                    <div>
-                        <select onchange="window.location.href=this.value" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
-                            <option value="{{ path('biens') }}{{ currentTransaction ? '?t=' ~ currentTransaction : '' }}">Tous les types</option>
-                            <option value="{{ path('biens') }}?t=vente">À vendre</option>
-                            <option value="{{ path('biens') }}?t=location">À louer</option>
-                        </select>
-                    </div>
-                    
-                    <!-- Bouton recherche -->
-                    <div>
-                        {# <button class="w-full bg-[#004165] text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-800 transition">
-                            Rechercher
-                        </button> #}
-                         <a href="{{ path('biens') }}" class="inline-block bg-[#004165] text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-800 transition">
-        Réinitialiser les filtres
-    </a>
+<!-- Barre de recherche et filtres -->
+<section class="py-8 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Rechercher un bien</h2>
+            
+            <form class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Type de transaction -->
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Transaction</label>
+                    <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                        <option value="">Tous</option>
+                        <option value="vente">À vendre</option>
+                        <option value="location">À louer</option>
+                    </select>
+                </div>
+                
+                <!-- Type de bien -->
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Type de bien</label>
+                    <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                        <option value="">Tous</option>
+                        <option value="villa">Villa</option>
+                        <option value="appartement">Appartement</option>
+                        <option value="terrain">Terrain</option>
+                        <option value="local">Local commercial</option>
+                    </select>
+                </div>
+                
+                <!-- Wilaya -->
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Wilaya</label>
+                    <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                        <option value="">Toutes</option>
+                        <option value="alger">Alger</option>
+                        <option value="blida">Blida</option>
+                        <option value="oran">Oran</option>
+                        <option value="constantine">Constantine</option>
+                    </select>
+                </div>
+                
+                <!-- Commune -->
+                <div>
+                    <label class="block text-gray-700 font-medium mb-2">Commune</label>
+                    <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                        <option value="">Toutes</option>
+                        <option value="hydra">Hydra</option>
+                        <option value="el-biar">El Biar</option>
+                        <option value="ben-aknoun">Ben Aknoun</option>
+                    </select>
+                </div>
+                
+                <!-- Prix range -->
+                <div class="md:col-span-2">
+                    <label class="block text-gray-700 font-medium mb-2">Prix (DZD)</label>
+                    <div class="flex items-center space-x-4">
+                        <input type="number" placeholder="Min" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                        <span class="text-gray-500">à</span>
+                        <input type="number" placeholder="Max" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
                     </div>
                 </div>
                 
-                <!-- Filtres avancés -->
-                <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                    <div>
-                        <select onchange="window.location.href=this.value" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
-                            <option value="">Type de bien</option>
-                            {% for type in types %}
-                                <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ type.id }}&pieces={{ currentPieces }}&superficie={{ currentSuperficie }}&prix={{ currentPrix }}">{{ type.libelle }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div>
-                        <select onchange="window.location.href=this.value" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
-                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&pieces={{ currentPieces }}&superficie={{ currentSuperficie }}">Budget</option>
-                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&pieces={{ currentPieces }}&superficie={{ currentSuperficie }}&prix=1"
-                                {{ currentPrix == '1' ? 'selected' : '' }}>Moins de 5M DZD</option>
-                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&pieces={{ currentPieces }}&superficie={{ currentSuperficie }}&prix=2"
-                                {{ currentPrix == '2' ? 'selected' : '' }}>5M - 10M DZD</option>
-                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&pieces={{ currentPieces }}&superficie={{ currentSuperficie }}&prix=3"
-                                {{ currentPrix == '3' ? 'selected' : '' }}>10M - 20M DZD</option>
-                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&pieces={{ currentPieces }}&superficie={{ currentSuperficie }}&prix=4"
-                                {{ currentPrix == '4' ? 'selected' : '' }}>Plus de 20M DZD</option>
-                        </select>
-                    </div>
-                    <div>
-                        <select onchange="window.location.href=this.value" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
-                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&pieces={{ currentPieces }}&prix={{ currentPrix }}">Surface</option>
-                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&pieces={{ currentPieces }}&prix={{ currentPrix }}&superficie=1"
-                                {{ currentSuperficie == '1' ? 'selected' : '' }}>Moins de 50m²</option>
-                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&pieces={{ currentPieces }}&prix={{ currentPrix }}&superficie=2"
-                                {{ currentSuperficie == '2' ? 'selected' : '' }}>50m² - 100m²</option>
-                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&pieces={{ currentPieces }}&prix={{ currentPrix }}&superficie=3"
-                                {{ currentSuperficie == '3' ? 'selected' : '' }}>100m² - 200m²</option>
-                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&pieces={{ currentPieces }}&prix={{ currentPrix }}&superficie=4"
-                                {{ currentSuperficie == '4' ? 'selected' : '' }}>Plus de 200m²</option>
-                        </select>
-                    </div>
-                    <div>
-                        <select  onchange="window.location.href=this.value" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
-                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&superficie={{ currentSuperficie }}&prix={{ currentPrix }}">Pièces</option>
-                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&superficie={{ currentSuperficie }}&prix={{ currentPrix }}&pieces=1"
-                                {{ currentPieces == '1' ? 'selected' : '' }}>1-2 pièces</option>
-                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&superficie={{ currentSuperficie }}&prix={{ currentPrix }}&pieces=2"
-                                {{ currentPieces == '2' ? 'selected' : '' }}>3-4 pièces</option>
-                            <option value="{{ path('biens') }}?t={{ currentTransaction }}&type={{ currentType }}&superficie={{ currentSuperficie }}&prix={{ currentPrix }}&pieces=3"
-                                {{ currentPieces == '3' ? 'selected' : '' }}>5+ pièces</option>
-                        </select>
+                <!-- Superficie -->
+                <div class="md:col-span-2">
+                    <label class="block text-gray-700 font-medium mb-2">Superficie (m²)</label>
+                    <div class="flex items-center space-x-4">
+                        <input type="number" placeholder="Min" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                        <span class="text-gray-500">à</span>
+                        <input type="number" placeholder="Max" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
                     </div>
                 </div>
+                
+                <!-- Boutons -->
+                <div class="md:col-span-2 flex items-end space-x-4">
+                    <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+                        <i class="fas fa-search mr-2"></i> Rechercher
+                    </button>
+                    <button type="reset" class="border border-gray-300 hover:bg-gray-100 text-gray-700 font-bold py-3 px-6 rounded-lg transition duration-300">
+                        Réinitialiser
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Liste des biens -->
+<section class="py-8 bg-white">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-2xl font-bold text-gray-900">Nos biens disponibles</h2>
+            <div class="text-gray-600">
+                <span class="font-medium">12</span> résultats
             </div>
         </div>
-    </section>
-
-    <!-- Liste des propriétés -->
-    <section class="py-16 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="flex justify-between items-center mb-10">
-                <h2 class="text-2xl font-bold text-[#004165]">{{ biens|length }} biens disponibles</h2>
-                <div class="flex items-center">
-                    <span class="mr-2 text-gray-600">Trier par :</span>
-                    <select class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165]">
-                        <option>Plus récents</option>
-                        <option>Prix croissant</option>
-                        <option>Prix décroissant</option>
-                        <option>Surface</option>
-                    </select>
+        
+        <!-- Grille des biens -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Bien 1 -->
+            <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <div class="relative h-64 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                         alt="Villa moderne" 
+                         class="w-full h-full object-cover">
+                    <div class="absolute top-4 right-4 bg-yellow-500 text-white font-bold px-3 py-1 rounded-md text-sm">
+                        À vendre
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 truncate">Villa moderne avec piscine</h3>
+                    <p class="text-gray-600 mb-3 flex items-center text-sm">
+                        <i class="fas fa-map-marker-alt mr-2 text-yellow-500"></i>
+                        Hydra, Alger
+                    </p>
+                    <div class="flex flex-wrap gap-3 text-xs text-gray-600 mb-4">
+                        <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
+                            <i class="fas fa-bed mr-1 text-yellow-500"></i>
+                            4 chambres
+                        </span>
+                        <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
+                            <i class="fas fa-ruler-combined mr-1 text-yellow-500"></i>
+                            250 m²
+                        </span>
+                    </div>
+                    <div class="text-gray-900 font-bold text-xl mb-4">
+                        1 Milliard 500 Millions DZD
+                    </div>
+                    <div class="flex space-x-2">
+                        <a href="tel:0123456789" class="flex-1 text-center bg-gray-100 text-gray-800 text-sm font-medium py-2 px-3 rounded-lg hover:bg-gray-200 transition">
+                            <i class="fas fa-phone mr-1"></i> Appeler
+                        </a>
+                        <a href="https://wa.me/0123456789" class="flex-1 text-center bg-gray-900 text-white text-sm font-medium py-2 px-3 rounded-lg hover:bg-gray-800 transition">
+                            <i class="fab fa-whatsapp mr-1"></i> WhatsApp
+                        </a>
+                    </div>
                 </div>
             </div>
             
-            <!-- Grille des propriétés -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {% for bien in biens %}
-                <a href="{{path('detail')}}?id={{bien.id}}" class="property-card bg-white rounded-xl overflow-hidden border border-gray-100">
-                    <div class="relative">
-                        <img src="{% if bien.images|length > 0 %}{{ asset('uploads/biens/' ~ bien.images.last.image) }}{% else %}https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60{% endif %}" 
-                             alt="GROUPIMMO DZ Algerie {{bien.libelle}}" 
-                             class="w-full h-48 object-cover">
-                        {% if bien.transaction == "vente" %}
-                            <div class="absolute top-4 right-4 bg-[#fddb36] text-[#004165] font-bold px-3 py-1 rounded-md">À vendre</div>                        
-                        {% else %}
-                            <div class="absolute top-4 right-4 bg-[#004165] text-white font-bold px-3 py-1 rounded-md">À louer</div>
-                        {% endif %}
+            <!-- Bien 2 -->
+            <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <div class="relative h-64 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                         alt="Appartement moderne" 
+                         class="w-full h-full object-cover">
+                    <div class="absolute top-4 right-4 bg-gray-800 text-white font-bold px-3 py-1 rounded-md text-sm">
+                        À louer
                     </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-[#004165] mb-2">{{bien.libelle}}</h3>
-                        <p class="text-gray-600 mb-3 flex items-center">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                            {{bien.commune.nom}}, {{bien.wilaya.nom}}
-                        </p>
-                        <div class="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
-                            <span class="flex items-center">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                                </svg>
-                                {{bien.piece}} pièces
-                            </span>
-                            <span class="flex items-center">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
-                                </svg>
-                                {{bien.superficie}} m²
-                            </span>
-                            <span class="flex items-center">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                                </svg>
-                                {% if bien.etage == 0 %}
-                                    Rez-de-chaussée
-                                {% else %}
-                                    {{ bien.etage }}{% if bien.etage == 1 %}er{% else %}ème{% endif %} étage
-                                {% endif %}
-                            </span>
-                        </div>
-                        <div class="text-[#004165] font-bold text-xl">{{bien.prix|number_format(0, ',', ' ')}} DZD</div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 truncate">Appartement F3 moderne</h3>
+                    <p class="text-gray-600 mb-3 flex items-center text-sm">
+                        <i class="fas fa-map-marker-alt mr-2 text-yellow-500"></i>
+                        El Biar, Alger
+                    </p>
+                    <div class="flex flex-wrap gap-3 text-xs text-gray-600 mb-4">
+                        <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
+                            <i class="fas fa-bed mr-1 text-yellow-500"></i>
+                            2 chambres
+                        </span>
+                        <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
+                            <i class="fas fa-ruler-combined mr-1 text-yellow-500"></i>
+                            90 m²
+                        </span>
                     </div>
+                    <div class="text-gray-900 font-bold text-xl mb-4">
+                        120 000 DZD/mois
+                    </div>
+                    <div class="flex space-x-2">
+                        <a href="tel:0123456789" class="flex-1 text-center bg-gray-100 text-gray-800 text-sm font-medium py-2 px-3 rounded-lg hover:bg-gray-200 transition">
+                            <i class="fas fa-phone mr-1"></i> Appeler
+                        </a>
+                        <a href="https://wa.me/0123456789" class="flex-1 text-center bg-gray-900 text-white text-sm font-medium py-2 px-3 rounded-lg hover:bg-gray-800 transition">
+                            <i class="fab fa-whatsapp mr-1"></i> WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bien 3 -->
+            <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <div class="relative h-64 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                         alt="Terrain constructible" 
+                         class="w-full h-full object-cover">
+                    <div class="absolute top-4 right-4 bg-yellow-500 text-white font-bold px-3 py-1 rounded-md text-sm">
+                        À vendre
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 truncate">Terrain constructible</h3>
+                    <p class="text-gray-600 mb-3 flex items-center text-sm">
+                        <i class="fas fa-map-marker-alt mr-2 text-yellow-500"></i>
+                        Staoueli, Alger
+                    </p>
+                    <div class="flex flex-wrap gap-3 text-xs text-gray-600 mb-4">
+                        <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
+                            <i class="fas fa-ruler-combined mr-1 text-yellow-500"></i>
+                            500 m²
+                        </span>
+                    </div>
+                    <div class="text-gray-900 font-bold text-xl mb-4">
+                        870 Millions DZD
+                    </div>
+                    <div class="flex space-x-2">
+                        <a href="tel:0123456789" class="flex-1 text-center bg-gray-100 text-gray-800 text-sm font-medium py-2 px-3 rounded-lg hover:bg-gray-200 transition">
+                            <i class="fas fa-phone mr-1"></i> Appeler
+                        </a>
+                        <a href="https://wa.me/0123456789" class="flex-1 text-center bg-gray-900 text-white text-sm font-medium py-2 px-3 rounded-lg hover:bg-gray-800 transition">
+                            <i class="fab fa-whatsapp mr-1"></i> WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Ajouter 9 autres biens similaires ici -->
+        </div>
+        
+        <!-- Pagination -->
+        <div class="mt-12 flex justify-center">
+            <nav class="flex items-center space-x-2">
+                <a href="#" class="px-3 py-1 rounded-lg border border-gray-300 text-gray-500 hover:bg-gray-100">
+                    <i class="fas fa-chevron-left"></i>
                 </a>
-                {% endfor %}
-            </div>
-            
-            <!-- Pagination -->
-            {% if pagesCount > 1 %}
-            <div class="mt-16 flex justify-center">
-                <ul class="pagination flex space-x-2">
-                    <li>
-                        <a href="{{ path('biens', app.request.query.all|merge({page: currentPage > 1 ? currentPage - 1 : 1})) }}" 
-                        class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 {{ currentPage == 1 ? 'opacity-50 cursor-not-allowed' : '' }}">
-                            &laquo;
-                        </a>
-                    </li>
-                    
-                    {% for i in 1..pagesCount %}
-                        <li>
-                            <a href="{{ path('biens', app.request.query.all|merge({page: i})) }}" 
-                            class="px-4 py-2 border border-gray-300 rounded-lg {{ currentPage == i ? 'bg-[#004165] text-white' : 'hover:bg-gray-100' }}">
-                                {{ i }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                    
-                    <li>
-                        <a href="{{ path('biens', app.request.query.all|merge({page: currentPage < pagesCount ? currentPage + 1 : pagesCount})) }}" 
-                        class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100 {{ currentPage == pagesCount ? 'opacity-50 cursor-not-allowed' : '' }}">
-                            &raquo;
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            {% endif %}
+                <a href="#" class="px-4 py-2 rounded-lg bg-yellow-500 text-white font-bold">1</a>
+                <a href="#" class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">2</a>
+                <a href="#" class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">3</a>
+                <span class="px-2 py-1 text-gray-500">...</span>
+                <a href="#" class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">8</a>
+                <a href="#" class="px-3 py-1 rounded-lg border border-gray-300 text-gray-500 hover:bg-gray-100">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            </nav>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- CTA Section -->
-    <section class="py-16 bg-[#f8f9fa]">
-        <div class="container mx-auto px-6">
-            <div class="bg-white rounded-xl shadow-xl overflow-hidden">
-                <div class="grid grid-cols-1 md:grid-cols-2">
-                    <div class="p-12 bg-[#004165] text-white">
-                        <h2 class="text-3xl font-bold mb-6">Vous avez un bien à vendre ou louer ?</h2>
-                        <p class="text-xl mb-8">Confiez-nous votre bien et bénéficiez de notre expertise pour une transaction rapide et au meilleur prix.</p>
-                        <a href="{{path('accueil')}}#vendre" class="inline-block bg-[#fddb36] text-[#004165] font-bold py-3 px-8 rounded-lg hover:bg-yellow-400 transition">
-                            Proposer un bien
-                        </a>
-                    </div>
-                    <div class="p-12">
-                        <h2 class="text-3xl font-bold text-[#004165] mb-6">Des questions sur nos biens ?</h2>
-                        <p class="text-xl text-gray-600 mb-8">Notre équipe est disponible pour vous conseiller et organiser des visites.</p>
-                        <a href="{{path('contact')}}" class="inline-block border-2 border-[#004165] text-[#004165] font-bold py-3 px-8 rounded-lg hover:bg-[#004165] hover:text-white transition">
-                            Contactez-nous
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
+<!-- Boutons de contact fixes -->
+<div class="fixed bottom-6 right-6 z-50 flex flex-col space-y-3">
+    <a href="tel:0123456789" class="w-14 h-14 bg-yellow-500 hover:bg-yellow-600 text-white rounded-full flex items-center justify-center shadow-lg transition transform hover:scale-110">
+        <i class="fas fa-phone text-xl"></i>
+    </a>
+    <a href="https://wa.me/0123456789" class="w-14 h-14 bg-green-500 hover:bg-green-600 text-white rounded-full flex items-center justify-center shadow-lg transition transform hover:scale-110">
+        <i class="fab fa-whatsapp text-xl"></i>
+    </a>
+</div>
 {% endblock %}

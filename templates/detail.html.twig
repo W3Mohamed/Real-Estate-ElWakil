@@ -1,564 +1,379 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{bien.libelle}} | GROUPIMMO{% endblock %}
-
-{% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
-    <style>
-        .property-details-item {
-            transition: all 0.3s ease;
-        }
-        .property-details-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-        .contact-form-container {
-            background: linear-gradient(135deg, rgba(253, 219, 54, 0.1) 0%, rgba(0, 65, 101, 0.1) 100%);
-        }
-        .feature-icon {
-            background: rgba(253, 219, 54, 0.2);
-            color: #004165;
-        }
-        .splide__pagination__page.is-active {
-            background: #fddb36;
-        }
-        .splide__arrow {
-            background: #004165;
-        }
-        .splide__arrow svg {
-            fill: #ffffff;
-        }
-        .amenity-icon {
-            color: #fddb36;
-            background-color: #004165;
-        }
-        .similar-property-card {
-            transition: all 0.3s ease;
-        }
-        .similar-property-card:hover {
-            transform: translateY(-10px);
-        }
-        .price-tag {
-            background: #fddb36;
-            color: #004165;
-            clip-path: polygon(0 0, 100% 0, 100% 70%, 85% 100%, 0 100%);
-        }
-    </style>
-{% endblock %}
+{% block title %}ElWakil - Villa Moderne avec Jardin{% endblock %}
 
 {% block body %}
-    <!-- Section Hero avec image principale et overlay -->
-    <section class="relative h-[50vh] min-h-[400px] overflow-hidden">
-        <div class="absolute inset-0">
-            <img src="{{asset('img/detail.jpg')}}" 
-                 alt="Villa de Luxe avec Piscine" 
-                 class="w-full h-full object-cover object-center">
-            <div class="absolute inset-0 bg-gradient-to-b from-black/70 to-black/30"></div>
-        </div>
-        
-        <div class="relative h-full flex flex-col justify-end px-6 pb-12">
-            <div class="container mx-auto">
-                <div class="bg-white/10 backdrop-blur-md p-8 rounded-lg inline-block mb-6">
-                    <span class="inline-block px-4 py-1 rounded-full bg-[#fddb36] text-[#004165] font-semibold text-sm mb-4">
-                        {{ bien.transaction }} - {{ bien.type.libelle }}
-                    </span>
-                    <h1 class="text-4xl md:text-5xl font-bold text-white leading-tight">
-                        {{ bien.libelle }}
-                    </h1>
-                    <div class="flex items-center mt-4">
-                        <div class="flex items-center mr-6">
-                            <svg class="w-5 h-5 text-[#fddb36] mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span class="text-white">{{ bien.commune.nom }}, {{ bien.wilaya.nom }}</span>
+    <!-- Section Principale -->
+    <section class="py-8 bg-white">
+        <div class="container mx-auto px-4">
+            <!-- Fil d'Ariane -->
+            <div class="mb-6 text-sm text-gray-600">
+                <a href="{{ path('accueil') }}" class="hover:text-yellow-500">Accueil</a> > 
+                <a href="{{ path('biens') }}" class="hover:text-yellow-500">Biens</a> > 
+                <span class="text-gray-900">Villa Moderne avec Jardin</span>
+            </div>
+
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Galerie d'images -->
+                <div class="lg:w-2/3">
+                    <div class="splide gallery-main mb-4 rounded-xl overflow-hidden shadow-lg">
+                        <div class="splide__track">
+                            <ul class="splide__list">
+                                <li class="splide__slide">
+                                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" 
+                                        alt="Villa Moderne avec Jardin" 
+                                        class="w-full h-96 object-cover">
+                                </li>
+                                <li class="splide__slide">
+                                    <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914" 
+                                        alt="Villa Moderne avec Jardin" 
+                                        class="w-full h-96 object-cover">
+                                </li>
+                                <li class="splide__slide">
+                                    <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                                        alt="Villa Moderne avec Jardin" 
+                                        class="w-full h-96 object-cover">
+                                </li>
+                                <li class="splide__slide">
+                                    <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994" 
+                                        alt="Villa Moderne avec Jardin" 
+                                        class="w-full h-96 object-cover">
+                                </li>
+                            </ul>
                         </div>
-                        {% if bien.transaction == 'vente' %}
-                            <div class="text-white font-bold text-2xl">{{ bien.prix|number_format(0, ',', ' ') }} DA</div>                            
-                        {% else %}
-                            <div class="text-white font-bold text-2xl">{{ bien.prix|number_format(0, ',', ' ') }} DA/Mois</div>
-                        {% endif %}
+                    </div>
+
+                    <!-- Miniatures -->
+                    <div class="splide gallery-thumbnails">
+                        <div class="splide__track">
+                            <ul class="splide__list">
+                                <li class="splide__slide">
+                                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" 
+                                        alt="Villa Moderne avec Jardin" 
+                                        class="w-full h-24 object-cover cursor-pointer">
+                                </li>
+                                <li class="splide__slide">
+                                    <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914" 
+                                        alt="Villa Moderne avec Jardin" 
+                                        class="w-full h-24 object-cover cursor-pointer">
+                                </li>
+                                <li class="splide__slide">
+                                    <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                                        alt="Villa Moderne avec Jardin" 
+                                        class="w-full h-24 object-cover cursor-pointer">
+                                </li>
+                                <li class="splide__slide">
+                                    <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994" 
+                                        alt="Villa Moderne avec Jardin" 
+                                        class="w-full h-24 object-cover cursor-pointer">
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        
-        <!-- Vague décorative -->
-        <div class="absolute bottom-0 left-0 right-0 z-20">
-            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" class="w-full h-16">
-                <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V120H0V0Z" 
-                     opacity=".25" fill="white"></path>
-                <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V120H0V0Z" 
-                     opacity=".5" fill="white"></path>
-                <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V120H0V0Z" 
-                     fill="white"></path>
-            </svg>
-        </div>
-        
-        <!-- Div de masquage -->
-        <div class="absolute bottom-0 left-0 right-0 bg-white h-1 z-10"></div>
-    </section>
 
-    <!-- Section Contenu Principal -->
-    <section class="py-12 bg-white">
-        {% for message in app.flashes('success') %}
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-                {{ message }}
-            </div>
-        {% endfor %}
-
-        {% for message in app.flashes('error') %}
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                {{ message }}
-            </div>
-        {% endfor %}
-        <div class="container mx-auto px-4 md:px-6">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                <!-- Colonne Gauche: Détails et Galerie -->
-                <div class="lg:col-span-2">
-                    <!-- Galerie d'images avec Splide -->
-                    <div class="mb-12 rounded-xl overflow-hidden shadow-lg">
-                        <div class="splide" id="property-carousel">
-                            <div class="splide__track">
-                                <ul class="splide__list">
-                                    {% for image in bien.images %}
-                                        <li class="splide__slide">
-                                            <img src="{{ asset('uploads/biens/' ~ image.image) }}" 
-                                                alt="{{ bien.libelle }} - Image {{ loop.index }}"
-                                                class="w-full h-[500px] object-cover">
-                                        </li>
-                                    {% else %}
-                                        {# Image par défaut si aucun image n'est disponible #}
-                                        <li class="splide__slide">
-                                            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" 
-                                                alt="Image par défaut"
-                                                class="w-full h-[500px] object-cover">
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
+                <!-- Détails du bien -->
+                <div class="lg:w-1/3">
+                    <div class="bg-white rounded-xl shadow-md p-6 sticky top-4">
+                        <!-- Étiquette de type -->
+                        <div class="mb-4">
+                            <span class="inline-block bg-yellow-500 text-white font-bold px-3 py-1 rounded-md text-sm">
+                                À vendre
+                            </span>
                         </div>
-                    </div>
 
-                    <!-- Boutons de partage et favoris -->
-                    <div class="flex justify-end mb-8">
-                        <button class="flex items-center text-gray-600 hover:text-[#004165] transition mr-4">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
-                            </svg>
-                            Partager
-                        </button>
-                        <button class="flex items-center text-gray-600 hover:text-red-500 transition">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                            </svg>
-                            Favoris
-                        </button>
-                    </div>
-
-                    <!-- Caractéristiques principales -->
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-                        <div class="property-details-item flex flex-col items-center py-5 px-2 rounded-lg bg-gray-50 shadow-sm text-center">
-                            <div class="w-12 h-12 mb-3 rounded-full feature-icon flex items-center justify-center">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                                </svg>
-                            </div>
-                            <h3 class="text-lg font-semibold text-gray-800">Surface</h3>
-                            <p class="text-lg font-bold text-[#004165]">{{ bien.superficie }} m²</p>
-                        </div>
-                        <div class="property-details-item flex flex-col items-center py-5 px-2 rounded-lg bg-gray-50 shadow-sm text-center">
-                            <div class="w-12 h-12 mb-3 rounded-full feature-icon flex items-center justify-center">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                                </svg>
-                            </div>
-                            <h3 class="text-lg font-semibold text-gray-800">Chambres</h3>
-                            <p class="text-lg font-bold text-[#004165]">{{ bien.piece }}</p>
-                        </div>
-                        {# <div class="property-details-item flex flex-col items-center py-5 px-2 rounded-lg bg-gray-50 shadow-sm text-center">
-                            <div class="w-12 h-12 mb-3 rounded-full feature-icon flex items-center justify-center">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
-                                </svg>
-                            </div>
-                            <h3 class="text-lg font-semibold text-gray-800">Salles de Bain</h3>
-                            <p class="text-lg font-bold text-[#004165]">3</p>
-                        </div> #}
-                        <div class="property-details-item flex flex-col items-center py-5 px-2 rounded-lg bg-gray-50 shadow-sm text-center">
-                            <div class="w-12 h-12 mb-3 rounded-full feature-icon flex items-center justify-center">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
-                                </svg>
-                            </div>
-                            <h3 class="text-lg font-semibold text-gray-800">Étage</h3>
-                            <p class="text-lg font-bold text-[#004165]">{{ bien.etage }}</p>
-                        </div>
-                    </div>
-
-                    <!-- Description -->
-                    <div class="mb-10">
-                        <h2 class="text-2xl font-bold text-[#004165] mb-4 flex items-center">
-                            <svg class="w-6 h-6 mr-2 text-[#fddb36]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            Description
-                        </h2>
-                        <div class="text-gray-700 space-y-4">
-                           <p>{{ bien.description|nl2br }}</p>
-                        </div>
-                    </div>
-
-                    {# <!-- Équipements et Services -->
-                    <div class="mb-10">
-                        <h2 class="text-2xl font-bold text-[#004165] mb-4 flex items-center">
-                            <svg class="w-6 h-6 mr-2 text-[#fddb36]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Équipements et Services
-                        </h2>
-                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 rounded-full amenity-icon flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-gray-700">Piscine chauffée</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 rounded-full amenity-icon flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-gray-700">Jardin paysager</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 rounded-full amenity-icon flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-gray-700">Smart Home</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 rounded-full amenity-icon flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-gray-700">Wifi haut débit</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 rounded-full amenity-icon flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-gray-700">Système de sécurité</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 rounded-full amenity-icon flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-gray-700">Garage 3 voitures</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 rounded-full amenity-icon flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-gray-700">Climatisation</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 rounded-full amenity-icon flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-gray-700">Chauffage central</span>
-                            </div>
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 rounded-full amenity-icon flex items-center justify-center mr-3">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M7 2a1 1 0 00-.707 1.707L7 4.414v3.758a1 1 0 01-.293.707l-4 4C.817 14.769 2.156 18 4.828 18h10.343c2.673 0 4.012-3.231 2.122-5.121l-4-4A1 1 0 0113 8.172V4.414l.707-.707A1 1 0 0013 2H7zm2 6.172V4h2v4.172a3 3 0 00.879 2.12l1.027 1.028a4 4 0 00-2.171.102l-.47.156a4 4 0 01-2.53 0l-.563-.187a1.993 1.993 0 00-.114-.035l1.063-1.063A3 3 0 009 8.172z" clip-rule="evenodd"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-gray-700">Cave à vin</span>
-                            </div>
-                        </div>
-                    </div> #}
-
-                    <!-- Emplacement -->
-                    <div class="mb-10">
-                        <h2 class="text-2xl font-bold text-[#004165] mb-4 flex items-center">
-                            <svg class="w-6 h-6 mr-2 text-[#fddb36]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                            Emplacement
-                        </h2>
-                        {# <div class="rounded-xl overflow-hidden h-96 shadow-lg">
-                            <iframe 
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d25580.42355066736!2d3.058584968750002!3d36.75391179999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128fad6795639515%3A0x4a7d6c0e0a3a3a3a!2sAlger%20Centre!5e0!3m2!1sen!2sdz!4v1620000000000!5m2!1sen!2sdz" 
-                                class="w-full h-full border-0"
-                                allowfullscreen=""
-                                loading="lazy">
-                            </iframe>
-                        </div> #}
-                        <div class="mt-4 text-gray-700">
-                            <p class="mb-2">{{ bien.adresse|nl2br }}</p>
-                        </div>
-                    </div>
-
-                    <!-- Visite Virtuelle -->
-                    {# <div class="mb-10">
-                        <h2 class="text-2xl font-bold text-[#004165] mb-4 flex items-center">
-                            <svg class="w-6 h-6 mr-2 text-[#fddb36]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                            </svg>
-                            Visite Virtuelle
-                        </h2>
-                        <div class="aspect-w-16 aspect-h-9 rounded-xl overflow-hidden shadow-lg">
-                            <iframe 
-                                src="https://www.youtube.com/embed/example" 
-                                class="w-full h-96"
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen>
-                            </iframe>
-                        </div>
-                    </div> #}
-                </div>
-
-                <!-- Colonne Droite: Formulaire de Contact et Agent -->
-                <div class="space-y-8">
-                    <!-- Formulaire de Contact -->
-                    <div class="contact-form-container p-6 rounded-xl shadow-lg border border-gray-200">
-                        <h2 class="text-2xl font-bold text-[#004165] mb-4">Intéressé par cette propriété ?</h2>
-                        <p class="text-gray-600 mb-6">Contactez notre agent pour plus d'informations ou pour organiser une visite.</p>
+                        <h1 class="text-2xl font-bold text-gray-900 mb-2">Villa Moderne avec Jardin</h1>
                         
-                        <form class="space-y-4" method="POST" action="{{path('app_reservation')}}">
-                            <div>
-                                <label for="contact-name" class="block text-gray-700 font-medium mb-2">Nom complet</label>
-                                <input type="text" name="nom" id="contact-name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165] focus:border-transparent">
-                            </div>
-                            
-                            <div>
-                                <label for="contact-email" class="block text-gray-700 font-medium mb-2">Email</label>
-                                <input type="email" name="email" id="contact-email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165] focus:border-transparent">
-                            </div>
-                            
-                            <div>
-                                <label for="contact-phone" class="block text-gray-700 font-medium mb-2">Téléphone</label>
-                                <input type="tel" name="tel" id="contact-phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165] focus:border-transparent">
-                            </div>
-                            
-                            <div>
-                                <label for="contact-message" class="block text-gray-700 font-medium mb-2">Message</label>
-                                <textarea id="contact-message" name="message" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#004165] focus:border-transparent"></textarea>
-                            </div>
-                            <input type="hidden" name="bien" value="{{ bien.id}}">
-                            <button type="submit" class="w-full bg-[#004165] text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-800 transition transform hover:-translate-y-1 shadow-md">
-                                Envoyer la demande
-                            </button>
-                        </form>
-                    </div>
+                        <div class="flex items-center text-gray-600 mb-4">
+                            <i class="fas fa-map-marker-alt mr-2 text-yellow-500"></i>
+                            Hydra, Alger
+                        </div>
 
-                    <!-- Agent Immobilier -->
-                    {# <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-                        <h2 class="text-2xl font-bold text-[#004165] mb-4">Votre agent</h2>
-                        <div class="flex items-start mb-6">
-                            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" 
-                                 alt="Karim Benali" 
-                                 class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-[#fddb36]">
-                            <div>
-                                <h3 class="text-xl font-bold text-gray-800">Karim Benali</h3>
-                                <p class="text-gray-600">Agent immobilier senior</p>
-                                <div class="flex items-center mt-2">
-                                    <svg class="w-4 h-4 text-[#fddb36] mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                                    </svg>
-                                    <span class="text-gray-700 font-medium">4.9 (24 avis)</span>
-                                </div>
+                        <!-- Prix formaté -->
+                        <div class="text-3xl font-bold text-gray-900 mb-6">
+                            42 500 000 DZD
+                        </div>
+
+                        <!-- Caractéristiques -->
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div class="flex items-center">
+                                <i class="fas fa-ruler-combined mr-2 text-yellow-500"></i>
+                                <span>280 m²</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-bed mr-2 text-yellow-500"></i>
+                                <span>5 chambres</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-bath mr-2 text-yellow-500"></i>
+                                <span>3 salles de bain</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-layer-group mr-2 text-yellow-500"></i>
+                                <span>2ème étage</span>
                             </div>
                         </div>
-                        
-                        <div class="space-y-3">
-                            <div class="flex items-center">
-                                <svg class="w-5 h-5 text-[#004165] mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                                </svg>
-                                <span class="text-gray-700">+213 123 456 789</span>
-                            </div>
-                            <div class="flex items-center">
-                                <svg class="w-5 h-5 text-[#004165] mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                                </svg>
-                                <span class="text-gray-700">k.benali@groupimmo.dz</span>
-                            </div>
-                            <div class="flex items-center">
-                                <svg class="w-5 h-5 text-[#004165] mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                <span class="text-gray-700">Disponible 7j/7 de 8h à 20h</span>
-                            </div>
-                        </div>
-                        
-                        <button class="w-full mt-6 bg-[#fddb36] text-[#004165] font-bold py-3 px-6 rounded-lg hover:bg-yellow-400 transition transform hover:-translate-y-1 shadow-md">
-                            Contacter l'agent
-                        </button>
-                    </div> #}
 
-                    <!-- Brochure PDF -->
-                    {# <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-                        <h2 class="text-2xl font-bold text-[#004165] mb-4">Documentation</h2>
-                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                            <div class="flex items-center">
-                                <svg class="w-8 h-8 text-[#004165] mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                                </svg>
-                                <div>
-                                    <h3 class="font-medium text-gray-800">Brochure complète</h3>
-                                    <p class="text-sm text-gray-600">PDF - 2.4 MB</p>
-                                </div>
-                            </div>
-                            <a href="#" class="text-[#004165] hover:text-blue-800 font-medium flex items-center">
-                                Télécharger
-                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                                </svg>
+                        <!-- Boutons de contact fixes -->
+                        <div class="flex flex-col space-y-3">
+                            <a href="tel:+213550123456" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-4 rounded-lg text-center transition">
+                                <i class="fas fa-phone mr-2"></i> Appeler maintenant
+                            </a>
+                            <a href="https://wa.me/213550123456" class="bg-gray-900 hover:bg-gray-800 text-white font-bold py-3 px-4 rounded-lg text-center transition">
+                                <i class="fab fa-whatsapp mr-2"></i> WhatsApp
                             </a>
                         </div>
-                    </div> #}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description et détails -->
+            <div class="mt-12 grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2">
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">Description</h2>
+                    <div class="prose max-w-none text-gray-600">
+                        <p>Magnifique villa moderne située dans le quartier prisé d'Hydra à Alger. Cette propriété exceptionnelle offre un espace de vie luxueux sur trois niveaux avec un jardin privé et une terrasse panoramique.</p>
+                        
+                        <p>La villa dispose de 5 chambres spacieuses, dont une suite parentale avec dressing et salle de bain privative. Les espaces de vie comprennent un grand salon lumineux, une salle à manger séparée et une cuisine entièrement équipée avec des appareils haut de gamme.</p>
+                        
+                        <p>Le sous-sol comprend un garage pour 2 voitures, une buanderie et une salle polyvalente pouvant servir de salle de sport ou de bureau. Le jardin paysager offre un espace extérieur idéal pour se détendre et recevoir.</p>
+                        
+                        <p>La propriété bénéficie d'une excellente sécurité avec un système d'alarme, des caméras de surveillance et un portail électrique. Située à proximité des écoles internationales, des ambassades et des centres commerciaux, cette villa représente une opportunité d'investissement exceptionnelle.</p>
+                    </div>
+
+                    <!-- Vidéos intégrées -->
+                    <div class="mt-8">
+                        <h2 class="text-xl font-bold text-gray-900 mb-4">Visite virtuelle</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2 flex items-center">
+                                    <i class="fab fa-youtube text-red-600 mr-2"></i> YouTube
+                                </h3>
+                                <div class="aspect-w-16 aspect-h-9">
+                                    <iframe class="w-full h-64 rounded-lg" src="https://www.youtube.com/embed/3OtJGyf4pjI?si=fzf5rWQcE5cRaynh" frameborder="0" allowfullscreen></iframe>
+                                </div>
+                            </div>
+                            <div class="facebook-videos-carousel">
+                                <h3 class="text-lg font-semibold mb-2 flex items-center">
+                                    <i class="fab fa-facebook text-blue-600 mr-2"></i> Facebook Videos
+                                </h3>
+                                
+                                <!-- Conteneur Splide pour les vidéos Facebook -->
+                                <div class="splide facebook-videos-slider">
+                                    <div class="splide__track">
+                                        <ul class="splide__list">
+                                            <!-- Vidéo 1 -->
+                                            <li class="splide__slide">
+                                                <div class="aspect-w-16 aspect-h-9">
+                                                    <iframe class="w-full h-64 rounded-lg" src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fweb.facebook.com%2F100092243002638%2Fvideos%2F9839164636178223%2F&show_text=false&width=267&t=0" frameborder="0" allowfullscreen></iframe>
+                                                </div>
+                                            </li>
+                                            
+                                            <!-- Vidéo 2 -->
+                                            <li class="splide__slide">
+                                                <div class="aspect-w-16 aspect-h-9">
+                                                    <iframe class="w-full h-64 rounded-lg" src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fweb.facebook.com%2F100092243002638%2Fvideos%2F676255345010546%2F&show_text=false&width=267&t=0" frameborder="0" allowfullscreen></iframe>
+                                                </div>
+                                            </li>
+                                            
+                                            <!-- Vidéo 3 -->
+                                            <li class="splide__slide">
+                                                <div class="aspect-w-16 aspect-h-9">
+                                                    <iframe class="w-full h-64 rounded-lg" src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fweb.facebook.com%2F100092243002638%2Fvideos%2F1189964672671077%2F&show_text=false&width=267&t=0" frameborder="0" allowfullscreen></iframe>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    // Initialiser le carrousel des vidéos Facebook avec une classe unique
+                                    new Splide('.facebook-videos-slider', {
+                                        type: 'loop', // ou 'slide' selon vos besoins
+                                        perPage: 1, // Nombre de vidéos visibles à la fois
+                                        perMove: 1,
+                                        gap: '1rem', // Espace entre les slides
+                                        arrows: true,
+                                        pagination: true,
+                                        // Ajoutez d'autres options selon vos besoins
+                                    }).mount();
+                                });
+                            </script>
+                        </div>
+                    </div>
+                                    
+                    <!-- Localisation -->
+                    <div class="mt-8">
+                        <h2 class="text-xl font-bold text-gray-900 mb-4">Localisation</h2>
+                        <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                            <p class="text-gray-600">La propriété est idéalement située dans le quartier résidentiel d'Hydra, offrant un accès facile aux commodités locales:</p>
+                            <ul class="mt-2 space-y-1 text-gray-600">
+                                <li>• 5 min des écoles internationales</li>
+                                <li>• 10 min du centre commercial</li>
+                                <li>• 15 min du centre-ville d'Alger</li>
+                                <li>• 25 min de l'aéroport international</li>
+                            </ul>
+                        </div>
+                        <div class="h-64 bg-gray-200 rounded-lg">
+                            <!-- Emplacement pour la carte Google Maps -->
+                            <div class="w-full h-full flex items-center justify-center text-gray-500">
+                                <p>Carte de localisation</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Caractéristiques supplémentaires -->
+                <div>
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-xl font-bold text-gray-900 mb-4">Détails du bien</h2>
+                        <ul class="space-y-3">
+                            <li class="flex justify-between py-2 border-b border-gray-100">
+                                <span class="text-gray-600">Type de bien</span>
+                                <span class="font-medium">Villa</span>
+                            </li>
+                            <li class="flex justify-between py-2 border-b border-gray-100">
+                                <span class="text-gray-600">Transaction</span>
+                                <span class="font-medium">Vente</span>
+                            </li>
+                            <li class="flex justify-between py-2 border-b border-gray-100">
+                                <span class="text-gray-600">Date de publication</span>
+                                <span class="font-medium">03/05/2025</span>
+                            </li>
+                            <li class="flex justify-between py-2 border-b border-gray-100">
+                                <span class="text-gray-600">Surface</span>
+                                <span class="font-medium">450 m²</span>
+                            </li>
+                            <li class="flex justify-between py-2 border-b border-gray-100">
+                                <span class="text-gray-600">Année de construction</span>
+                                <span class="font-medium">2021</span>
+                            </li>
+                            <li class="flex justify-between py-2 border-b border-gray-100">
+                                <span class="text-gray-600">État</span>
+                                <span class="font-medium">Excellent</span>
+                            </li>
+                        </ul>
+
+                        <!-- Partager sur les réseaux -->
+                        <div class="mt-6">
+                            <h3 class="text-lg font-semibold mb-3">Nos reseau sociaux</h3>
+                            <div class="flex space-x-2">
+                                <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center transition">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center transition">
+                                    <i class="fab fa-youtube"></i>
+                                </a>
+                                <a href="#" class="bg-green-500 hover:bg-green-600 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center transition">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                                <a href="#" class="bg-gray-700 hover:bg-gray-800 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center transition">
+                                    <i class="fab fa-tiktok"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Biens similaires -->
+                    <div class="mt-6 bg-white rounded-xl shadow-md p-6">
+                        <h2 class="text-xl font-bold text-gray-900 mb-4">Biens similaires</h2>
+                        <div class="space-y-4">
+                            <a href="#" class="block group">
+                                <div class="flex items-center">
+                                    <div class="w-20 h-20 rounded-md overflow-hidden mr-3">
+                                        <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Appartement de Luxe" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-900 group-hover:text-yellow-500 transition">Appartement de Luxe</h4>
+                                        <p class="text-sm text-gray-600">Alger Centre</p>
+                                        <p class="text-sm font-bold text-yellow-500">18 500 000 DZD</p>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="#" class="block group">
+                                <div class="flex items-center">
+                                    <div class="w-20 h-20 rounded-md overflow-hidden mr-3">
+                                        <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Villa avec Piscine" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-900 group-hover:text-yellow-500 transition">Villa avec Piscine</h4>
+                                        <p class="text-sm text-gray-600">Dély Ibrahim</p>
+                                        <p class="text-sm font-bold text-yellow-500">38 700 000 DZD</p>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="#" class="block group">
+                                <div class="flex items-center">
+                                    <div class="w-20 h-20 rounded-md overflow-hidden mr-3">
+                                        <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Duplex Moderne" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-900 group-hover:text-yellow-500 transition">Duplex Moderne</h4>
+                                        <p class="text-sm text-gray-600">Birkhadem</p>
+                                        <p class="text-sm font-bold text-yellow-500">22 300 000 DZD</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="mt-4 text-center">
+                            <a href="{{ path('biens') }}" class="text-yellow-500 hover:text-yellow-600 font-semibold inline-flex items-center">
+                                Voir plus de biens <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Propriétés Similaires -->
-    {% if similarBiens is not empty %}
-    <section class="py-16 bg-gray-50">
-        <div class="container mx-auto px-4 md:px-6">
-            <h2 class="text-3xl font-bold text-[#004165] mb-10 text-center">Propriétés similaires</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {% for similar in similarBiens %}
-                <a href="{{path('detail')}}?id={{ similar.id }}" class="similar-property-card bg-white rounded-xl overflow-hidden border border-gray-200 shadow-md">
-                    <div class="relative">
-                        <img src="{% if similar.images|length > 0 %}{{ asset('uploads/biens/' ~ similar.images.first.image) }}{% else %}https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60{% endif %}" 
-                             alt="GROPIMMO DZ Algerie{{ similar.libelle }}" 
-                             class="w-full h-48 object-cover">
-                        <div class="absolute top-4 right-4 price-tag px-4 py-1 font-bold">
-                            {{ similar.prix|number_format(0, ',', ' ') }} DA
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-[#004165] mb-2">{{ similar.libelle }}</h3>
-                        <p class="text-gray-600 mb-3 flex items-center">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                            {{ similar.commune.nom }}, {{ similar.wilaya.nom }}
-                        </p>
-                        <div class="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
-                            <span class="flex items-center">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                                </svg>
-                                {{ similar.piece }} pièces
-                            </span>
-                            <span class="flex items-center">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
-                                </svg>
-                                {{ similar.superficie }} m²
-                            </span>
-                            <span class="flex items-center">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                                </svg>
-                                {% if similar.etage == 0 %}
-                                    Rez-de-chaussée
-                                {% else %}
-                                    {{ similar.etage }}{% if similar.etage == 1 %}er{% else %}ème{% endif %} étage
-                                {% endif %}
-                            </span>
-                        </div>
-                    </div>
-                </a>
-                {% endfor %}
-            </div>
+    <!-- Section Call to Action -->
+    <section class="py-16 bg-gray-900 text-white relative overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute top-0 left-0 w-64 h-64 bg-yellow-500 rounded-full filter blur-[100px] opacity-20"></div>
+            <div class="absolute bottom-0 right-0 w-64 h-64 bg-yellow-500 rounded-full filter blur-[100px] opacity-20"></div>
         </div>
-    </section>
-    {% endif %}
-    <!-- CTA Section -->
-    <section class="py-16 bg-[#004165] text-white">
-        <div class="container mx-auto px-4 md:px-6 text-center">
-            <h2 class="text-3xl font-bold mb-6">Vous souhaitez vendre ou louer votre bien ?</h2>
-            <p class="text-xl mb-8 max-w-2xl mx-auto">Nos experts vous accompagnent pour estimer et mettre en valeur votre propriété sur le marché.</p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="{{path('accueil')}}#vendre" class="bg-[#fddb36] text-[#004165] font-bold py-3 px-8 rounded-lg hover:bg-yellow-400 transition transform hover:-translate-y-1">
-                    Évaluer mon bien
-                </a>
-                <a href="{{path('contact')}}" class="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-lg hover:bg-white hover:text-[#004165] transition transform hover:-translate-y-1">
-                    Contactez-nous
-                </a>
-            </div>
+        <div class="container mx-auto px-4 relative z-10 text-center">
+            <h2 class="text-3xl font-bold mb-6">Vous avez un bien à vendre ou à louer ?</h2>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">Confiez-nous votre bien et bénéficiez de l'expertise d'ElWakil pour une transaction réussie</p>
+            <a href="" class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-8 rounded-lg transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                Appelez-nous
+            </a>
         </div>
     </section>
 
-
-    <!-- Scripts -->
-    {% block javascripts %}
-        {{ parent() }}
-        <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Initialisation du carrousel Splide
-                new Splide('#property-carousel', {
-                    type: 'fade',
-                    rewind: true,
-                    pagination: true,
-                    arrows: true,
-                    autoplay: true,
-                    interval: 5000,
-                    pauseOnHover: true,
-                    cover: true,
-                    heightRatio: 0.5
-                }).mount();
-                
-                // Animation des éléments au scroll
-                const animateOnScroll = function() {
-                    const elements = document.querySelectorAll('.property-details-item, .similar-property-card');
-                    
-                    elements.forEach(element => {
-                        const elementPosition = element.getBoundingClientRect().top;
-                        const screenPosition = window.innerHeight / 1.2;
-                        
-                        if (elementPosition < screenPosition) {
-                            element.style.opacity = '1';
-                            element.style.transform = 'translateY(0)';
-                        }
-                    });
-                };
-                
-                // Initial state for animation
-                const items = document.querySelectorAll('.property-details-item, .similar-property-card');
-                items.forEach(item => {
-                    item.style.opacity = '0';
-                    item.style.transform = 'translateY(20px)';
-                    item.style.transition = 'all 0.6s ease-out';
-                });
-                
-                window.addEventListener('scroll', animateOnScroll);
-                animateOnScroll(); // Trigger on load
+    <!-- Script pour la galerie d'images -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialisation du slider principal
+            var mainSlider = new Splide('.gallery-main', {
+                type: 'fade',
+                rewind: true,
+                pagination: false,
+                arrows: true,
             });
-        </script>
-    {% endblock %}
+            
+            // Initialisation des miniatures
+            var thumbnailSlider = new Splide('.gallery-thumbnails', {
+                fixedWidth: 100,
+                fixedHeight: 60,
+                gap: 10,
+                rewind: true,
+                pagination: false,
+                isNavigation: true,
+                breakpoints: {
+                    600: {
+                        fixedWidth: 60,
+                        fixedHeight: 44,
+                    },
+                },
+            });
+            
+            // Synchronisation des sliders
+            mainSlider.sync(thumbnailSlider);
+            mainSlider.mount();
+            thumbnailSlider.mount();
+        });
+    </script>
 {% endblock %}

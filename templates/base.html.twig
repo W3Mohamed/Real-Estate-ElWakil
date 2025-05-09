@@ -3,26 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}GROUPIMMO - Agence Immobilière en Algérie{% endblock %}</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-    
+    <title>{% block title %}ElWakil - Agence Immobilière en Algérie{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+    <script src="{{ asset('js/script.js') }}"></script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Police Spartan -->
-    <link href="https://fonts.googleapis.com/css2?family=Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Police moderne -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- SplideJS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
     
+    <!-- Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         body {
-            font-family: 'Spartan', sans-serif;
-        }
-        
-        .hexagon-bg {
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0L93.3013 25V75L50 100L6.69873 75V25L50 0Z' fill='%23fddb3610'/%3E%3C/svg%3E");
-            background-size: 60px;
+            font-family: 'Inter', sans-serif;
         }
         
         .dropdown:hover .dropdown-menu {
@@ -39,73 +37,77 @@
     </style>
     
     {% block stylesheets %}{% endblock %}
-            {{ encore_entry_link_tags('app') }}
+    {{ encore_entry_link_tags('app') }}
     {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
+        {{ encore_entry_script_tags('app') }}
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
 </head>
-<body class="bg-gray-50">
+<body class="bg-white">
     <!-- Navbar -->
-    <nav class="bg-gray-900 shadow-lg sticky top-0 z-50">
+    <nav class="bg-white shadow-md sticky top-0 z-50 border-b border-gray-100">
         <div class="container mx-auto px-4 lg:px-6">
             <div class="flex justify-between items-center py-4">
                 <!-- Logo -->
                 <div class="flex items-center">
                     <a href="{{path('accueil')}}" class="flex items-center">
-                        <div class="flex -space-x-2">
-                            {# <div class="w-8 h-8 bg-[#004165] rounded-sm transform rotate-45"></div>
-                            <div class="w-8 h-8 bg-[#fddb36] rounded-sm transform rotate-45"></div> #}
-                            <img src="{{asset('img/logo.png')}}" class="w-8 h-8" alt="GROUPIMMO Agence immobiliere en Algerie">
+                        <div class="flex -space-x-2 rounded-full overflow-hidden">
+                            <img src="{{asset('img/logo.jpg')}}" class="w-10 h-10" alt="ElWakil Agence immobiliere">
                         </div>
-                        <span class="ml-3 text-2xl font-bold text-white">GROUP<span class="text-[#fddb36]">IMMO</span></span>
+                        <span class="ml-3 text-2xl font-bold text-gray-900">EL<span class="text-yellow-500">WAKIL</span> IMMOBILIER</span>
                     </a>
                 </div>
                 
                 <!-- Menu principal -->
                 <div class="hidden lg:flex items-center space-x-8">
-                    <a href="{{path('accueil')}}#vendre" class="text-white font-medium hover:text-[#fddb36] transition duration-300">Vendre</a>
+                    <a href="{{path('accueil')}}" class="text-gray-700 font-medium hover:text-yellow-500 transition duration-300">Accueil</a>
                     
                     <!-- Dropdown Acheter -->
                     <div class="relative group">
-                        <button class="py-2 text-white font-medium hover:text-[#fddb36] transition duration-300 flex items-center focus:outline-none group-hover:text-[#fddb36]">
+                        <button class="py-2 text-gray-700 font-medium hover:text-yellow-500 transition duration-300 flex items-center focus:outline-none group-hover:text-yellow-500">
                             Acheter 
                             <svg class="ml-1 w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
-                        <div class="absolute hidden bg-[#004165] shadow-xl rounded-md py-2 w-48 z-10 group-hover:block transition-all duration-300 ease-in-out transform origin-top scale-y-0 group-hover:scale-y-100">
+                        <div class="absolute hidden bg-white shadow-xl rounded-md py-2 w-48 z-10 group-hover:block transition-all duration-300 ease-in-out transform origin-top scale-y-0 group-hover:scale-y-100 border border-gray-100">
                             {% for type in types %}
-                                <a href="{{path('biens')}}?t=vente&type={{type.id}}" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">{{type.libelle}}</a>
+                                <a href="{{path('biens')}}?t=vente&type={{type.id}}" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition duration-200">{{type.libelle}}</a>
                             {% endfor %}
                         </div>
                     </div>
                     
                     <!-- Dropdown Louer -->
                     <div class="relative group">
-                        <button class="py-2 text-white font-medium hover:text-[#fddb36] transition duration-300 flex items-center focus:outline-none group-hover:text-[#fddb36]">
+                        <button class="py-2 text-gray-700 font-medium hover:text-yellow-500 transition duration-300 flex items-center focus:outline-none group-hover:text-yellow-500">
                             Louer 
                             <svg class="ml-1 w-4 h-4 transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
-                        <div class="absolute hidden bg-[#004165] shadow-xl rounded-md py-2 w-48 z-10 group-hover:block transition-all duration-300 ease-in-out transform origin-top scale-y-0 group-hover:scale-y-100">
+                        <div class="absolute hidden bg-white shadow-xl rounded-md py-2 w-48 z-10 group-hover:block transition-all duration-300 ease-in-out transform origin-top scale-y-0 group-hover:scale-y-100 border border-gray-100">
                             {% for type in types %}
-                                <a href="{{path('biens')}}?t=location&type={{type.id}}" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">{{type.libelle}}</a>
+                                <a href="{{path('biens')}}?t=location&type={{type.id}}" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition duration-200">{{type.libelle}}</a>
                             {% endfor %}
                         </div>
                     </div>
                     
-                    <a href="{{path('about')}}" class="text-white font-medium hover:text-[#fddb36] transition duration-300">À propos</a>                    
-                    <!-- Bouton Contact Direct -->
-                    <a href="{{path('contact')}}" class="bg-[#fddb36] text-[#004165] font-bold py-2 px-4 rounded-lg hover:bg-yellow-400 transition duration-300 hover:-translate-y-1">
-                        Nous contacter
-                    </a>
+                    <a href="{{path('about')}}" class="text-gray-700 font-medium hover:text-yellow-500 transition duration-300">À propos</a>
+                    
+                    <!-- Boutons de contact -->
+                    <div class="flex space-x-4">
+                        <a href="tel:0123456789" class="bg-yellow-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-yellow-600 transition duration-300 flex items-center">
+                            <i class="fas fa-phone mr-2"></i> Appeler
+                        </a>
+                        <a href="https://wa.me/0123456789" class="bg-gray-800 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-900 transition duration-300 flex items-center">
+                            <i class="fab fa-whatsapp mr-2"></i> WhatsApp
+                        </a>
+                    </div>
                 </div>
                 
                 <!-- Bouton mobile -->
                 <div class="lg:hidden">
-                    <button id="mobile-menu-button" class="text-white focus:outline-none">
+                    <button id="mobile-menu-button" class="text-gray-700 focus:outline-none">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
@@ -115,41 +117,44 @@
             
             <!-- Menu mobile -->
             <div id="mobile-menu" class="hidden lg:hidden pb-4">
-                <a href="{{path('accueil')}}#vendre" class="block py-3 text-white font-medium hover:text-[#fddb36] transition duration-200">Vendre</a>
+                <a href="{{path('accueil')}}" class="block py-3 text-gray-700 font-medium hover:text-yellow-500 transition duration-200 border-b border-gray-100">Accueil</a>
                 
-                <div class="py-2">
-                    <button class="mobile-dropdown-btn flex items-center text-white font-medium w-full justify-between focus:outline-none hover:text-[#fddb36] py-2" data-target="mobile-buy-menu">
+                <div class="py-2 border-b border-gray-100">
+                    <button class="mobile-dropdown-btn flex items-center text-gray-700 font-medium w-full justify-between focus:outline-none hover:text-yellow-500 py-3" data-target="mobile-buy-menu">
                         Acheter
                         <svg class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
-                    <div class="mobile-dropdown-menu pl-4 hidden bg-[#004165] rounded-md my-1" id="mobile-buy-menu">
+                    <div class="mobile-dropdown-menu pl-4 hidden bg-gray-50 rounded-md my-1" id="mobile-buy-menu">
                         {% for type in types %}
-                                <a href="{{path('biens')}}?t=vente&type={{type.id}}" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">{{type.libelle}}</a>
+                            <a href="{{path('biens')}}?t=vente&type={{type.id}}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition duration-200">{{type.libelle}}</a>
                         {% endfor %}
-                     </div>
+                    </div>
                 </div>
                 
-                <div class="py-2">
-                    <button class="mobile-dropdown-btn flex items-center text-white font-medium w-full justify-between focus:outline-none hover:text-[#fddb36] py-2" data-target="mobile-rent-menu">
+                <div class="py-2 border-b border-gray-100">
+                    <button class="mobile-dropdown-btn flex items-center text-gray-700 font-medium w-full justify-between focus:outline-none hover:text-yellow-500 py-3" data-target="mobile-rent-menu">
                         Louer
                         <svg class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
-                    <div class="mobile-dropdown-menu pl-4 hidden bg-[#004165] rounded-md my-1" id="mobile-rent-menu">
+                    <div class="mobile-dropdown-menu pl-4 hidden bg-gray-50 rounded-md my-1" id="mobile-rent-menu">
                         {% for type in types %}
-                                <a href="{{path('biens')}}?t=location&type={{type.id}}" class="block px-4 py-2 text-white hover:bg-[#fddb36] hover:text-[#004165] transition duration-200">{{type.libelle}}</a>
+                            <a href="{{path('biens')}}?t=location&type={{type.id}}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition duration-200">{{type.libelle}}</a>
                         {% endfor %}    
                     </div>
                 </div>
                 
-                <a href="{{path('about')}}" class="block py-3 text-white font-medium hover:text-[#fddb36] transition duration-200">À propos</a>
+                <a href="{{path('about')}}" class="block py-3 text-gray-700 font-medium hover:text-yellow-500 transition duration-200 border-b border-gray-100">À propos</a>
                 
-                <div class="mt-4">
-                    <a href="{{path('contact')}}" class="block text-center bg-[#fddb36] text-[#004165] font-bold py-2 px-4 rounded-lg hover:bg-yellow-400 transition duration-300">
-                        Nous contacter
+                <div class="mt-4 space-y-2">
+                    <a href="tel:0123456789" class="block text-center bg-yellow-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-yellow-600 transition duration-300 flex items-center justify-center">
+                        <i class="fas fa-phone mr-2"></i> Appeler
+                    </a>
+                    <a href="https://wa.me/0123456789" class="block text-center bg-gray-800 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-900 transition duration-300 flex items-center justify-center">
+                        <i class="fab fa-whatsapp mr-2"></i> WhatsApp
                     </a>
                 </div>
             </div>
@@ -183,52 +188,53 @@
     {% block body %}{% endblock %}
 
     <!-- Footer -->
-    <footer class="bg-[#004165] text-white py-12 hexagon-bg">
+    <footer class="bg-gray-900 text-white py-12">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
-                    <div class="flex items-center mb-4">
-                        <div class="flex -space-x-2">
-                            {# <div class="w-8 h-8 bg-white rounded-sm transform rotate-45"></div>
-                            <div class="w-8 h-8 bg-[#fddb36] rounded-sm transform rotate-45"></div> #}
-                            <img src="{{asset('img/logo.png')}}" class="w-8 h-8" alt="GROUPIMMO Agence immobiliere en Algerie">                           
-                        </div>
-                        <span class="ml-2 text-2xl font-bold text-white">GROUPIMMO</span>
+                    <div class="flex items-center mb-4 rounded-full overfolw-hidden">
+                        <img src="{{asset('img/logo.jpg')}}" class="w-10 h-10" alt="ElWakil Agence immobiliere">
+                        <span class="ml-2 text-2xl font-bold text-white">EL<span class="text-yellow-500">WAKIL</span></span>
                     </div>
-                    <p class="text-gray-300">Votre partenaire immobilier en Algérie, Belgique et Luxembourg.</p>
+                    <p class="text-gray-300">Votre partenaire immobilier de confiance en Algérie.</p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-300 hover:text-yellow-500 transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-yellow-500 transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-yellow-500 transition"><i class="fab fa-whatsapp"></i></a>
+                    </div>
                 </div>
                 
                 <div>
-                    <h3 class="text-lg font-bold mb-4 text-[#fddb36]">Liens rapides</h3>
+                    <h3 class="text-lg font-bold mb-4 text-yellow-500">Liens rapides</h3>
                     <ul class="space-y-2">
-                        <li><a href="{{path('accueil')}}" class="hover:text-[#fddb36] transition">Accueil</a></li>
-                        <li><a href="{{path('biens')}}" class="hover:text-[#fddb36] transition">Acheter</a></li>
-                        <li><a href="{{path('biens')}}" class="hover:text-[#fddb36] transition">Louer</a></li>
-                        <li><a href="{{path('accueil')}}#vendre" class="hover:text-[#fddb36] transition">Vendre</a></li>
+                        <li><a href="{{path('accueil')}}" class="hover:text-yellow-500 transition">Accueil</a></li>
+                        <li><a href="{{path('biens')}}?t=vente" class="hover:text-yellow-500 transition">Acheter</a></li>
+                        <li><a href="{{path('biens')}}?t=location" class="hover:text-yellow-500 transition">Louer</a></li>
+                        <li><a href="{{path('about')}}" class="hover:text-yellow-500 transition">À propos</a></li>
                     </ul>
                 </div>
                 
                 <div>
-                    <h3 class="text-lg font-bold mb-4 text-[#fddb36]">Entreprise</h3>
+                    <h3 class="text-lg font-bold mb-4 text-yellow-500">Types de biens</h3>
                     <ul class="space-y-2">
-                        <li><a href="{{path('about')}}" class="hover:text-[#fddb36] transition">À propos</a></li>
-                        <li><a href="{{path('contact')}}" class="hover:text-[#fddb36] transition">Contact</a></li>
+                        {% for type in types|slice(0, 4) %}
+                        <li><a href="{{path('biens')}}?type={{type.id}}" class="hover:text-yellow-500 transition">{{type.libelle}}</a></li>
+                        {% endfor %}
                     </ul>
                 </div>
                 
                 <div>
-                    <h3 class="text-lg font-bold mb-4 text-[#fddb36]">Contact</h3>
+                    <h3 class="text-lg font-bold mb-4 text-yellow-500">Contact</h3>
                     <address class="not-italic">
-                        <p class="mb-2">{{ parametres.adresse }}</p>
-                        {# <p class="mb-2">Alger, Algérie</p> #}
-                        <p class="mb-2">Tél: {{ parametres.telephone }}</p>
-                        <p class="mb-2">Email: {{ parametres.email }}</p>
+                        <p class="mb-2 flex items-center"><i class="fas fa-map-marker-alt mr-2 text-yellow-500"></i> 123 Rue Principale, Alger</p>
+                        <p class="mb-2 flex items-center"><i class="fas fa-phone mr-2 text-yellow-500"></i> +213 123 456 789</p>
+                        <p class="mb-2 flex items-center"><i class="fas fa-envelope mr-2 text-yellow-500"></i> contact@elwakil.dz</p>
                     </address>
                 </div>
             </div>
             
             <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; {{ "now"|date("Y") }} GROUPIMMO. Tous droits réservés.</p>
+                <p>&copy; {{ "now"|date("Y") }} ElWakil Immobilier. Tous droits réservés.</p>
             </div>
         </div>
     </footer>
@@ -236,38 +242,6 @@
     <!-- SplideJS -->
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
 
-    <script>
-        // Initialisation des carrousels
-        document.addEventListener('DOMContentLoaded', function() {
-            // Carrousel à vendre
-            if (document.getElementById('properties-for-sale')) {
-                new Splide('#properties-for-sale', {
-                    type: 'loop',
-                    perPage: 3,
-                    perMove: 1,
-                    gap: '1.5rem',
-                    breakpoints: {
-                        1024: { perPage: 2 },
-                        768: { perPage: 1 }
-                    }
-                }).mount();
-            }
-            
-            // Carrousel à louer
-            if (document.getElementById('properties-for-rent')) {
-                new Splide('#properties-for-rent', {
-                    type: 'loop',
-                    perPage: 3,
-                    perMove: 1,
-                    gap: '1.5rem',
-                    breakpoints: {
-                        1024: { perPage: 2 },
-                        768: { perPage: 1 }
-                    }
-                }).mount();
-            }
-        });
-    </script>
     {% block scripts %}{% endblock %}
 </body>
 </html>
