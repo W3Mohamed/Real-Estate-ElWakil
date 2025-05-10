@@ -171,8 +171,8 @@ final class HomeController extends AbstractController
     //     ]);
     // }
 
-    #[Route('/details', name: 'details')]
-    public function details(TypeRepository $typeRepository,
+    #[Route('/detail', name: 'detail')]
+    public function detail(TypeRepository $typeRepository,
     ParamettreRepository $paramettreRepository,
     BienRepository $bienRepository): Response
     {
@@ -185,14 +185,4 @@ final class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/apropos', name: 'about')]
-    public function about(TypeRepository $typeRepository,ParamettreRepository $paramettreRepository): Response
-    {
-        $types = $typeRepository->findAll();
-        $parametres = $paramettreRepository->find(1); 
-        return $this->render('apropos.html.twig',[
-            'types' => $types,
-            'parametres' => $parametres
-        ]);
-    }
 }

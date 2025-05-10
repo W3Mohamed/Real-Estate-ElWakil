@@ -24,6 +24,9 @@ class Type
     #[ORM\OneToMany(targetEntity: Bien::class, mappedBy: 'type')]
     private Collection $biens;
 
+    #[ORM\Column(length: 255)]
+    private ?string $icon = null;
+
     public function __construct()
     {
         $this->biens = new ArrayCollection();
@@ -42,6 +45,19 @@ class Type
     public function setLibelle(string $libelle): static
     {
         $this->libelle = $libelle;
+
+        return $this;
+    }
+
+
+    public function getIcon(): ?string
+    {
+        return $this->icon;
+    }
+
+    public function setIcon(string $icon): static
+    {
+        $this->icon = $icon;
 
         return $this;
     }
@@ -75,4 +91,5 @@ class Type
 
         return $this;
     }
+
 }

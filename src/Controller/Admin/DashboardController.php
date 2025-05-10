@@ -40,14 +40,14 @@ class DashboardController extends AbstractDashboardController
 
         return $this->render('admin/dashboard.html.twig', [
             'stats' => $stats,
-            'dashboard_title' => 'Tableau de bord GROUPIMMO',
+            'dashboard_title' => 'Tableau de bord El Wakil',
         ]);
     }
 
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('GROUPIMMO Admin')
+            ->setTitle('El Wakil Admin')
             ->setFaviconPath('favicon-admin.ico')
             ->setTranslationDomain('admin');
     }
