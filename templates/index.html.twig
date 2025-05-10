@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} - Agence Immobilière en Algérie{% endblock %}
+{% block title %}ElWakil - Agence Immobilière en Algérie{% endblock %}
 
 {% block body %}
     <!-- Hero Section - Style Airbnb -->
@@ -33,13 +33,56 @@
 
                 <!-- Image avec bordure arabe -->
                 <div class="md:w-1/2 relative">
-                    <div class="relative rounded-t-[100px] rounded-b-xl overflow-hidden shadow-2xl transform rotate-1">
-                        <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" 
-                            alt="ElWakil Immobilier" 
-                            class="w-full h-auto object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/20 to-transparent"></div>
+                    <div class="relative rounded-t-[100px] rounded-b-xl overflow-hidden shadow-2xl transform ">
+                        <!-- Carrousel Hero Splide -->
+                        <div class="splide hero-image-slider">
+                            <div class="splide__track">
+                                <ul class="splide__list">
+                                    <!-- Slide 1 -->
+                                    <li class="splide__slide">
+                                        <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" 
+                                            alt="ElWakil Immobilier" 
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/20 to-transparent"></div>
+                                    </li>
+                                    
+                                    <!-- Slide 2 (ajoutez d'autres images selon besoin) -->
+                                    <li class="splide__slide">
+                                        <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" 
+                                            alt="ElWakil Immobilier" 
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/20 to-transparent"></div>
+                                    </li>
+                                    
+                                    <!-- Slide 3 -->
+                                    <li class="splide__slide">
+                                        <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" 
+                                            alt="ElWakil Immobilier" 
+                                            class="w-full h-full object-cover">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/20 to-transparent"></div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // Initialisation du carrousel Hero avec une classe unique
+                        new Splide('.hero-image-slider', {
+                            type: 'fade', // Effet de fondu pour une transition douce
+                            autoplay: true,
+                            interval: 4000,
+                            pauseOnHover: false,
+                            arrows: true, // flèches pour un look épuré
+                            pagination: true, // pagination visible
+                            speed: 500, // Durée de la transition
+                            rewind: true,
+                            // Options spécifiques pour ce carrousel
+                        }).mount();
+                    });
+                </script>
             </div>
         </div>
 
