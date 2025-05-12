@@ -239,7 +239,7 @@
                     new Splide(carousel, {
                         type: 'fade',
                         rewind: true,
-                        arrows: true, // On désactive les flèches par défaut
+                        arrows: true, 
                         pagination: true,
                         autoplay: false
                     }).mount();
@@ -323,8 +323,8 @@
                         <a href="#contact" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300 shadow-md hover:shadow-lg">
                             Contactez notre équipe
                         </a>
-                        <a href="tel:+213123456789" class="border-2 border-gray-300 hover:border-gray-400 text-gray-700 font-bold py-3 px-6 rounded-lg transition duration-300 flex items-center">
-                            <i class="fas fa-phone mr-2"></i> +213 123 45 67 89
+                        <a href="tel:{{parametres.telephone}}" class="border-2 border-gray-300 hover:border-gray-400 text-gray-700 font-bold py-3 px-6 rounded-lg transition duration-300 flex items-center">
+                            <i class="fas fa-phone mr-2"></i> {{parametres.telephone}}
                         </a>
                     </div>
                 </div>
@@ -435,8 +435,8 @@
                             </div>
                         </div>
                         <div class="ml-4">
-                            <h3 class="text-xl font-bold mb-2">Nos bureaux</h3>
-                            <p class="text-gray-300">123 Avenue des Frères Oudek,<br>Alger Centre, Algérie</p>
+                            <h3 class="text-xl font-bold mb-2">Notre bureau</h3>
+                            <p class="text-gray-300">{{parametres.adresse}}</p>
                         </div>
                     </div>
 
@@ -449,7 +449,7 @@
                         <div class="ml-4">
                             <h3 class="text-xl font-bold mb-2">Téléphone</h3>
                             <p class="text-gray-300">
-                                <a href="tel:+213123456789" class="hover:text-yellow-500 transition">+213 123 45 67 89</a>
+                                <a href="tel:{{parametres.telephone}}" class="hover:text-yellow-500 transition">{{parametres.telephone}}</a>
                             </p>
                         </div>
                     </div>
@@ -463,7 +463,7 @@
                         <div class="ml-4">
                             <h3 class="text-xl font-bold mb-2">Email</h3>
                             <p class="text-gray-300">
-                                <a href="mailto:contact@elwakil-immobilier.dz" class="hover:text-yellow-500 transition">contact@elwakil-immobilier.dz</a>
+                                <a href="mailto:{{parametres.email}}" class="hover:text-yellow-500 transition">{{parametres.email}}</a>
                             </p>
                         </div>
                     </div>
@@ -481,20 +481,16 @@
                             <h3 class="text-xl font-bold mb-4">Horaires d'ouverture</h3>
                             <ul class="space-y-3 text-gray-300">
                                 <li class="flex justify-between">
-                                    <span>Lundi - Vendredi</span>
-                                    <span class="font-medium">8h - 18h</span>
+                                    {{parametres.horaires|nl2br}}
                                 </li>
-                                <li class="flex justify-between">
-                                    <span>Samedi</span>
-                                    <span class="font-medium">9h - 16h</span>
-                                </li>
+                                
                             </ul>
                         </div>
                     </div>
 
                     <div class="mt-10">
                         <h4 class="text-lg font-bold mb-4">Urgence immobilière</h4>
-                        <a href="tel:+213123456789" class="inline-flex items-center bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-6 rounded-lg transition duration-300">
+                        <a href="tel:{{parametres.telephone}}" class="inline-flex items-center bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-6 rounded-lg transition duration-300">
                             <i class="fas fa-phone-volume mr-2"></i> Appel d'urgence
                         </a>
                     </div>
@@ -513,16 +509,16 @@
                             <p class="text-gray-300 mb-6">Retrouvez nos dernières offres et actualités</p>
                             
                             <div class="grid grid-cols-2 gap-4">
-                                <a href="https://facebook.com/elwakil.immobilier" target="_blank" rel="noopener noreferrer" class="bg-gray-700 hover:bg-[#1877F2] text-white flex items-center justify-center py-3 px-4 rounded-lg transition duration-300">
+                                <a href="{{parametres.facebook}}" target="_blank" rel="noopener noreferrer" class="bg-gray-700 hover:bg-[#1877F2] text-white flex items-center justify-center py-3 px-4 rounded-lg transition duration-300">
                                     <i class="fab fa-facebook-f mr-2"></i> Facebook
                                 </a>
-                                <a href="https://instagram.com/elwakil.immobilier" target="_blank" rel="noopener noreferrer" class="bg-gray-700 hover:bg-[#E1306C] text-white flex items-center justify-center py-3 px-4 rounded-lg transition duration-300">
+                                <a href="{{parametres.instagram}}" target="_blank" rel="noopener noreferrer" class="bg-gray-700 hover:bg-[#E1306C] text-white flex items-center justify-center py-3 px-4 rounded-lg transition duration-300">
                                     <i class="fab fa-instagram mr-2"></i> Instagram
                                 </a>
-                                <a href="https://youtube.com/elwakilimmobilier" target="_blank" rel="noopener noreferrer" class="bg-gray-700 hover:bg-[#FF0000] text-white flex items-center justify-center py-3 px-4 rounded-lg transition duration-300">
+                                <a href="{{parametres.youtube}}" target="_blank" rel="noopener noreferrer" class="bg-gray-700 hover:bg-[#FF0000] text-white flex items-center justify-center py-3 px-4 rounded-lg transition duration-300">
                                     <i class="fab fa-youtube mr-2"></i> YouTube
                                 </a>
-                                <a href="https://tiktok.com/@elwakil.immobilier" target="_blank" rel="noopener noreferrer" class="bg-gray-700 hover:bg-black text-white flex items-center justify-center py-3 px-4 rounded-lg transition duration-300">
+                                <a href="{{parametres.tiktok}}" target="_blank" rel="noopener noreferrer" class="bg-gray-700 hover:bg-black text-white flex items-center justify-center py-3 px-4 rounded-lg transition duration-300">
                                     <i class="fab fa-tiktok mr-2"></i> TikTok
                                 </a>
                             </div>

@@ -4,11 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Proposition;
 use App\Entity\Reservation;
+use App\Entity\Wilaya;
 use App\Repository\BienRepository;
+use App\Repository\CommuneRepository;
 use App\Repository\ParamettreRepository;
 use App\Repository\TypeRepository;
+use App\Repository\WilayaRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -42,88 +46,98 @@ final class HomeController extends AbstractController
     }
 
     #[Route('/biens', name: 'biens')]
-    public function biens(Request $request, BienRepository $bienRepository, TypeRepository $typeRepository, ParamettreRepository $paramettreRepository): Response
+    public function biens(Request $request, 
+        BienRepository $bienRepository, WilayaRepository $wilayaRepository,
+        TypeRepository $typeRepository, CommuneRepository $communeRepository,
+        ParamettreRepository $paramettreRepository): Response
     {
+        $searchQuery = $request->query->get('query');
+        // Récupération des paramètres de filtrage
         $transaction = $request->query->get('t');
         $typeId = $request->query->get('type');
-        $pieces = $request->query->get('pieces');
-        $superficie = $request->query->get('superficie');
-        $prix = $request->query->get('prix');
-
+        $wilayaId = $request->query->get('wilaya');
+        $commune = $request->query->get('commune');
+        $priceMin = $request->query->get('price_min');
+        $priceMax = $request->query->get('price_max');
+        $areaMin = $request->query->get('area_min');
+        $areaMax = $request->query->get('area_max');
+    
         $queryBuilder = $bienRepository->createQueryBuilder('b')
-            ->leftJoin('b.images', 'i', 'WITH', 'i.id = (
-                SELECT MIN(i2.id) FROM App\Entity\Images i2 
-                WHERE i2.Bien = b.id
-            )')
-            ->addSelect('i') // Charge uniquement la première image
+            ->leftJoin('b.images', 'i') // Charge TOUTES les images associées
+            ->addSelect('i') // Important pour éviter le N+1 problem
             ->orderBy('b.id', 'DESC');
+    
+        if ($searchQuery) {
+            $queryBuilder->andWhere('b.libelle LIKE :query OR b.description LIKE :query')
+                ->setParameter('query', '%'.$searchQuery.'%');
+        }
 
+        // Filtre par transaction (vente/location)
         if ($transaction) {
             $queryBuilder->andWhere('b.transaction = :transaction')
                 ->setParameter('transaction', $transaction);
         }
         
+        // Filtre par type de bien
         if ($typeId) {
             $queryBuilder->andWhere('b.type = :typeId')
                 ->setParameter('typeId', $typeId);
         }
-
-        if ($pieces) {
-            switch ($pieces) {
-                case '1': // 1-2 pièces
-                    $queryBuilder->andWhere('b.piece BETWEEN 1 AND 2');
-                    break;
-                case '2': // 3-4 pièces
-                    $queryBuilder->andWhere('b.piece BETWEEN 3 AND 4');
-                    break;
-                case '3': // 5+ pièces
-                    $queryBuilder->andWhere('b.piece >= 5');
-                    break;
+    
+        // Filtre par wilaya
+        if ($wilayaId) {
+            $queryBuilder->andWhere('b.wilaya = :wilayaId')
+                ->setParameter('wilayaId', $wilayaId);
+        }
+    
+        // Filtre par commune
+        if ($commune) {
+            $queryBuilder->andWhere('b.commune = :commune')
+                ->setParameter('commune', $commune);
+        }
+    
+        // Filtre par plage de prix
+        if ($priceMin || $priceMax) {
+            if ($priceMin && $priceMax) {
+                $queryBuilder->andWhere('b.prix BETWEEN :priceMin AND :priceMax')
+                    ->setParameter('priceMin', $priceMin)
+                    ->setParameter('priceMax', $priceMax);
+            } elseif ($priceMin) {
+                $queryBuilder->andWhere('b.prix >= :priceMin')
+                    ->setParameter('priceMin', $priceMin);
+            } elseif ($priceMax) {
+                $queryBuilder->andWhere('b.prix <= :priceMax')
+                    ->setParameter('priceMax', $priceMax);
             }
         }
     
-        // Filtre par superficie
-        if ($superficie) {
-            switch ($superficie) {
-                case '1': // Moins de 50m²
-                    $queryBuilder->andWhere('b.superficie < 50');
-                    break;
-                case '2': // 50m² - 100m²
-                    $queryBuilder->andWhere('b.superficie BETWEEN 50 AND 100');
-                    break;
-                case '3': // 100m² - 200m²
-                    $queryBuilder->andWhere('b.superficie BETWEEN 100 AND 200');
-                    break;
-                case '4': // Plus de 200m²
-                    $queryBuilder->andWhere('b.superficie > 200');
-                    break;
+        // Filtre par plage de superficie
+        if ($areaMin || $areaMax) {
+            if ($areaMin && $areaMax) {
+                $queryBuilder->andWhere('b.superficie BETWEEN :areaMin AND :areaMax')
+                    ->setParameter('areaMin', $areaMin)
+                    ->setParameter('areaMax', $areaMax);
+            } elseif ($areaMin) {
+                $queryBuilder->andWhere('b.superficie >= :areaMin')
+                    ->setParameter('areaMin', $areaMin);
+            } elseif ($areaMax) {
+                $queryBuilder->andWhere('b.superficie <= :areaMax')
+                    ->setParameter('areaMax', $areaMax);
             }
         }
     
-        // Filtre par prix
-        if ($prix) {
-            switch ($prix) {
-                case '1': // Moins de 5M DZD
-                    $queryBuilder->andWhere('b.prix < 5000000');
-                    break;
-                case '2': // 5M - 10M DZD
-                    $queryBuilder->andWhere('b.prix BETWEEN 5000000 AND 10000000');
-                    break;
-                case '3': // 10M - 20M DZD
-                    $queryBuilder->andWhere('b.prix BETWEEN 10000000 AND 20000000');
-                    break;
-                case '4': // Plus de 20M DZD
-                    $queryBuilder->andWhere('b.prix > 20000000');
-                    break;
-            }
-        }
-
+        // Récupération des résultats non paginés pour le comptage
         $biens = $queryBuilder->getQuery()->getResult();
         $query = $queryBuilder->getQuery();
     
+        // Formatage des prix pour l'affichage
+        foreach ($biens as $bien) {
+            $bien->formattedPrix = $this->formatPrixDZD($bien->getPrix());
+        }
+    
         // Pagination
         $page = $request->query->getInt('page', 1);
-        $limit = 9; // Nombre d'items par page
+        $limit = 12; // Nombre d'items par page
         
         $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
         $totalItems = count($paginator);
@@ -133,48 +147,37 @@ final class HomeController extends AbstractController
             ->getQuery()
             ->setFirstResult($limit * ($page - 1)) // Offset
             ->setMaxResults($limit); // Limit
+    
+        // Récupération des données pour les listes déroulantes
         $types = $typeRepository->findAll();
         $parametres = $paramettreRepository->find(1); 
+        $wilayas = $wilayaRepository->findAll();
+    
+        $communes = [];
+        if ($wilayaId) {
+            $communes = $communeRepository->findBy(['wilaya' => $wilayaId]);
+        }
 
         return $this->render('biens.html.twig',[
             'types' => $types,
             'parametres' => $parametres,
             'biens' => $biens,
             'currentTransaction' => $transaction,
-            'biens' => $paginator,
+            'totalItems' => $totalItems,
+            'paginator' => $paginator,
             'currentPage' => $page,
             'pagesCount' => $pagesCount,
             'currentType' => $typeId,
-            'currentPieces' => $pieces,
-            'currentSuperficie' => $superficie,
-            'currentPrix' => $prix
+            'currentWilaya' => $wilayaId,
+            'currentCommune' => $commune,
+            'currentPriceMin' => $priceMin,
+            'currentPriceMax' => $priceMax,
+            'currentAreaMin' => $areaMin,
+            'currentAreaMax' => $areaMax,
+            'communes' => $communes,
+            'wilayas' => $wilayas
         ]);
     }
-
-    // #[Route('/detail', name: 'detail')]
-    // public function detail(TypeRepository $typeRepository,
-    //  Request $request,
-    //  ParamettreRepository $paramettreRepository,
-    //  BienRepository $bienRepository): Response
-    // {
-    //     $bienId = $request->query->get('id');
-    //     $bien = $bienRepository->findWithImages($bienId);
-
-    //     if (!$bien) {
-    //         throw $this->createNotFoundException('Le bien demandé n\'existe pas');
-    //     }
-
-    //     $similarBiens = $bienRepository->findSimilarBiens($bien);
-    //     $types = $typeRepository->findAll();
-    //     $parametres = $paramettreRepository->find(1); 
-
-    //     return $this->render('detail.html.twig',[
-    //         'bien' => $bien,
-    //         'types' => $types,
-    //         'parametres' => $parametres,
-    //         'similarBiens' => $similarBiens
-    //     ]);
-    // }
 
     #[Route('/detail', name: 'detail')]
     public function detail(TypeRepository $typeRepository,
@@ -198,6 +201,27 @@ final class HomeController extends AbstractController
         ]);
     }
 
+
+    #[Route('/get-communes/{wilayaId}', name: 'get_communes')]
+    public function getCommunes(int $wilayaId, CommuneRepository $communeRepository): JsonResponse
+    {
+        $communes = $communeRepository->findBy(['wilaya' => $wilayaId]);
+        
+        if (empty($communes)) {
+            return new JsonResponse([], 404);
+        }
+        
+        $response = [];
+        foreach ($communes as $commune) {
+            $response[] = [
+                'id' => $commune->getId(),
+                'nom' => $commune->getNom(),
+                'code_postal' => $commune->getCodePostal()
+            ];
+        }
+        
+        return new JsonResponse($response);
+    }
 
     private function formatPrixDZD(?int $prixCentimes): string
     {

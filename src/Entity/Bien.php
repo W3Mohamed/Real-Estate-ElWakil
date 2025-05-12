@@ -64,12 +64,6 @@ class Bien
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $telephone = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $etat = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $annee = null;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $youtube = null;
 
@@ -287,30 +281,6 @@ class Bien
     public function setTelephone(?string $telephone): static
     {
         $this->telephone = $telephone;
-
-        return $this;
-    }
-
-    public function getEtat(): ?string
-    {
-        return $this->etat;
-    }
-
-    public function setEtat(?string $etat): static
-    {
-        $this->etat = $etat;
-
-        return $this;
-    }
-
-    public function getAnnee(): ?string
-    {
-        return $this->annee;
-    }
-
-    public function setAnnee(?string $annee): static
-    {
-        $this->annee = $annee;
 
         return $this;
     }

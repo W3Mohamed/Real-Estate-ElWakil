@@ -99,12 +99,27 @@
                         </div>
 
                         <!-- Boutons de contact fixes -->
-                        <div class="flex flex-col space-y-3">
-                            <a href="tel:{{bien.telephone}}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-4 rounded-lg text-center transition">
-                                <i class="fas fa-phone mr-2"></i> Appeler maintenant
+                        <div class="grid grid-cols-2 gap-3">
+                            <!-- Ligne 1 -->
+                            <!-- Bouton Appel -->
+                            <a href="tel:{{bien.telephone}}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-3 rounded-lg text-center transition flex items-center justify-center text-sm">
+                                <i class="fas fa-phone mr-2"></i> Appeler
                             </a>
-                            <a href="https://wa.me/{{bien.whatsapp}}" class="bg-gray-900 hover:bg-gray-800 text-white font-bold py-3 px-4 rounded-lg text-center transition">
+                            
+                            <!-- Bouton WhatsApp -->
+                            <a href="https://wa.me/{{bien.whatsapp}}" class="bg-[#25D366] hover:bg-[#128C7E] text-white font-bold py-2 px-3 rounded-lg text-center transition flex items-center justify-center text-sm">
                                 <i class="fab fa-whatsapp mr-2"></i> WhatsApp
+                            </a>
+                            
+                            <!-- Ligne 2 -->
+                            <!-- Bouton Telegram -->
+                            <a href="https://t.me/{{bien.telegram}}" class="bg-[#0088CC] hover:bg-[#006699] text-white font-bold py-2 px-3 rounded-lg text-center transition flex items-center justify-center text-sm">
+                                <i class="fab fa-telegram mr-2"></i> Telegram
+                            </a>
+                            
+                            <!-- Bouton Viber -->
+                            <a href="viber://chat?number={{bien.viber}}" class="bg-[#7360F2] hover:bg-[#5A4BD6] text-white font-bold py-2 px-3 rounded-lg text-center transition flex items-center justify-center text-sm">
+                                <i class="fab fa-viber mr-2"></i> Viber
                             </a>
                         </div>
                     </div>
@@ -216,14 +231,6 @@
                                 <span class="text-gray-600">Date de publication</span>
                                 <span class="font-medium">03/05/2025</span>
                             </li>
-                            <li class="flex justify-between py-2 border-b border-gray-100">
-                                <span class="text-gray-600">Année de construction</span>
-                                <span class="font-medium">{{bien.annee}}</span>
-                            </li>
-                            <li class="flex justify-between py-2 border-b border-gray-100">
-                                <span class="text-gray-600">État</span>
-                                <span class="font-medium">{{bien.etat}}</span>
-                            </li>
                         </ul>
 
                         <!-- Partager sur les réseaux -->
@@ -307,7 +314,7 @@
         <div class="container mx-auto px-4 relative z-10 text-center">
             <h2 class="text-3xl font-bold mb-6">Vous avez un bien à vendre ou à louer ?</h2>
             <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">Confiez-nous votre bien et bénéficiez de l'expertise d'ElWakil pour une transaction réussie</p>
-            <a href="" class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-8 rounded-lg transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+            <a href="tel:{{parametres.telephone}}" class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-8 rounded-lg transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                 Appelez-nous
             </a>
         </div>
