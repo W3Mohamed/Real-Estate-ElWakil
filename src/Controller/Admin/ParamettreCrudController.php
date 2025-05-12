@@ -51,8 +51,8 @@ class ParamettreCrudController extends AbstractCrudController
             TextField::new('telephone', 'Téléphone'),
             TextField::new('facebook', 'Facebook'),
             TextField::new('instagram', 'Instagram'),
-            TextField::new('linkedin', 'LinkedIn'),
-            TextField::new('twitter', 'Twitter'),
+            TextField::new('youtube', 'Youtube'),
+            TextField::new('tiktok', 'Tiktok'),
             TextField::new('adresse', 'Adresse'),
             TextareaField::new('horaires', 'Horaires'),
         ];

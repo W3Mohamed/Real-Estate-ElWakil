@@ -23,13 +23,18 @@ final class HomeController extends AbstractController
         $types = $typeRepository->findAll();
 
         $parametres = $paramettreRepository->find(1); // Récupère l'entrée avec id=1
-
+        $biens = $bienRepository->findLastEight();
+        // Formater les prix pour chaque bien
+        foreach ($biens as $bien) {
+            $bien->formattedPrix = $this->formatPrixDZD($bien->getPrix());
+        }
         // Récupérer les biens séparés par type de transaction
         $biensALouer = $bienRepository->findBiensALouer();
         $biensAVendre = $bienRepository->findBiensAVendre();
 
         return $this->render('index.html.twig',[
             'types' => $types,
+            'biens' => $biens,
             'parametres' => $parametres,
             'biensALouer' => $biensALouer,
             'biensAVendre' => $biensAVendre
@@ -173,16 +178,70 @@ final class HomeController extends AbstractController
 
     #[Route('/detail', name: 'detail')]
     public function detail(TypeRepository $typeRepository,
+    Request $request,
     ParamettreRepository $paramettreRepository,
     BienRepository $bienRepository): Response
     {
+        $bienId = $request->query->get('id');
         $types = $typeRepository->findAll();
-
+        $bien = $bienRepository->findWithImages($bienId);
+        $formatedPrix = $this->formatPrixDZD($bien->getPrix());
+        if (!$bien) {
+            throw $this->createNotFoundException('Le bien demandé n\'existe pas');
+        }
         $parametres = $paramettreRepository->find(1);
         return $this->render('detail.html.twig',[
+            'bien' => $bien,
+            'prix' => $formatedPrix,
             'types' => $types,
             'parametres' => $parametres
         ]);
     }
 
+
+    private function formatPrixDZD(?int $prixCentimes): string
+    {
+        if ($prixCentimes === null) {
+            return 'Prix non disponible';
+        }
+    
+        // Convertir les centimes en unités standard (1 million = 10000 centimes)
+        $prixStandard = $prixCentimes * 100; // 10000 centimes = 1 million DZD
+        
+        $milliards = floor($prixStandard / 1000000000);
+        $reste = $prixStandard % 1000000000;
+        $millions = floor($reste / 1000000);
+        $milliers = floor(($reste % 1000000) / 1000);
+        $unites = $reste % 1000;
+    
+        $result = '';
+        
+        if ($milliards > 0) {
+            $result .= number_format($milliards, 0, ',', ' ') . ' Milliard' . ($milliards > 1 ? 's' : '');
+        }
+        
+        if ($millions > 0) {
+            if (!empty($result)) {
+                $result .= ' ';
+            }
+            $result .= number_format($millions, 0, ',', ' ') . ' Million' . ($millions > 1 ? 's' : '');
+        }
+        
+        if ($milliers > 0) {
+            if (!empty($result)) {
+                $result .= ' ';
+            }
+            $result .= number_format($milliers, 0, ',', ' ') . ' Mille';
+        }
+        
+        if ($unites > 0 && empty($result)) {
+            $result .= number_format($unites, 0, ',', ' ');
+        }
+    
+        if (empty($result)) {
+            return '0 DZD';
+        }
+    
+        return $result . ' DZD';
+    }
 }

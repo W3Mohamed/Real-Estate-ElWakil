@@ -29,7 +29,7 @@ class Bien
     #[ORM\JoinColumn(nullable: false)]
     private ?Type $type = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $adresse = null;
 
     #[ORM\Column]
@@ -58,9 +58,46 @@ class Bien
     #[ORM\JoinColumn(nullable: false)]
     private ?Commune $commune = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $bain = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $telephone = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $etat = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $annee = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $youtube = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $insta = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $tiktok = null;
+
+    /**
+     * @var Collection<int, Facebook>
+     */
+    #[ORM\OneToMany(targetEntity: Facebook::class, mappedBy: 'bien',cascade: ["persist", "remove"])]
+    private Collection $facebooks;
+
+    #[ORM\Column(length: 25, nullable: true)]
+    private ?string $whatsapp = null;
+
+    #[ORM\Column(length: 25, nullable: true)]
+    private ?string $viber = null;
+
+    #[ORM\Column(length: 25, nullable: true)]
+    private ?string $telegram = null;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
+        $this->facebooks = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -226,6 +263,156 @@ class Bien
     public function setCommune(?Commune $commune): static
     {
         $this->commune = $commune;
+
+        return $this;
+    }
+
+    public function getBain(): ?int
+    {
+        return $this->bain;
+    }
+
+    public function setBain(?int $bain): static
+    {
+        $this->bain = $bain;
+
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(?string $telephone): static
+    {
+        $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    public function getEtat(): ?string
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(?string $etat): static
+    {
+        $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getAnnee(): ?string
+    {
+        return $this->annee;
+    }
+
+    public function setAnnee(?string $annee): static
+    {
+        $this->annee = $annee;
+
+        return $this;
+    }
+
+    public function getYoutube(): ?string
+    {
+        return $this->youtube;
+    }
+
+    public function setYoutube(?string $youtube): static
+    {
+        $this->youtube = $youtube;
+
+        return $this;
+    }
+
+    public function getInsta(): ?string
+    {
+        return $this->insta;
+    }
+
+    public function setInsta(?string $insta): static
+    {
+        $this->insta = $insta;
+
+        return $this;
+    }
+
+    public function getTiktok(): ?string
+    {
+        return $this->tiktok;
+    }
+
+    public function setTiktok(?string $tiktok): static
+    {
+        $this->tiktok = $tiktok;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Facebook>
+     */
+    public function getFacebooks(): Collection
+    {
+        return $this->facebooks;
+    }
+
+    public function addFacebook(Facebook $facebook): static
+    {
+        if (!$this->facebooks->contains($facebook)) {
+            $this->facebooks->add($facebook);
+            $facebook->setBien($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFacebook(Facebook $facebook): static
+    {
+        if ($this->facebooks->removeElement($facebook)) {
+            // set the owning side to null (unless already changed)
+            if ($facebook->getBien() === $this) {
+                $facebook->setBien(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getWhatsapp(): ?string
+    {
+        return $this->whatsapp;
+    }
+
+    public function setWhatsapp(?string $whatsapp): static
+    {
+        $this->whatsapp = $whatsapp;
+
+        return $this;
+    }
+
+    public function getViber(): ?string
+    {
+        return $this->viber;
+    }
+
+    public function setViber(?string $viber): static
+    {
+        $this->viber = $viber;
+
+        return $this;
+    }
+
+    public function getTelegram(): ?string
+    {
+        return $this->telegram;
+    }
+
+    public function setTelegram(?string $telegram): static
+    {
+        $this->telegram = $telegram;
 
         return $this;
     }

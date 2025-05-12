@@ -33,10 +33,10 @@ class Paramettre
     private ?string $instagram = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $linkedin = null;
+    private ?string $youtube = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $twitter = null;
+    private ?string $tiktok = null;
 
     #[ORM\Column(length: 255)]
     private ?string $adresse = null;
@@ -121,26 +121,26 @@ class Paramettre
         return $this;
     }
 
-    public function getLinkedin(): ?string
+    public function getYoutube(): ?string
     {
-        return $this->linkedin;
+        return $this->youtube;
     }
 
-    public function setLinkedin(string $linkedin): static
+    public function setYoutube(string $youtube): static
     {
-        $this->linkedin = $linkedin;
+        $this->youtube = $youtube;
 
         return $this;
     }
 
-    public function getTwitter(): ?string
+    public function getTiktok(): ?string
     {
-        return $this->twitter;
+        return $this->tiktok;
     }
 
-    public function setTwitter(string $twitter): static
+    public function setTiktok(string $tiktok): static
     {
-        $this->twitter = $twitter;
+        $this->tiktok = $tiktok;
 
         return $this;
     }

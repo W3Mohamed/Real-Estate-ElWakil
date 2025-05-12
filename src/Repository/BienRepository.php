@@ -67,4 +67,14 @@ class BienRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findLastEight()
+    {
+        return $this->createQueryBuilder('b')
+            ->orderBy('b.id', 'DESC')  // Tri par ID décroissant
+            ->setMaxResults(8)         // Limite à 8 résultats
+            ->getQuery()
+            ->getResult();
+    }
+    
 }

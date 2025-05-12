@@ -3,7 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Bien;
+use App\Entity\Facebook;
 use App\Entity\Images;
+use App\Form\FacebookFormType;
 use App\Repository\CommuneRepository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -17,7 +19,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use App\Form\ImageFormType;
-
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class BienCrudController extends AbstractCrudController
 {
@@ -45,6 +49,10 @@ class BienCrudController extends AbstractCrudController
     {
         yield TextField::new('libelle', 'Libellé');
         yield IntegerField::new('prix', 'Prix'); 
+        yield TextField::new('telephone', 'N° Téléphone');
+        yield TextField::new('whatsapp', 'WhatsApp')->hideOnIndex();
+        yield TextField::new('viber', 'Viber')->hideOnIndex();
+        yield TextField::new('telegram', 'Telegram')->hideOnIndex();
         yield ChoiceField::new('transaction')
             ->setChoices([
                 'Vente' => 'vente',
@@ -86,11 +94,36 @@ class BienCrudController extends AbstractCrudController
             });
 
 
-        yield TextField::new('adresse', 'Adresse')->hideOnIndex();
-        yield IntegerField::new('piece', 'Nombre de pièces');
-        yield IntegerField::new('superficie', 'Superficie (m²)');
-        yield IntegerField::new('etage', 'Étage');
+        yield TextareaField::new('adresse', 'Adresse')->hideOnIndex();
+        yield IntegerField::new('piece', 'Nombre de pièces')->hideOnIndex();
+        yield IntegerField::new('bain', 'Salle de bain')->hideOnIndex();
+        yield IntegerField::new('superficie', 'Superficie (m²)')->hideOnIndex();
+        yield IntegerField::new('etage', 'Étage')->hideOnIndex();
         yield TextareaField::new('description', 'Description')->hideOnIndex();
+        yield TextareaField::new('youtube', 'Lien youtube')->hideOnIndex();
+        yield TextareaField::new('insta', 'Lien instagram')->hideOnIndex();
+        yield TextareaField::new('tiktok', 'Lien tiktok')->hideOnIndex();
+
+        yield CollectionField::new('facebooks', 'Liens Facebook')
+        ->setEntryType(FacebookFormType::class)
+        ->setFormTypeOption('by_reference', false)
+        ->onlyOnForms()
+        ->setEntryIsComplex(true)
+        ->setRequired(false)
+        ->setHelp('Ajoutez plusieurs liens Facebook (vidéos, posts, etc.)')
+        ->setFormTypeOptions([
+            'entry_options' => [
+                'label' => false,
+            ],
+            'allow_add' => true,
+            'allow_delete' => true,
+            'prototype' => true,
+            'by_reference' => false,
+            'delete_empty' => true,
+            'attr' => [
+                'class' => 'facebook-links-collection',
+            ]
+        ]);
 
 
         yield CollectionField::new('images')

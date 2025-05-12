@@ -201,9 +201,10 @@
                     </div>
                     <p class="text-gray-300">Votre partenaire immobilier de confiance en Algérie.</p>
                     <div class="flex space-x-4 mt-4">
-                        <a href="#" class="text-gray-300 hover:text-yellow-500 transition"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="text-gray-300 hover:text-yellow-500 transition"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="text-gray-300 hover:text-yellow-500 transition"><i class="fab fa-whatsapp"></i></a>
+                        <a href="{{parametres.facebook}}" class="text-gray-300 hover:text-yellow-500 transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="{{parametres.instagram}}" class="text-gray-300 hover:text-yellow-500 transition"><i class="fab fa-instagram"></i></a>
+                        <a href="{{parametres.youtube}}" class="text-gray-300 hover:text-yellow-500 transition"><i class="fab fa-youtube"></i></a>
+                        <a href="{{parametres.tiktok}}" class="text-gray-300 hover:text-yellow-500 transition"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
                 
@@ -228,9 +229,9 @@
                 <div>
                     <h3 class="text-lg font-bold mb-4 text-yellow-500">Contact</h3>
                     <address class="not-italic">
-                        <p class="mb-2 flex items-center"><i class="fas fa-map-marker-alt mr-2 text-yellow-500"></i> 123 Rue Principale, Alger</p>
-                        <p class="mb-2 flex items-center"><i class="fas fa-phone mr-2 text-yellow-500"></i> +213 123 456 789</p>
-                        <p class="mb-2 flex items-center"><i class="fas fa-envelope mr-2 text-yellow-500"></i> contact@elwakil.dz</p>
+                        <p class="mb-2 flex items-center"><i class="fas fa-map-marker-alt mr-2 text-yellow-500"></i> {{parametres.adresse}}</p>
+                        <p class="mb-2 flex items-center"><i class="fas fa-phone mr-2 text-yellow-500"></i> {{parametres.telephone}}</p>
+                        <p class="mb-2 flex items-center"><i class="fas fa-envelope mr-2 text-yellow-500"></i>{{parametres.email}}</p>
                     </address>
                 </div>
             </div>

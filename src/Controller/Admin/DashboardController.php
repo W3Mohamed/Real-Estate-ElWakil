@@ -31,11 +31,7 @@ class DashboardController extends AbstractDashboardController
             'biens' => $this->em->getRepository(Bien::class)->count([]),
             'biens_vente' => $this->em->getRepository(Bien::class)->count(['transaction' => 'vente']),
             'biens_location' => $this->em->getRepository(Bien::class)->count(['transaction' => 'location']),
-            'reservations' => $this->em->getRepository(Reservation::class)->count([]),
-            'propositions' => $this->em->getRepository(Proposition::class)->count([]),
-            'contacts' => $this->em->getRepository(Contact::class)->count([]),
             'latest_biens' => $this->em->getRepository(Bien::class)->findBy([], ['id' => 'DESC'], 5),
-            'latest_contacts' => $this->em->getRepository(Contact::class)->findBy([], ['id' => 'DESC'], 5),
         ];
 
         return $this->render('admin/dashboard.html.twig', [
@@ -68,12 +64,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Immobilier');
         yield MenuItem::linkToCrud('Types de biens', 'fas fa-tags', Type::class);
         yield MenuItem::linkToCrud('Biens immobiliers', 'fas fa-home', Bien::class);
-        
-        // Section Interactions
-        yield MenuItem::section('Interactions');
-        yield MenuItem::linkToCrud('Réservations', 'fas fa-calendar-check', Reservation::class);
-        yield MenuItem::linkToCrud('Propositions', 'fas fa-handshake', Proposition::class);
-        yield MenuItem::linkToCrud('Messages', 'fas fa-envelope', Contact::class);
         
         // Section Configuration
         yield MenuItem::section('Configuration');

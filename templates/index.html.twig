@@ -148,511 +148,79 @@
             </div>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Bien 1 -->
-                <div class="property-card group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <div class="relative h-60 overflow-hidden"> <!-- Réduit de h-64 à h-60 -->
-                        <!-- Carousel pour les images -->
-                        <div class="splide splideImg">
-                            <div class="splide__track">
-                                <ul class="splide__list">
-                                    <li class="splide__slide">
-                                        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                                            alt="Villa moderne" 
-                                            class="w-full h-full object-cover">
-                                    </li>
-                                    <li class="splide__slide">
-                                        <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                                            alt="Villa moderne" 
-                                            class="w-full h-full object-cover">
-                                    </li>
-                                </ul>
+                {% for bien in biens %}
+                    <div class="property-card group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                        <div class="relative h-60 overflow-hidden"> <!-- Réduit de h-64 à h-60 -->
+                            <!-- Carousel pour les images -->
+                            <div class="splide splideImg">
+                                <div class="splide__track">
+                                    <ul class="splide__list">
+                                        {% for image in bien.images %}
+                                        <li class="splide__slide">
+                                            <img src="{{ asset('uploads/biens/' ~ image.image) }}" 
+                                                alt="{{ bien.libelle }}El Wakil immobilier" 
+                                                class="w-full h-full object-cover">
+                                        </li>
+                                        {% else %}
+                                        <li class="splide__slide">
+                                            <img src="{{ asset('images/default.jpg') }}" 
+                                                alt="Image par défaut El Wakil immobilier" 
+                                                class="w-full h-full object-cover">
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <!-- Boutons de navigation -->
+                                <div class="splide__arrows">
+                                    <button class="splide__arrow splide__arrow--prev absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
+                                        <i class="fas fa-chevron-left text-sm"></i>
+                                    </button>
+                                    <button class="splide__arrow splide__arrow--next absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
+                                        <i class="fas fa-chevron-right text-sm"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <!-- Boutons de navigation -->
-                            <div class="splide__arrows">
-                                <button class="splide__arrow splide__arrow--prev absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
-                                    <i class="fas fa-chevron-left text-sm"></i>
-                                </button>
-                                <button class="splide__arrow splide__arrow--next absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
-                                    <i class="fas fa-chevron-right text-sm"></i>
-                                </button>
+                            <!-- Étiquette de type -->
+                            {% if bien.transaction == 'vente' %}                              
+                                <div class="absolute top-3 right-3 bg-yellow-500 text-white font-bold px-2 py-1 rounded-md text-xs">
+                                    À vendre
+                                </div>
+                            {% else %}
+                                <div class="absolute top-3 right-3 bg-gray-800 text-white font-bold px-2 py-1 rounded-md text-xs">
+                                    À louer
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="p-4"> <!-- Réduit de p-5 à p-4 -->
+                            <h3 class="text-lg font-bold text-gray-900 mb-1 truncate">{{bien.libelle}}</h3> <!-- mb-2 à mb-1 -->
+                            <p class="text-gray-600 mb-2 flex items-center text-sm"> <!-- mb-3 à mb-2 -->
+                                <i class="fas fa-map-marker-alt mr-2 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
+                                {{bien.commune.nom}}, {{bien.wilaya.nom}}
+                            </p>
+                            <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3"> <!-- gap-3 à gap-2, mb-4 à mb-3 -->
+                                <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
+                                    <i class="fas fa-bed mr-1 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
+                                    {{bien.piece}} chambres
+                                </span>
+                                <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
+                                    <i class="fas fa-ruler-combined mr-1 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
+                                    {{bien.superficie}} m²
+                                </span>
                             </div>
-                        </div>
-                        <!-- Étiquette de type -->
-                        <div class="absolute top-3 right-3 bg-yellow-500 text-white font-bold px-2 py-1 rounded-md text-xs">
-                            À vendre
-                        </div>
-                    </div>
-                    <div class="p-4"> <!-- Réduit de p-5 à p-4 -->
-                        <h3 class="text-lg font-bold text-gray-900 mb-1 truncate">Villa moderne avec piscine</h3> <!-- mb-2 à mb-1 -->
-                        <p class="text-gray-600 mb-2 flex items-center text-sm"> <!-- mb-3 à mb-2 -->
-                            <i class="fas fa-map-marker-alt mr-2 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                            Hydra, Alger
-                        </p>
-                        <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3"> <!-- gap-3 à gap-2, mb-4 à mb-3 -->
-                            <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
-                                <i class="fas fa-bed mr-1 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                                4 chambres
-                            </span>
-                            <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
-                                <i class="fas fa-ruler-combined mr-1 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                                250 m²
-                            </span>
-                        </div>
-                        <div class="text-gray-900 font-bold text-lg mb-3"> <!-- mb-4 à mb-3 -->
-                            1 Milliard 500 Millions DZD
-                        </div>
-                        <div class="flex space-x-2">
-                            <a href="tel:0123456789" class="flex-1 text-center bg-gray-100 text-gray-800 text-xs font-medium py-2 px-2 rounded-lg hover:bg-gray-200 transition flex items-center justify-center">
-                                <i class="fas fa-phone mr-1"></i> Appeler
-                            </a>
-                            <a href="" class="flex-1 text-center bg-gray-900 text-white text-xs font-medium py-2 px-2 rounded-lg hover:bg-gray-800 transition flex items-center justify-center">
-                                Voir plus
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="property-card group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <div class="relative h-60 overflow-hidden"> <!-- Réduit de h-64 à h-60 -->
-                        <!-- Carousel pour les images -->
-                        <div class="splide splideImg">
-                            <div class="splide__track">
-                                <ul class="splide__list">
-                                    <li class="splide__slide">
-                                        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                                            alt="Villa moderne" 
-                                            class="w-full h-full object-cover">
-                                    </li>
-                                    <li class="splide__slide">
-                                        <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                                            alt="Villa moderne" 
-                                            class="w-full h-full object-cover">
-                                    </li>
-                                </ul>
+                            <div class="text-gray-900 font-bold text-lg mb-3"> <!-- mb-4 à mb-3 -->
+                                {{bien.formattedPrix }}
                             </div>
-                            <!-- Boutons de navigation -->
-                            <div class="splide__arrows">
-                                <button class="splide__arrow splide__arrow--prev absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
-                                    <i class="fas fa-chevron-left text-sm"></i>
-                                </button>
-                                <button class="splide__arrow splide__arrow--next absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
-                                    <i class="fas fa-chevron-right text-sm"></i>
-                                </button>
+                            <div class="flex space-x-2">
+                                <a href="tel:{{bien.telephone}}" class="flex-1 text-center bg-gray-100 text-gray-800 text-xs font-medium py-2 px-2 rounded-lg hover:bg-gray-200 transition flex items-center justify-center">
+                                    <i class="fas fa-phone mr-1"></i> Appeler
+                                </a>
+                                <a href="{{path('detail', {id:bien.id})}}" class="flex-1 text-center bg-gray-900 text-white text-xs font-medium py-2 px-2 rounded-lg hover:bg-gray-800 transition flex items-center justify-center">
+                                    Voir plus
+                                </a>
                             </div>
                         </div>
-                        <!-- Étiquette de type -->
-                        <div class="absolute top-3 right-3 bg-yellow-500 text-white font-bold px-2 py-1 rounded-md text-xs">
-                            À vendre
-                        </div>
-                    </div>
-                    <div class="p-4"> <!-- Réduit de p-5 à p-4 -->
-                        <h3 class="text-lg font-bold text-gray-900 mb-1 truncate">Villa moderne avec piscine</h3> <!-- mb-2 à mb-1 -->
-                        <p class="text-gray-600 mb-2 flex items-center text-sm"> <!-- mb-3 à mb-2 -->
-                            <i class="fas fa-map-marker-alt mr-2 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                            Hydra, Alger
-                        </p>
-                        <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3"> <!-- gap-3 à gap-2, mb-4 à mb-3 -->
-                            <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
-                                <i class="fas fa-bed mr-1 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                                4 chambres
-                            </span>
-                            <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
-                                <i class="fas fa-ruler-combined mr-1 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                                250 m²
-                            </span>
-                        </div>
-                        <div class="text-gray-900 font-bold text-lg mb-3"> <!-- mb-4 à mb-3 -->
-                            1 Milliard 500 Millions DZD
-                        </div>
-                        <div class="flex space-x-2">
-                            <a href="tel:0123456789" class="flex-1 text-center bg-gray-100 text-gray-800 text-xs font-medium py-2 px-2 rounded-lg hover:bg-gray-200 transition flex items-center justify-center">
-                                <i class="fas fa-phone mr-1"></i> Appeler
-                            </a>
-                            <a href="https://wa.me/0123456789" class="flex-1 text-center bg-gray-900 text-white text-xs font-medium py-2 px-2 rounded-lg hover:bg-gray-800 transition flex items-center justify-center">
-                                Voir plus
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="property-card group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <div class="relative h-60 overflow-hidden"> <!-- Réduit de h-64 à h-60 -->
-                        <!-- Carousel pour les images -->
-                        <div class="splide splideImg">
-                            <div class="splide__track">
-                                <ul class="splide__list">
-                                    <li class="splide__slide">
-                                        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                                            alt="Villa moderne" 
-                                            class="w-full h-full object-cover">
-                                    </li>
-                                    <li class="splide__slide">
-                                        <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                                            alt="Villa moderne" 
-                                            class="w-full h-full object-cover">
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- Boutons de navigation -->
-                            <div class="splide__arrows">
-                                <button class="splide__arrow splide__arrow--prev absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
-                                    <i class="fas fa-chevron-left text-sm"></i>
-                                </button>
-                                <button class="splide__arrow splide__arrow--next absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
-                                    <i class="fas fa-chevron-right text-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <!-- Étiquette de type -->
-                        <div class="absolute top-3 right-3 bg-yellow-500 text-white font-bold px-2 py-1 rounded-md text-xs">
-                            À vendre
-                        </div>
-                    </div>
-                    <div class="p-4"> <!-- Réduit de p-5 à p-4 -->
-                        <h3 class="text-lg font-bold text-gray-900 mb-1 truncate">Villa moderne avec piscine</h3> <!-- mb-2 à mb-1 -->
-                        <p class="text-gray-600 mb-2 flex items-center text-sm"> <!-- mb-3 à mb-2 -->
-                            <i class="fas fa-map-marker-alt mr-2 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                            Hydra, Alger
-                        </p>
-                        <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3"> <!-- gap-3 à gap-2, mb-4 à mb-3 -->
-                            <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
-                                <i class="fas fa-bed mr-1 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                                4 chambres
-                            </span>
-                            <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
-                                <i class="fas fa-ruler-combined mr-1 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                                250 m²
-                            </span>
-                        </div>
-                        <div class="text-gray-900 font-bold text-lg mb-3"> <!-- mb-4 à mb-3 -->
-                            1 Milliard 500 Millions DZD
-                        </div>
-                        <div class="flex space-x-2">
-                            <a href="tel:0123456789" class="flex-1 text-center bg-gray-100 text-gray-800 text-xs font-medium py-2 px-2 rounded-lg hover:bg-gray-200 transition flex items-center justify-center">
-                                <i class="fas fa-phone mr-1"></i> Appeler
-                            </a>
-                            <a href="https://wa.me/0123456789" class="flex-1 text-center bg-gray-900 text-white text-xs font-medium py-2 px-2 rounded-lg hover:bg-gray-800 transition flex items-center justify-center">
-                                Voir plus
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="property-card group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <div class="relative h-60 overflow-hidden"> <!-- Réduit de h-64 à h-60 -->
-                        <!-- Carousel pour les images -->
-                        <div class="splide splideImg">
-                            <div class="splide__track">
-                                <ul class="splide__list">
-                                    <li class="splide__slide">
-                                        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                                            alt="Villa moderne" 
-                                            class="w-full h-full object-cover">
-                                    </li>
-                                    <li class="splide__slide">
-                                        <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                                            alt="Villa moderne" 
-                                            class="w-full h-full object-cover">
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- Boutons de navigation -->
-                            <div class="splide__arrows">
-                                <button class="splide__arrow splide__arrow--prev absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
-                                    <i class="fas fa-chevron-left text-sm"></i>
-                                </button>
-                                <button class="splide__arrow splide__arrow--next absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
-                                    <i class="fas fa-chevron-right text-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <!-- Étiquette de type -->
-                        <div class="absolute top-3 right-3 bg-yellow-500 text-white font-bold px-2 py-1 rounded-md text-xs">
-                            À vendre
-                        </div>
-                    </div>
-                    <div class="p-4"> <!-- Réduit de p-5 à p-4 -->
-                        <h3 class="text-lg font-bold text-gray-900 mb-1 truncate">Villa moderne avec piscine</h3> <!-- mb-2 à mb-1 -->
-                        <p class="text-gray-600 mb-2 flex items-center text-sm"> <!-- mb-3 à mb-2 -->
-                            <i class="fas fa-map-marker-alt mr-2 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                            Hydra, Alger
-                        </p>
-                        <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3"> <!-- gap-3 à gap-2, mb-4 à mb-3 -->
-                            <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
-                                <i class="fas fa-bed mr-1 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                                4 chambres
-                            </span>
-                            <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
-                                <i class="fas fa-ruler-combined mr-1 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                                250 m²
-                            </span>
-                        </div>
-                        <div class="text-gray-900 font-bold text-lg mb-3"> <!-- mb-4 à mb-3 -->
-                            1 Milliard 500 Millions DZD
-                        </div>
-                        <div class="flex space-x-2">
-                            <a href="tel:0123456789" class="flex-1 text-center bg-gray-100 text-gray-800 text-xs font-medium py-2 px-2 rounded-lg hover:bg-gray-200 transition flex items-center justify-center">
-                                <i class="fas fa-phone mr-1"></i> Appeler
-                            </a>
-                            <a href="https://wa.me/0123456789" class="flex-1 text-center bg-gray-900 text-white text-xs font-medium py-2 px-2 rounded-lg hover:bg-gray-800 transition flex items-center justify-center">
-                                Voir plus
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="property-card group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <div class="relative h-60 overflow-hidden"> <!-- Réduit de h-64 à h-60 -->
-                        <!-- Carousel pour les images -->
-                        <div class="splide splideImg">
-                            <div class="splide__track">
-                                <ul class="splide__list">
-                                    <li class="splide__slide">
-                                        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                                            alt="Villa moderne" 
-                                            class="w-full h-full object-cover">
-                                    </li>
-                                    <li class="splide__slide">
-                                        <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                                            alt="Villa moderne" 
-                                            class="w-full h-full object-cover">
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- Boutons de navigation -->
-                            <div class="splide__arrows">
-                                <button class="splide__arrow splide__arrow--prev absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
-                                    <i class="fas fa-chevron-left text-sm"></i>
-                                </button>
-                                <button class="splide__arrow splide__arrow--next absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
-                                    <i class="fas fa-chevron-right text-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <!-- Étiquette de type -->
-                        <div class="absolute top-3 right-3 bg-yellow-500 text-white font-bold px-2 py-1 rounded-md text-xs">
-                            À vendre
-                        </div>
-                    </div>
-                    <div class="p-4"> <!-- Réduit de p-5 à p-4 -->
-                        <h3 class="text-lg font-bold text-gray-900 mb-1 truncate">Villa moderne avec piscine</h3> <!-- mb-2 à mb-1 -->
-                        <p class="text-gray-600 mb-2 flex items-center text-sm"> <!-- mb-3 à mb-2 -->
-                            <i class="fas fa-map-marker-alt mr-2 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                            Hydra, Alger
-                        </p>
-                        <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3"> <!-- gap-3 à gap-2, mb-4 à mb-3 -->
-                            <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
-                                <i class="fas fa-bed mr-1 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                                4 chambres
-                            </span>
-                            <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
-                                <i class="fas fa-ruler-combined mr-1 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                                250 m²
-                            </span>
-                        </div>
-                        <div class="text-gray-900 font-bold text-lg mb-3"> <!-- mb-4 à mb-3 -->
-                            1 Milliard 500 Millions DZD
-                        </div>
-                        <div class="flex space-x-2">
-                            <a href="tel:0123456789" class="flex-1 text-center bg-gray-100 text-gray-800 text-xs font-medium py-2 px-2 rounded-lg hover:bg-gray-200 transition flex items-center justify-center">
-                                <i class="fas fa-phone mr-1"></i> Appeler
-                            </a>
-                            <a href="https://wa.me/0123456789" class="flex-1 text-center bg-gray-900 text-white text-xs font-medium py-2 px-2 rounded-lg hover:bg-gray-800 transition flex items-center justify-center">
-                                Voir plus
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="property-card group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <div class="relative h-60 overflow-hidden"> <!-- Réduit de h-64 à h-60 -->
-                        <!-- Carousel pour les images -->
-                        <div class="splide splideImg">
-                            <div class="splide__track">
-                                <ul class="splide__list">
-                                    <li class="splide__slide">
-                                        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                                            alt="Villa moderne" 
-                                            class="w-full h-full object-cover">
-                                    </li>
-                                    <li class="splide__slide">
-                                        <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                                            alt="Villa moderne" 
-                                            class="w-full h-full object-cover">
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- Boutons de navigation -->
-                            <div class="splide__arrows">
-                                <button class="splide__arrow splide__arrow--prev absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
-                                    <i class="fas fa-chevron-left text-sm"></i>
-                                </button>
-                                <button class="splide__arrow splide__arrow--next absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
-                                    <i class="fas fa-chevron-right text-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <!-- Étiquette de type -->
-                        <div class="absolute top-3 right-3 bg-yellow-500 text-white font-bold px-2 py-1 rounded-md text-xs">
-                            À vendre
-                        </div>
-                    </div>
-                    <div class="p-4"> <!-- Réduit de p-5 à p-4 -->
-                        <h3 class="text-lg font-bold text-gray-900 mb-1 truncate">Villa moderne avec piscine</h3> <!-- mb-2 à mb-1 -->
-                        <p class="text-gray-600 mb-2 flex items-center text-sm"> <!-- mb-3 à mb-2 -->
-                            <i class="fas fa-map-marker-alt mr-2 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                            Hydra, Alger
-                        </p>
-                        <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3"> <!-- gap-3 à gap-2, mb-4 à mb-3 -->
-                            <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
-                                <i class="fas fa-bed mr-1 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                                4 chambres
-                            </span>
-                            <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
-                                <i class="fas fa-ruler-combined mr-1 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                                250 m²
-                            </span>
-                        </div>
-                        <div class="text-gray-900 font-bold text-lg mb-3"> <!-- mb-4 à mb-3 -->
-                            1 Milliard 500 Millions DZD
-                        </div>
-                        <div class="flex space-x-2">
-                            <a href="tel:0123456789" class="flex-1 text-center bg-gray-100 text-gray-800 text-xs font-medium py-2 px-2 rounded-lg hover:bg-gray-200 transition flex items-center justify-center">
-                                <i class="fas fa-phone mr-1"></i> Appeler
-                            </a>
-                            <a href="https://wa.me/0123456789" class="flex-1 text-center bg-gray-900 text-white text-xs font-medium py-2 px-2 rounded-lg hover:bg-gray-800 transition flex items-center justify-center">
-                                Voir plus
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="property-card group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <div class="relative h-60 overflow-hidden"> <!-- Réduit de h-64 à h-60 -->
-                        <!-- Carousel pour les images -->
-                        <div class="splide splideImg">
-                            <div class="splide__track">
-                                <ul class="splide__list">
-                                    <li class="splide__slide">
-                                        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                                            alt="Villa moderne" 
-                                            class="w-full h-full object-cover">
-                                    </li>
-                                    <li class="splide__slide">
-                                        <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                                            alt="Villa moderne" 
-                                            class="w-full h-full object-cover">
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- Boutons de navigation -->
-                            <div class="splide__arrows">
-                                <button class="splide__arrow splide__arrow--prev absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
-                                    <i class="fas fa-chevron-left text-sm"></i>
-                                </button>
-                                <button class="splide__arrow splide__arrow--next absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
-                                    <i class="fas fa-chevron-right text-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <!-- Étiquette de type -->
-                        <div class="absolute top-3 right-3 bg-yellow-500 text-white font-bold px-2 py-1 rounded-md text-xs">
-                            À vendre
-                        </div>
-                    </div>
-                    <div class="p-4"> <!-- Réduit de p-5 à p-4 -->
-                        <h3 class="text-lg font-bold text-gray-900 mb-1 truncate">Villa moderne avec piscine</h3> <!-- mb-2 à mb-1 -->
-                        <p class="text-gray-600 mb-2 flex items-center text-sm"> <!-- mb-3 à mb-2 -->
-                            <i class="fas fa-map-marker-alt mr-2 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                            Hydra, Alger
-                        </p>
-                        <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3"> <!-- gap-3 à gap-2, mb-4 à mb-3 -->
-                            <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
-                                <i class="fas fa-bed mr-1 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                                4 chambres
-                            </span>
-                            <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
-                                <i class="fas fa-ruler-combined mr-1 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                                250 m²
-                            </span>
-                        </div>
-                        <div class="text-gray-900 font-bold text-lg mb-3"> <!-- mb-4 à mb-3 -->
-                            1 Milliard 500 Millions DZD
-                        </div>
-                        <div class="flex space-x-2">
-                            <a href="tel:0123456789" class="flex-1 text-center bg-gray-100 text-gray-800 text-xs font-medium py-2 px-2 rounded-lg hover:bg-gray-200 transition flex items-center justify-center">
-                                <i class="fas fa-phone mr-1"></i> Appeler
-                            </a>
-                            <a href="https://wa.me/0123456789" class="flex-1 text-center bg-gray-900 text-white text-xs font-medium py-2 px-2 rounded-lg hover:bg-gray-800 transition flex items-center justify-center">
-                                Voir plus
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="property-card group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                    <div class="relative h-60 overflow-hidden"> <!-- Réduit de h-64 à h-60 -->
-                        <!-- Carousel pour les images -->
-                        <div class="splide splideImg">
-                            <div class="splide__track">
-                                <ul class="splide__list">
-                                    <li class="splide__slide">
-                                        <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                                            alt="Villa moderne" 
-                                            class="w-full h-full object-cover">
-                                    </li>
-                                    <li class="splide__slide">
-                                        <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                                            alt="Villa moderne" 
-                                            class="w-full h-full object-cover">
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- Boutons de navigation -->
-                            <div class="splide__arrows">
-                                <button class="splide__arrow splide__arrow--prev absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
-                                    <i class="fas fa-chevron-left text-sm"></i>
-                                </button>
-                                <button class="splide__arrow splide__arrow--next absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-900 rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-md">
-                                    <i class="fas fa-chevron-right text-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <!-- Étiquette de type -->
-                        <div class="absolute top-3 right-3 bg-yellow-500 text-white font-bold px-2 py-1 rounded-md text-xs">
-                            À vendre
-                        </div>
-                    </div>
-                    <div class="p-4"> <!-- Réduit de p-5 à p-4 -->
-                        <h3 class="text-lg font-bold text-gray-900 mb-1 truncate">Villa moderne avec piscine</h3> <!-- mb-2 à mb-1 -->
-                        <p class="text-gray-600 mb-2 flex items-center text-sm"> <!-- mb-3 à mb-2 -->
-                            <i class="fas fa-map-marker-alt mr-2 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                            Hydra, Alger
-                        </p>
-                        <div class="flex flex-wrap gap-2 text-xs text-gray-600 mb-3"> <!-- gap-3 à gap-2, mb-4 à mb-3 -->
-                            <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
-                                <i class="fas fa-bed mr-1 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                                4 chambres
-                            </span>
-                            <span class="flex items-center bg-gray-50 px-2 py-1 rounded">
-                                <i class="fas fa-ruler-combined mr-1 text-yellow-500 text-xs"></i> <!-- Ajout text-xs -->
-                                250 m²
-                            </span>
-                        </div>
-                        <div class="text-gray-900 font-bold text-lg mb-3"> <!-- mb-4 à mb-3 -->
-                            1 Milliard 500 Millions DZD
-                        </div>
-                        <div class="flex space-x-2">
-                            <a href="tel:0123456789" class="flex-1 text-center bg-gray-100 text-gray-800 text-xs font-medium py-2 px-2 rounded-lg hover:bg-gray-200 transition flex items-center justify-center">
-                                <i class="fas fa-phone mr-1"></i> Appeler
-                            </a>
-                            <a href="https://wa.me/0123456789" class="flex-1 text-center bg-gray-900 text-white text-xs font-medium py-2 px-2 rounded-lg hover:bg-gray-800 transition flex items-center justify-center">
-                                Voir plus
-                            </a>
-                        </div>
-                    </div>
-                </div>            
-
+                    </div>   
+                {% endfor %}       
             </div>
 
             <!-- Bouton "Voir plus" avec effet moderne -->
