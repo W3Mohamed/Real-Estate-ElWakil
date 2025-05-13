@@ -8,6 +8,7 @@ use App\Entity\Wilaya;
 use App\Repository\BienRepository;
 use App\Repository\CommuneRepository;
 use App\Repository\ParamettreRepository;
+use App\Repository\SliderRepository;
 use App\Repository\TypeRepository;
 use App\Repository\WilayaRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,10 +23,11 @@ final class HomeController extends AbstractController
     #[Route('/', name: 'accueil')]
     public function index(TypeRepository $typeRepository,
         ParamettreRepository $paramettreRepository,
+        SliderRepository $sliderRepository,
         BienRepository $bienRepository): Response
     {
         $types = $typeRepository->findAll();
-
+        $sliders = $sliderRepository->findBy([], ['ordre' => 'ASC']);
         $parametres = $paramettreRepository->find(1); // Récupère l'entrée avec id=1
         $biens = $bienRepository->findLastEight();
         // Formater les prix pour chaque bien
@@ -39,6 +41,7 @@ final class HomeController extends AbstractController
         return $this->render('index.html.twig',[
             'types' => $types,
             'biens' => $biens,
+            'sliders' => $sliders,
             'parametres' => $parametres,
             'biensALouer' => $biensALouer,
             'biensAVendre' => $biensAVendre

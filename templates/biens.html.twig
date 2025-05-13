@@ -247,7 +247,7 @@
                         });
                     </script>
             </div>
-            
+            {% if totalItems != 0 %}       
             <!-- Pagination -->
             <div class="mt-12 flex justify-center">
                 <nav class="flex items-center space-x-2">
@@ -306,6 +306,7 @@
                     {% endif %}
                 </nav>
             </div>
+            {% endif %}
         </div>
     </section>
 

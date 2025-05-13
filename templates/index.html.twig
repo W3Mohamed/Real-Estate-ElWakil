@@ -32,35 +32,20 @@
                 </div>
 
                 <!-- Image avec bordure arabe -->
-                <div class="md:w-1/2 relative">
-                    <div class="relative rounded-t-[100px] rounded-b-xl overflow-hidden shadow-2xl transform ">
+               <div class="md:w-1/2 relative">
+                    <div class="relative rounded-t-[100px] rounded-b-xl overflow-hidden shadow-2xl transform h-[400px]"> <!-- Hauteur fixe ajoutée ici -->
                         <!-- Carrousel Hero Splide -->
-                        <div class="splide hero-image-slider">
-                            <div class="splide__track">
-                                <ul class="splide__list">
-                                    <!-- Slide 1 -->
-                                    <li class="splide__slide">
-                                        <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" 
+                        <div class="splide hero-image-slider h-full"> <!-- h-full pour prendre toute la hauteur du parent -->
+                            <div class="splide__track h-full">
+                                <ul class="splide__list h-full">
+                                    {% for slide in sliders %}
+                                    <li class="splide__slide h-full">
+                                        <img src="{{ asset('uploads/slider/' ~ slide.image) }}" 
                                             alt="ElWakil Immobilier" 
                                             class="w-full h-full object-cover">
                                         <div class="absolute inset-0 bg-gradient-to-t from-gray-900/20 to-transparent"></div>
                                     </li>
-                                    
-                                    <!-- Slide 2 (ajoutez d'autres images selon besoin) -->
-                                    <li class="splide__slide">
-                                        <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" 
-                                            alt="ElWakil Immobilier" 
-                                            class="w-full h-full object-cover">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/20 to-transparent"></div>
-                                    </li>
-                                    
-                                    <!-- Slide 3 -->
-                                    <li class="splide__slide">
-                                        <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" 
-                                            alt="ElWakil Immobilier" 
-                                            class="w-full h-full object-cover">
-                                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/20 to-transparent"></div>
-                                    </li>
+                                    {% endfor %}
                                 </ul>
                             </div>
                         </div>

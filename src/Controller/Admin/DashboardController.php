@@ -7,6 +7,7 @@ use App\Entity\Contact;
 use App\Entity\Paramettre;
 use App\Entity\Proposition;
 use App\Entity\Reservation;
+use App\Entity\Slider;
 use App\Entity\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
@@ -70,7 +71,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Paramètres', 'fas fa-cog', Paramettre::class)
             ->setAction('edit')
             ->setEntityId(1);
-            
+        yield MenuItem::linkToCrud('Slider', 'fas fa-home', Slider::class);
         yield MenuItem::linkToUrl('Retour au site', 'fas fa-globe', '/');
     }
 }
