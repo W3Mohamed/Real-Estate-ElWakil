@@ -130,19 +130,14 @@ final class HomeController extends AbstractController
         }
     
         // Récupération des résultats non paginés pour le comptage
-        $biens = $queryBuilder->getQuery()->getResult();
-        $query = $queryBuilder->getQuery();
-    
-        // Formatage des prix pour l'affichage
-        foreach ($biens as $bien) {
-            $bien->formattedPrix = $this->formatPrixDZD($bien->getPrix());
-        }
+        // $biens = $queryBuilder->getQuery()->getResult();
+        // $query = $queryBuilder->getQuery();
     
         // Pagination
         $page = $request->query->getInt('page', 1);
         $limit = 12; // Nombre d'items par page
         
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($query);
+        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($queryBuilder);
         $totalItems = count($paginator);
         $pagesCount = ceil($totalItems / $limit);
         
@@ -150,7 +145,14 @@ final class HomeController extends AbstractController
             ->getQuery()
             ->setFirstResult($limit * ($page - 1)) // Offset
             ->setMaxResults($limit); // Limit
-    
+
+        // Formatage des prix pour l'affichage
+        $biens = [];
+        foreach ($paginator as $bien) {
+            $bien->formattedPrix = $this->formatPrixDZD($bien->getPrix());
+            $biens[] = $bien;
+        }
+
         // Récupération des données pour les listes déroulantes
         $types = $typeRepository->findAll();
         $parametres = $paramettreRepository->find(1); 
@@ -196,11 +198,29 @@ final class HomeController extends AbstractController
             throw $this->createNotFoundException('Le bien demandé n\'existe pas');
         }
         $parametres = $paramettreRepository->find(1);
-        return $this->render('detail.html.twig',[
+
+        if($bien->getTransaction() == 'vente') {
+            $similarBiens = $bienRepository->findSimilarVenteBiens($bien, 3);
+        } else {
+            $similarBiens = $bienRepository->findSimilarLocationBiens($bien, 3);
+        }
+
+        // Formater les prix des biens similaires
+        $formatedSimilarBiens = [];
+        foreach ($similarBiens as $similarBien) {
+            $formatedSimilarBien = [
+                'entity' => $similarBien,
+                'formatedPrix' => $this->formatPrixDZD($similarBien->getPrix())
+            ];
+            $formatedSimilarBiens[] = $formatedSimilarBien;
+        }
+
+        return $this->render('detail.html.twig', [
             'bien' => $bien,
             'prix' => $formatedPrix,
             'types' => $types,
-            'parametres' => $parametres
+            'parametres' => $parametres,
+            'similarBiens' => $formatedSimilarBiens
         ]);
     }
 

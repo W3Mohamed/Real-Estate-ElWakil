@@ -229,7 +229,7 @@
                             </li>
                             <li class="flex justify-between py-2 border-b border-gray-100">
                                 <span class="text-gray-600">Date de publication</span>
-                                <span class="font-medium">03/05/2025</span>
+                                <span class="font-medium">{{ bien.dateCreation|date('d/m/Y') }}</span>
                             </li>
                         </ul>
 
@@ -257,45 +257,41 @@
                     <div class="mt-6 bg-white rounded-xl shadow-md p-6">
                         <h2 class="text-xl font-bold text-gray-900 mb-4">Biens similaires</h2>
                         <div class="space-y-4">
-                            <a href="#" class="block group">
-                                <div class="flex items-center">
-                                    <div class="w-20 h-20 rounded-md overflow-hidden mr-3">
-                                        <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Appartement de Luxe" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                            {% for similarBien in similarBiens %}
+                                <a href="{{ path('detail', {id: similarBien.entity.id}) }}" class="block group">
+                                    <div class="flex items-center">
+                                        <div class="w-20 h-20 rounded-md overflow-hidden mr-3">
+                                            {% if similarBien.entity.images is not empty %}
+                                                <img src="{{ asset('uploads/biens/' ~ similarBien.entity.images.first().nom) }}" 
+                                                    alt="{{ similarBien.entity.libelle }}" 
+                                                    class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                                            {% else %}
+                                                <img src="{{ asset('images/default-property.jpg') }}" 
+                                                    alt="Image par défaut" 
+                                                    class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-gray-900 group-hover:text-yellow-500 transition">{{ similarBien.entity.libelle }}</h4>
+                                            <p class="text-sm text-gray-600">{{ similarBien.entity.wilaya.nom }}</p>
+                                            {% if similarBien.entity.transaction == 'vente' %}
+                                                <p class="text-sm font-bold text-yellow-500">{{ similarBien.formatedPrix }}</p>
+                                            {% endif %}
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-900 group-hover:text-yellow-500 transition">Appartement de Luxe</h4>
-                                        <p class="text-sm text-gray-600">Alger Centre</p>
-                                        <p class="text-sm font-bold text-yellow-500">18 500 000 DZD</p>
-                                    </div>
-                                </div>
-                            </a>
-                            <a href="#" class="block group">
-                                <div class="flex items-center">
-                                    <div class="w-20 h-20 rounded-md overflow-hidden mr-3">
-                                        <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Villa avec Piscine" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-900 group-hover:text-yellow-500 transition">Villa avec Piscine</h4>
-                                        <p class="text-sm text-gray-600">Dély Ibrahim</p>
-                                        <p class="text-sm font-bold text-yellow-500">38 700 000 DZD</p>
-                                    </div>
-                                </div>
-                            </a>
-                            <a href="#" class="block group">
-                                <div class="flex items-center">
-                                    <div class="w-20 h-20 rounded-md overflow-hidden mr-3">
-                                        <img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Duplex Moderne" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-900 group-hover:text-yellow-500 transition">Duplex Moderne</h4>
-                                        <p class="text-sm text-gray-600">Birkhadem</p>
-                                        <p class="text-sm font-bold text-yellow-500">22 300 000 DZD</p>
-                                    </div>
-                                </div>
-                            </a>
+                                </a>
+                            {% else %}
+                                <p class="text-gray-500">Aucun bien similaire trouvé</p>
+                            {% endfor %}
                         </div>
                         <div class="mt-4 text-center">
-                            <a href="{{ path('biens') }}" class="text-yellow-500 hover:text-yellow-600 font-semibold inline-flex items-center">
+                            <a href="{{ path('biens', {
+                                transaction: bien.transaction,
+                                type: bien.type.id,
+                                wilaya: bien.wilaya,
+                                price_min: bien.transaction == 'vente' ? bien.prix - 2000000 : null,
+                                price_max: bien.transaction == 'vente' ? bien.prix + 2000000 : null
+                            }) }}" class="text-yellow-500 hover:text-yellow-600 font-semibold inline-flex items-center">
                                 Voir plus de biens <i class="fas fa-arrow-right ml-2"></i>
                             </a>
                         </div>

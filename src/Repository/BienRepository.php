@@ -51,21 +51,45 @@ class BienRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findSimilarBiens(Bien $bien, int $limit = 3): array
+    public function findSimilarVenteBiens(Bien $bien, int $limit = 3): array
     {
-        return $this->createQueryBuilder('b')
+        $qb = $this->createQueryBuilder('b')
             ->leftJoin('b.images', 'i')
-            ->addSelect('i') // Charge les images
+            ->addSelect('i')
             ->where('b.transaction = :transaction')
             ->andWhere('b.type = :type')
+            ->andWhere('b.wilaya = :wilaya')
+            ->andWhere('b.id != :currentId')
+            ->andWhere('b.prix BETWEEN :minPrix AND :maxPrix')
+            ->setParameter('transaction', $bien->getTransaction())
+            ->setParameter('type', $bien->getType())
+            ->setParameter('wilaya', $bien->getWilaya())
+            ->setParameter('currentId', $bien->getId())
+            ->setParameter('minPrix', $bien->getPrix() - 2000000)
+            ->setParameter('maxPrix', $bien->getPrix() + 2000000)
+            ->orderBy('b.id', 'DESC')
+            ->setMaxResults($limit);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findSimilarLocationBiens(Bien $bien, int $limit = 3): array
+    {
+        $qb = $this->createQueryBuilder('b')
+            ->leftJoin('b.images', 'i')
+            ->addSelect('i')
+            ->where('b.transaction = :transaction')
+            ->andWhere('b.type = :type')
+            ->andWhere('b.wilaya = :wilaya')
             ->andWhere('b.id != :currentId')
             ->setParameter('transaction', $bien->getTransaction())
             ->setParameter('type', $bien->getType())
+            ->setParameter('wilaya', $bien->getWilaya())
             ->setParameter('currentId', $bien->getId())
             ->orderBy('b.id', 'DESC')
-            ->setMaxResults($limit)
-            ->getQuery()
-            ->getResult();
+            ->setMaxResults($limit);
+
+        return $qb->getQuery()->getResult();
     }
 
     public function findLastEight()

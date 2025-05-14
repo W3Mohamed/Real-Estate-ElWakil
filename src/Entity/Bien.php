@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BienRepository::class)]
+#[ORM\HasLifecycleCallbacks] 
 class Bien
 {
     #[ORM\Id]
@@ -87,6 +88,9 @@ class Bien
 
     #[ORM\Column(length: 25, nullable: true)]
     private ?string $telegram = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $dateCreation = null;
 
     public function __construct()
     {
@@ -386,4 +390,22 @@ class Bien
 
         return $this;
     }
+
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->dateCreation;
+    }
+
+    public function setDateCreation(\DateTimeInterface $dateCreation): self
+    {
+        $this->dateCreation = $dateCreation;
+        return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function setDateCreationValue(): void
+    {
+        $this->dateCreation = new \DateTime();
+    }
+
 }

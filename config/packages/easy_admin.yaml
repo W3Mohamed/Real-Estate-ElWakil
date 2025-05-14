@@ -6,3 +6,5 @@ easy_admin:
                 - 'build/admin/app.js'
         form_theme:
             - '@EasyAdmin/crud/form_theme.html.twig'
+    security:
+        enable: true

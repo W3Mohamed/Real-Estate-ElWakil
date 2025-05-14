@@ -61,9 +61,23 @@ class Paramettre
         return $this;
     }
 
-    public function getPwd(): ?string
+    public function getRoles(): array
+    {
+        return ['ROLE_ADMIN'];
+    }
+
+    public function getPassword(): string
     {
         return $this->pwd;
+    }
+
+    public function eraseCredentials(): void {}
+
+    public function getSalt(): ?string { return null; }
+
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->username;
     }
 
     public function setPwd(string $pwd): static
