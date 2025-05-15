@@ -41,6 +41,27 @@
         .property-card:hover {
             transform: translateY(-5px);
         }
+        /* Dans votre balise head */
+        .goog-te-banner-frame {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            width: 0 !important;
+            position: absolute !important;
+        }
+
+        body {
+            top: 0 !important;
+        }
+
+        .skiptranslate {
+            display: none !important;
+        }
+
+        .goog-te-gadget {
+            display: none !important;
+        }
+
     </style>
     
     {% block stylesheets %}{% endblock %}
@@ -53,28 +74,29 @@
 <body class="bg-white">
     <!-- Navbar -->
     <nav class="bg-white shadow-md sticky top-0 z-50 border-b border-gray-100">
+    <div id="google_translate_element" style="display:none; height:0; width:0; position:absolute;"></div>
         <div class="container mx-auto px-4 lg:px-6">
             <div class="flex justify-between items-center py-4">
                 <!-- Logo -->
-<div class="flex items-center">
-    <a href="{{path('accueil')}}" class="flex items-center">
-        <!-- Conteneur du logo avec effet story PERMANENT -->
-        <div class="relative mr-3">
-            <!-- Cercle orange PERMANENT -->
-            <div class="absolute -inset-1 rounded-full bg-gradient-to-tr from-orange-400 to-yellow-500 p-0.5">
-                <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-orange-400 to-yellow-500 "></div>
-            </div>
-            <!-- Logo rond -->
-            <div class="relative flex rounded-full overflow-hidden border-2 border-white bg-white z-10">
-                <img src="{{asset('img/logo2.jpg')}}" 
-                     class="w-10 h-10 rounded-full object-cover" 
-                     alt="ElWakil Agence immobiliere">
-            </div>
-        </div>
-        <!-- Texte -->
-        <span class="text-2xl font-bold text-gray-900">EL<span class="text-yellow-500">WAKIL</span> IMMOBILIER</span>
-    </a>
-</div>
+                <div class="flex items-center">
+                    <a href="{{path('accueil')}}" class="flex items-center">
+                        <!-- Conteneur du logo avec effet story PERMANENT -->
+                        <div class="relative mr-3">
+                            <!-- Cercle orange PERMANENT -->
+                            <div class="absolute -inset-1 rounded-full bg-gradient-to-tr from-orange-400 to-yellow-500 p-0.5">
+                                <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-orange-400 to-yellow-500 "></div>
+                            </div>
+                            <!-- Logo rond -->
+                            <div class="relative flex rounded-full overflow-hidden border-2 border-white bg-white z-10">
+                                <img src="{{asset('img/logo2.jpg')}}" 
+                                    class="w-10 h-10 rounded-full object-cover" 
+                                    alt="ElWakil Agence immobiliere">
+                            </div>
+                        </div>
+                        <!-- Texte -->
+                        <span class="text-xl font-bold text-gray-900">EL<span class="text-yellow-500">WAKIL</span> IMMOBILIER</span>
+                    </a>
+                </div>
                 
                 <!-- Menu principal -->
                 <div class="hidden lg:flex items-center space-x-8">
@@ -120,7 +142,21 @@
                         </a>
                     </div>
                 </div>
-                
+
+                <div class="relative group">
+                    <button class="text-gray-700 hover:text-yellow-500 transition duration-300 focus:outline-none">
+                        <i class="fas fa-globe text-xl"></i>
+                    </button>
+                    <div class="absolute right-0 hidden bg-white shadow-lg rounded-md py-2 w-32 z-50 group-hover:block border border-gray-100">
+                        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition flex items-center lang-switcher" data-lang="fr">
+                            <span class="mr-2">🇫🇷</span> Français
+                        </a>
+                        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition flex items-center lang-switcher" data-lang="ar">
+                            <span class="mr-2">🇩🇿</span> العربية
+                        </a>
+                    </div>
+                </div>
+
                 <!-- Bouton mobile -->
                 <div class="lg:hidden">
                     <button id="mobile-menu-button" class="text-gray-700 focus:outline-none">
