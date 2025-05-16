@@ -2,29 +2,26 @@ security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-        App\Entity\Paramettre: 'auto'
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        users_in_memory: { memory: null }
-        paramettre_provider:
-            entity:
-                class: App\Entity\Paramettre
-                property: username
+        in_memory:
+            memory:
+                users:
+                    admin:  # Remplacez par le nom d'utilisateur souhaité
+                        password: '%env(ADMIN_PASSWORD)%'  # Mot de passe hashé
+                        roles: 'ROLE_ADMIN'  # Le rôle nécessaire pour EasyAdmin
+
     firewalls:
+        admin:
+            pattern: ^/(admin|logout)  # Protège toutes les routes commençant par /admin
+            http_basic: ~  # <-- Ceci est ESSENTIEL pour la popup de connexion
+            provider: in_memory  # Utilise le provider "in_memory"
+            logout:
+                path: app_logout  # Route pour la déconnexion
+                target: accueil
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        main:
-            lazy: true
-            provider: paramettre_provider  # Changez ceci
-            form_login:
-                login_path: app_login
-                check_path: app_login
-                enable_csrf: true
-                default_target_path: /admin 
-            logout:
-                path: app_logout
-                target: app_login
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -36,7 +33,6 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/profile, roles: ROLE_USER }
 
 when@test:
     security:
@@ -45,8 +41,8 @@ when@test:
             # important to generate secure password hashes. In tests however, secure hashes
             # are not important, waste resources and increase test times. The following
             # reduces the work factor to the lowest possible values.
-            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
-                algorithm: auto
-                cost: 4 # Lowest possible value for bcrypt
-                time_cost: 3 # Lowest possible value for argon
-                memory_cost: 10 # Lowest possible value for argon
+            # Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+            #     algorithm: auto
+            #     cost: 4 # Lowest possible value for bcrypt
+            #     time_cost: 3 # Lowest possible value for argon
+            #     memory_cost: 10 # Lowest possible value for argon

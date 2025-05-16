@@ -1,5 +1,5 @@
 easy_admin:
-    site_name: 'GROUPIMMO'
+    site_name: 'ElWakilImmobilier'
     design:
         assets:
             js:
@@ -8,3 +8,8 @@ easy_admin:
             - '@EasyAdmin/crud/form_theme.html.twig'
     security:
         enable: true
+        logout: 
+            enabled: true
+            path: app_logout
+            icon: 'fa fa-sign-out'
+            label: 'Déconnexion'

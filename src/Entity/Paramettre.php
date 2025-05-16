@@ -15,12 +15,6 @@ class Paramettre
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $username = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $pwd = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
@@ -47,44 +41,6 @@ class Paramettre
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUsername(): ?string
-    {
-        return $this->username;
-    }
-
-    public function setUsername(string $username): static
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    public function getRoles(): array
-    {
-        return ['ROLE_ADMIN'];
-    }
-
-    public function getPassword(): string
-    {
-        return $this->pwd;
-    }
-
-    public function eraseCredentials(): void {}
-
-    public function getSalt(): ?string { return null; }
-
-    public function getUserIdentifier(): string
-    {
-        return (string) $this->username;
-    }
-
-    public function setPwd(string $pwd): static
-    {
-        $this->pwd = $pwd;
-
-        return $this;
     }
 
     public function getEmail(): ?string

@@ -45,8 +45,6 @@ class ParamettreCrudController extends AbstractCrudController
     {
          return [
             IdField::new('id')->hideOnForm(),
-            TextField::new('username', 'Nom d\'utilisateur'),
-            TextField::new('pwd', 'Mot de passe')->hideOnIndex(), // Cache le mot de passe dans la liste
             TextField::new('email', 'Email'),
             TextField::new('telephone', 'Téléphone'),
             TextField::new('facebook', 'Facebook'),

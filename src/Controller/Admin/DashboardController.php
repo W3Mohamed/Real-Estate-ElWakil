@@ -41,6 +41,13 @@ class DashboardController extends AbstractDashboardController
         ]);
     }
 
+    #[Route('/logout', name: 'app_logout')]
+    public function logout(): void
+    {
+        // Cette méthode ne sera jamais exécutée, 
+        // car Symfony intercepte la déconnexion avant
+    }
+
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
@@ -71,7 +78,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Paramètres', 'fas fa-cog', Paramettre::class)
             ->setAction('edit')
             ->setEntityId(1);
-        yield MenuItem::linkToCrud('Slider', 'fas fa-home', Slider::class);
+        yield MenuItem::linkToCrud('Slider', 'fas fa-image', Slider::class);
         yield MenuItem::linkToUrl('Retour au site', 'fas fa-globe', '/');
     }
 }
