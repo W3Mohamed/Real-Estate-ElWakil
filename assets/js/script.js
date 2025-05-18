@@ -1,106 +1,106 @@
 document.addEventListener('DOMContentLoaded', function () {
     console.log('hello world');
-// Fonction principale pour gérer les langues
-function initLanguageSystem() {
-    // Fonction pour corriger les styles après traduction
-    function fixStylesAfterTranslation() {
-        // Réinitialiser les styles perturbés par Google Translate
-        document.querySelectorAll('*').forEach(el => {
-            el.style.transform = '';
-            el.style.position = '';
-            el.style.top = '';
-            el.style.left = '';
-        });
-        
-        // Réappliquer les classes Tailwind importantes
-        setTimeout(() => {
-            document.body.classList.add('font-sans', 'antialiased', 'text-gray-900');
-        }, 100);
-    }
-
-    // Fonction pour activer une langue
-    function activateLanguage(lang) {
-        // Sauvegarder la préférence
-        document.cookie = `googtrans=/auto/${lang}; path=/; max-age=31536000; SameSite=Lax`;
-        
-        // Gérer la direction
-        document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-        document.body.classList.toggle('rtl', lang === 'ar');
-        
-        // Recharger la traduction
-        if(window.google?.translate?.TranslateElement) {
-            google.translate.TranslateElement().refresh();
-            setTimeout(fixStylesAfterTranslation, 300);
-        } else {
-            loadGoogleTranslate();
-        }
-    }
-
-    // Initialiser Google Translate
-    function loadGoogleTranslate() {
-        if(!document.getElementById('google-translate-script')) {
-            const script = document.createElement('script');
-            script.id = 'google-translate-script';
-            script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-            document.body.appendChild(script);
-        }
-    }
-
-    // Callback Google Translate
-    window.googleTranslateElementInit = function() {
-        new google.translate.TranslateElement({
-            pageLanguage: 'fr',
-            includedLanguages: 'fr,ar',
-            layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL,
-            autoDisplay: false
-        }, 'google_translate_element');
-        
-        setTimeout(() => {
-            // Masquer les éléments Google
-            document.querySelectorAll('.goog-te-banner, .goog-te-gadget, .goog-te-combo')
-                   .forEach(el => el.style.display = 'none');
+    // Fonction principale pour gérer les langues
+    function initLanguageSystem() {
+        // Fonction pour corriger les styles après traduction
+        function fixStylesAfterTranslation() {
+            // Réinitialiser les styles perturbés par Google Translate
+            document.querySelectorAll('*').forEach(el => {
+                el.style.transform = '';
+                el.style.position = '';
+                el.style.top = '';
+                el.style.left = '';
+            });
             
-            fixStylesAfterTranslation();
-            checkSavedLanguage();
-        }, 500);
-    };
+            // Réappliquer les classes Tailwind importantes
+            setTimeout(() => {
+                document.body.classList.add('font-sans', 'antialiased', 'text-gray-900');
+            }, 100);
+        }
 
-    // Vérifier la langue sauvegardée
-    function checkSavedLanguage() {
-        const langCookie = document.cookie.split(';')
-                           .find(c => c.trim().startsWith('googtrans='));
-        if(langCookie) {
-            const lang = langCookie.split('=')[1].split('/').pop();
-            if(['ar', 'fr'].includes(lang)) {
-                activateLanguage(lang);
-                return;
+        // Fonction pour activer une langue
+        function activateLanguage(lang) {
+            // Sauvegarder la préférence
+            document.cookie = `googtrans=/auto/${lang}; path=/; max-age=31536000; SameSite=Lax`;
+            
+            // Gérer la direction
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            document.body.classList.toggle('rtl', lang === 'ar');
+            
+            // Recharger la traduction
+            if(window.google?.translate?.TranslateElement) {
+                google.translate.TranslateElement().refresh();
+                setTimeout(fixStylesAfterTranslation, 300);
+            } else {
+                loadGoogleTranslate();
             }
         }
-        activateLanguage('fr');
-    }
 
-    // Écouteurs d'événements
-    document.querySelectorAll('.lang-switcher').forEach(btn => {
-        btn.addEventListener('click', e => {
-            e.preventDefault();
-            activateLanguage(btn.dataset.lang);
+        // Initialiser Google Translate
+        function loadGoogleTranslate() {
+            if(!document.getElementById('google-translate-script')) {
+                const script = document.createElement('script');
+                script.id = 'google-translate-script';
+                script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+                document.body.appendChild(script);
+            }
+        }
+
+        // Callback Google Translate
+        window.googleTranslateElementInit = function() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'fr',
+                includedLanguages: 'fr,ar',
+                layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL,
+                autoDisplay: false
+            }, 'google_translate_element');
+            
+            setTimeout(() => {
+                // Masquer les éléments Google
+                document.querySelectorAll('.goog-te-banner, .goog-te-gadget, .goog-te-combo')
+                    .forEach(el => el.style.display = 'none');
+                
+                fixStylesAfterTranslation();
+                checkSavedLanguage();
+            }, 500);
+        };
+
+        // Vérifier la langue sauvegardée
+        function checkSavedLanguage() {
+            const langCookie = document.cookie.split(';')
+                            .find(c => c.trim().startsWith('googtrans='));
+            if(langCookie) {
+                const lang = langCookie.split('=')[1].split('/').pop();
+                if(['ar', 'fr'].includes(lang)) {
+                    activateLanguage(lang);
+                    return;
+                }
+            }
+            activateLanguage('fr');
+        }
+
+        // Écouteurs d'événements
+        document.querySelectorAll('.lang-switcher').forEach(btn => {
+            btn.addEventListener('click', e => {
+                e.preventDefault();
+                activateLanguage(btn.dataset.lang);
+            });
         });
-    });
 
-    // Initialisation
-    if(!window.google?.translate) {
-        loadGoogleTranslate();
-    } else {
-        checkSavedLanguage();
+        // Initialisation
+        if(!window.google?.translate) {
+            loadGoogleTranslate();
+        } else {
+            checkSavedLanguage();
+        }
     }
-}
 
-// Démarrer quand le DOM est prêt
-if(document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initLanguageSystem);
-} else {
-    initLanguageSystem();
-}
+    // Démarrer quand le DOM est prêt
+    if(document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initLanguageSystem);
+    } else {
+        initLanguageSystem();
+    }
 
     const counters = document.querySelectorAll('.counter');
     console.log('Nombre de compteurs trouvés:', counters.length); // Vérifie si les éléments sont trouvés
@@ -316,34 +316,31 @@ if(document.readyState === 'loading') {
         });
     });
 
-
-
-
     // Fonction pour montrer le CTA discrètement
-    function showDiscreetCTA() {
-        const cta = document.getElementById('discreet-cta');
-        cta.classList.remove('hidden');
-        cta.classList.add('opacity-0');
+    // function showDiscreetCTA() {
+    //     const cta = document.getElementById('discreet-cta');
+    //     cta.classList.remove('hidden');
+    //     cta.classList.add('opacity-0');
         
-        setTimeout(() => {
-            cta.classList.remove('opacity-0');
-        }, 50);
+    //     setTimeout(() => {
+    //         cta.classList.remove('opacity-0');
+    //     }, 50);
         
-        // Disparaît après 5 secondes
-        setTimeout(() => {
-            cta.classList.add('opacity-0');
-            setTimeout(() => cta.classList.add('hidden'), 500);
-        }, 5000);
-    }
+    //     // Disparaît après 5 secondes
+    //     setTimeout(() => {
+    //         cta.classList.add('opacity-0');
+    //         setTimeout(() => cta.classList.add('hidden'), 500);
+    //     }, 5000);
+    // }
     
-    // Affiche toutes les 20 secondes
-    setTimeout(showDiscreetCTA, 3000);
-    setInterval(showDiscreetCTA, 20000);
+    // // Affiche toutes les 20 secondes
+    // setTimeout(showDiscreetCTA, 3000);
+    // setInterval(showDiscreetCTA, 20000);
     
     // Affiche aussi au survol des boutons
-    document.querySelectorAll('.fixed a').forEach(btn => {
-        btn.addEventListener('mouseenter', showDiscreetCTA);
-    });
+    // document.querySelectorAll('.fixed a').forEach(btn => {
+    //     btn.addEventListener('mouseenter', showDiscreetCTA);
+    // });
 
 
 
@@ -378,6 +375,39 @@ if(document.readyState === 'loading') {
         if (wilayaSelect.value) {
             wilayaSelect.dispatchEvent(new Event('change'));
         }
+    }
+
+    function initStickyTypes() {
+        const stickySection = document.getElementById('types-sticky-section');
+        if (!stickySection) return; // Stop si l'élément n'existe pas
+        
+        const originalOffset = stickySection.offsetTop;
+        const navbar = document.querySelector('nav'); // Adaptez ce sélecteur
+        const navbarHeight = navbar ? navbar.offsetHeight : 64; // 64px par défaut
+    
+        window.addEventListener('scroll', () => {
+            const shouldSticky = window.scrollY > stickySection.offsetTop - navbarHeight;
+            
+            stickySection.classList.toggle('fixed', shouldSticky);
+            stickySection.classList.toggle('top-16', shouldSticky);
+            stickySection.classList.toggle('left-0', shouldSticky);
+            stickySection.classList.toggle('right-0', shouldSticky);
+            stickySection.classList.toggle('z-40', shouldSticky);
+            stickySection.classList.toggle('shadow-md', shouldSticky);
+            
+            // Compensation pour le contenu suivant
+            const nextElement = stickySection.nextElementSibling;
+            if (nextElement) {
+                nextElement.classList.toggle('mt-[180px]', shouldSticky);
+            }
+            // Retour à la position initiale quand on remonte assez
+            if (window.scrollY <= originalOffset - navbarHeight) {
+                stickySection.classList.remove('fixed', 'top-16', 'left-0', 'right-0', 'z-40', 'shadow-md', 'w-full');
+            }
+        });
+    }
+    if (document.getElementById('types-sticky-section')) {
+        initStickyTypes();
     }
 
 });

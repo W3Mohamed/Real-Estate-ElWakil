@@ -170,7 +170,7 @@
                                 document.addEventListener('DOMContentLoaded', function() {
                                     // Initialiser le carrousel des vidéos Facebook avec une classe unique
                                     new Splide('.facebook-videos-slider', {
-                                        type: 'loop', // ou 'slide' selon vos besoins
+                                        type: 'slide', // ou 'slide' selon vos besoins
                                         perPage: 1, // Nombre de vidéos visibles à la fois
                                         perMove: 1,
                                         gap: '1rem', // Espace entre les slides
@@ -321,7 +321,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Initialisation du slider principal
             var mainSlider = new Splide('.gallery-main', {
-                type: 'fade',
+                type: 'slide',
                 rewind: true,
                 pagination: false,
                 arrows: true,

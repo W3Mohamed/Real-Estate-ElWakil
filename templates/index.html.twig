@@ -32,10 +32,10 @@
                 </div>
 
                 <!-- Image avec bordure arabe -->
-               <div class="md:w-1/2 relative">
-                    <div class="relative rounded-t-[100px] rounded-b-xl overflow-hidden shadow-2xl transform h-[400px]"> <!-- Hauteur fixe ajoutée ici -->
+                <div class="md:w-1/2 relative">
+                    <div class="relative  rounded-xl overflow-hidden shadow-2xl transform h-[400px]"> <!-- Hauteur fixe ajoutée ici -->
                         <!-- Carrousel Hero Splide -->
-                        <div class="splide hero-image-slider h-full"> <!-- h-full pour prendre toute la hauteur du parent -->
+                        <div class="splide hero-image-slider h-full" id="sliderImg"> <!-- h-full pour prendre toute la hauteur du parent -->
                             <div class="splide__track h-full">
                                 <ul class="splide__list h-full">
                                     {% for slide in sliders %}
@@ -55,8 +55,8 @@
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         // Initialisation du carrousel Hero avec une classe unique
-                        new Splide('.hero-image-slider', {
-                            type: 'fade', // Effet de fondu pour une transition douce
+                        new Splide('#sliderImg', {
+                            type: 'slide', // Effet de fondu pour une transition douce
                             autoplay: true,
                             interval: 4000,
                             pauseOnHover: false,
@@ -75,7 +75,7 @@
         <div class="border-t border-gray-200"></div>
     </section>
     <!-- Carousel des Types -->
-    <section class="py-6 bg-white border-b border-gray-100">
+    <section id="types-sticky-section" class="py-6 bg-white border-b border-gray-100 transition-all duration-300">
         <div class="container mx-auto px-4">
             <div class="splide" id="types-carousel">
                 <div class="splide__track">
@@ -105,8 +105,8 @@
                     perPage: 8,
                     perMove: 1,
                     gap: '0.5rem',
-                    arrows: false,
-                    pagination: false,
+                    arrows: true,
+                    pagination: true,
                     drag: true,
                     breakpoints: {
                         1280: { perPage: 7 },
@@ -148,7 +148,7 @@
                                         </li>
                                         {% else %}
                                         <li class="splide__slide">
-                                            <img src="{{ asset('images/default.jpg') }}" 
+                                            <img src="{{ asset('uploads/default.jpg') }}" 
                                                 alt="Image par défaut El Wakil immobilier" 
                                                 class="w-full h-full object-cover">
                                         </li>
