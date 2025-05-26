@@ -1,120 +1,116 @@
-document.addEventListener('DOMContentLoaded', function () {
-    console.log('hello world');
-    // Fonction principale pour gérer les langues
-    function initLanguageSystem() {
-        // Fonction pour corriger les styles après traduction
-        function fixStylesAfterTranslation() {
-            // Réinitialiser les styles perturbés par Google Translate
-            document.querySelectorAll('*').forEach(el => {
-                el.style.transform = '';
-                el.style.position = '';
-                el.style.top = '';
-                el.style.left = '';
-            });
-            
-            // Réappliquer les classes Tailwind importantes
-            setTimeout(() => {
-                document.body.classList.add('font-sans', 'antialiased', 'text-gray-900');
-            }, 100);
-        }
-
-        // Fonction pour activer une langue
-        function activateLanguage(lang) {
-            // Sauvegarder la préférence
-            document.cookie = `googtrans=/auto/${lang}; path=/; max-age=31536000; SameSite=Lax`;
-            
-            // Gérer la direction
-            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-            document.body.classList.toggle('rtl', lang === 'ar');
-            
-            // Recharger la traduction
-            if(window.google?.translate?.TranslateElement) {
-                google.translate.TranslateElement().refresh();
-                setTimeout(fixStylesAfterTranslation, 300);
-            } else {
-                loadGoogleTranslate();
-            }
-        }
-
-        // Initialiser Google Translate
-        function loadGoogleTranslate() {
-            if(!document.getElementById('google-translate-script')) {
-                const script = document.createElement('script');
-                script.id = 'google-translate-script';
-                script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-                document.body.appendChild(script);
-            }
-        }
-
-        // Callback Google Translate
-        window.googleTranslateElementInit = function() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'fr',
-                includedLanguages: 'fr,ar',
-                layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL,
-                autoDisplay: false
-            }, 'google_translate_element');
-            
-            setTimeout(() => {
-                // Masquer les éléments Google
-                document.querySelectorAll('.goog-te-banner, .goog-te-gadget, .goog-te-combo')
-                    .forEach(el => el.style.display = 'none');
-                
-                fixStylesAfterTranslation();
-                checkSavedLanguage();
-            }, 500);
-        };
-
-        // Vérifier la langue sauvegardée
-        function checkSavedLanguage() {
-            const langCookie = document.cookie.split(';')
-                            .find(c => c.trim().startsWith('googtrans='));
-            if(langCookie) {
-                const lang = langCookie.split('=')[1].split('/').pop();
-                if(['ar', 'fr'].includes(lang)) {
-                    activateLanguage(lang);
-                    return;
-                }
-            }
-            activateLanguage('fr');
-        }
-
-        // Écouteurs d'événements
-        document.querySelectorAll('.lang-switcher').forEach(btn => {
-            btn.addEventListener('click', e => {
-                e.preventDefault();
-                activateLanguage(btn.dataset.lang);
-            });
+// Fonction principale pour gérer les langues
+function initLanguageSystem() {
+    // Fonction pour corriger les styles après traduction
+    function fixStylesAfterTranslation() {
+        // Réinitialiser les styles perturbés par Google Translate
+        document.querySelectorAll('*').forEach(el => {
+            el.style.transform = '';
+            el.style.position = '';
+            el.style.top = '';
+            el.style.left = '';
         });
+        
+        // Réappliquer les classes Tailwind importantes
+        setTimeout(() => {
+            document.body.classList.add('font-sans', 'antialiased', 'text-gray-900');
+        }, 100);
+    }
 
-        // Initialisation
-        if(!window.google?.translate) {
-            loadGoogleTranslate();
+    // Fonction pour activer une langue
+    function activateLanguage(lang) {
+        // Sauvegarder la préférence
+        document.cookie = `googtrans=/auto/${lang}; path=/; max-age=31536000; SameSite=Lax`;
+        
+        // Gérer la direction
+        document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+        document.body.classList.toggle('rtl', lang === 'ar');
+        
+        // Recharger la traduction
+        if(window.google?.translate?.TranslateElement) {
+            try {
+                google.translate.TranslateElement().refresh();
+            } catch(e) {
+                console.log('Erreur de rafraîchissement Google Translate:', e);
+            }
+            setTimeout(fixStylesAfterTranslation, 300);
         } else {
-            checkSavedLanguage();
+            loadGoogleTranslate();
         }
     }
 
-    // Démarrer quand le DOM est prêt
-    if(document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initLanguageSystem);
-    } else {
-        initLanguageSystem();
+    // Initialiser Google Translate
+    function loadGoogleTranslate() {
+        if(!document.getElementById('google-translate-script')) {
+            const script = document.createElement('script');
+            script.id = 'google-translate-script';
+            script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+            document.body.appendChild(script);
+        }
     }
 
+    // Callback Google Translate
+    window.googleTranslateElementInit = function() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'fr',
+            includedLanguages: 'fr,ar',
+            layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL,
+            autoDisplay: false
+        }, 'google_translate_element');
+        
+        setTimeout(() => {
+            // Masquer les éléments Google
+            document.querySelectorAll('.goog-te-banner, .goog-te-gadget, .goog-te-combo')
+                .forEach(el => el.style.display = 'none');
+            
+            fixStylesAfterTranslation();
+            checkSavedLanguage();
+        }, 500);
+    };
+
+    // Vérifier la langue sauvegardée
+    function checkSavedLanguage() {
+        const langCookie = document.cookie.split(';')
+                        .find(c => c.trim().startsWith('googtrans='));
+        if(langCookie) {
+            const lang = langCookie.split('=')[1].split('/').pop();
+            if(['ar', 'fr'].includes(lang)) {
+                activateLanguage(lang);
+                return;
+            }
+        }
+        activateLanguage('fr');
+    }
+
+    // Écouteurs d'événements
+    document.querySelectorAll('.lang-switcher').forEach(btn => {
+        btn.addEventListener('click', e => {
+            e.preventDefault();
+            activateLanguage(btn.dataset.lang);
+        });
+    });
+
+    // Initialisation
+    if(!window.google?.translate) {
+        loadGoogleTranslate();
+    } else {
+        checkSavedLanguage();
+    }
+}
+
+// Fonction pour animer les compteurs
+function initCounters() {
     const counters = document.querySelectorAll('.counter');
-    console.log('Nombre de compteurs trouvés:', counters.length); // Vérifie si les éléments sont trouvés
+    console.log('Nombre de compteurs trouvés:', counters.length);
     
-    // Animation simple, démarrage immédiat sans observer
     function animateCounter(counter) {
         const target = parseInt(counter.getAttribute('data-target'));
         let count = 0;
         const speed = 200;
         const increment = target / speed;
-        const duration = 2000; // Durée totale de l'animation en ms
+        const duration = 2000;
         const stepTime = duration / (target / increment);
         
-        console.log('Compteur cible:', target); // Pour vérifier les valeurs cibles
+        console.log('Compteur cible:', target);
         
         function update() {
             if (count < target) {
@@ -129,49 +125,29 @@ document.addEventListener('DOMContentLoaded', function () {
         update();
     }
     
-    // Option 1: Démarrer l'animation immédiatement
-    counters.forEach(counter => {
-        animateCounter(counter);
-    });
-    
-    // Option 2: Utiliser l'ID que vous avez ajouté
     const section = document.getElementById('chiffresCles');
     
     if (section) {
         console.log('Section trouvée avec ID');
         
-        // Vérifier si la section est visible dès le chargement
-        const rect = section.getBoundingClientRect();
-        const isVisible = (
-            rect.top >= 0 &&
-            rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-        );
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    console.log('Section entre dans la vue, démarrage animation');
+                    counters.forEach(counter => animateCounter(counter));
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
         
-        if (isVisible) {
-            console.log('Section visible, démarrage animation');
-            counters.forEach(counter => animateCounter(counter));
-        } else {
-            // Si pas visible initialement, utiliser IntersectionObserver
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        console.log('Section entre dans la vue, démarrage animation');
-                        counters.forEach(counter => animateCounter(counter));
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 }); // Diminuer le seuil pour détecter plus tôt
-            
-            observer.observe(section);
-        }
+        observer.observe(section);
     } else {
-        console.log('Section non trouvée avec ID, utilisation du plan B');
-        // Plan B: Si la section avec ID n'est pas trouvée, animer quand même
+        console.log('Section non trouvée avec ID, animation immédiate');
         counters.forEach(counter => animateCounter(counter));
     }
+}
 
+function initRange(){
     // Configuration du slider de prix
     const priceSlider = document.getElementById('price-slider');
     const priceMinInput = document.getElementById('price-min');
@@ -199,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Fonction pour mettre à jour l'affichage des valeurs
         function updatePriceDisplay(values) {
-            const minValue = formatPriceAlgeria(values[0]);
+            const minValue = 0;
             const maxValue = formatPriceAlgeria(values[1]);
             priceValuesDisplay.textContent = `${minValue} - ${maxValue}`;
         }
@@ -254,9 +230,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const maxValue = Math.round(values[1]);
             areaValuesDisplay.textContent = `${minValue} - ${maxValue} m²`;
         }
-
+    
         noUiSlider.create(areaSlider, {
-            start: [0, 500],
+            start: [0, 500], // Curseur min à 0, max à 500
             connect: true,
             step: 5,
             range: {
@@ -272,22 +248,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
         });
-
+    
+        // Initialisation
+        updateAreaDisplay([0, 500]);
+        
         areaSlider.noUiSlider.on('update', function(values, handle) {
             const numericValues = values.map(Number);
-            
-            if (handle === 0) {
-                areaMinInput.value = numericValues[0];
-            } else {
-                areaMaxInput.value = numericValues[1];
-            }
-            
+            areaMinInput.value = numericValues[0];
+            areaMaxInput.value = numericValues[1];
             updateAreaDisplay(numericValues);
         });
-
-        // Initialiser l'affichage
-        const initialValues = areaSlider.noUiSlider.get();
-        updateAreaDisplay(initialValues);
     }
 
     // Personnalisation de l'apparence des sliders
@@ -315,36 +285,9 @@ document.addEventListener('DOMContentLoaded', function () {
             lines.forEach(line => line.remove());
         });
     });
+}
 
-    // Fonction pour montrer le CTA discrètement
-    // function showDiscreetCTA() {
-    //     const cta = document.getElementById('discreet-cta');
-    //     cta.classList.remove('hidden');
-    //     cta.classList.add('opacity-0');
-        
-    //     setTimeout(() => {
-    //         cta.classList.remove('opacity-0');
-    //     }, 50);
-        
-    //     // Disparaît après 5 secondes
-    //     setTimeout(() => {
-    //         cta.classList.add('opacity-0');
-    //         setTimeout(() => cta.classList.add('hidden'), 500);
-    //     }, 5000);
-    // }
-    
-    // // Affiche toutes les 20 secondes
-    // setTimeout(showDiscreetCTA, 3000);
-    // setInterval(showDiscreetCTA, 20000);
-    
-    // Affiche aussi au survol des boutons
-    // document.querySelectorAll('.fixed a').forEach(btn => {
-    //     btn.addEventListener('mouseenter', showDiscreetCTA);
-    // });
-
-
-
-
+function initCommunes(){
     const wilayaSelect = document.getElementById('wilaya-select');
     const communeSelect = document.getElementById('commune-select');
     
@@ -376,6 +319,58 @@ document.addEventListener('DOMContentLoaded', function () {
             wilayaSelect.dispatchEvent(new Event('change'));
         }
     }
+}
+
+// Fonction pour initialiser tous les scripts
+function initializeAllScripts() {
+    console.log('Initialisation des scripts...');
+    initLanguageSystem();
+    initCounters();
+    initRange();
+    initCommunes();
+    initStickyTypes();
+    
+    // Ajoutez ici d'autres fonctions d'initialisation si nécessaire
+}
+
+// Écouteurs d'événements pour Turbo
+document.addEventListener('turbo:load', initializeAllScripts);
+document.addEventListener('turbo:render', initializeAllScripts);
+
+// Écouteur pour le chargement initial
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeAllScripts);
+} else {
+    initializeAllScripts();
+}
+
+console.log('hello world');
+
+    // Fonction pour montrer le CTA discrètement
+    // function showDiscreetCTA() {
+    //     const cta = document.getElementById('discreet-cta');
+    //     cta.classList.remove('hidden');
+    //     cta.classList.add('opacity-0');
+        
+    //     setTimeout(() => {
+    //         cta.classList.remove('opacity-0');
+    //     }, 50);
+        
+    //     // Disparaît après 5 secondes
+    //     setTimeout(() => {
+    //         cta.classList.add('opacity-0');
+    //         setTimeout(() => cta.classList.add('hidden'), 500);
+    //     }, 5000);
+    // }
+    
+    // // Affiche toutes les 20 secondes
+    // setTimeout(showDiscreetCTA, 3000);
+    // setInterval(showDiscreetCTA, 20000);
+    
+    // Affiche aussi au survol des boutons
+    // document.querySelectorAll('.fixed a').forEach(btn => {
+    //     btn.addEventListener('mouseenter', showDiscreetCTA);
+    // });
 
     function initStickyTypes() {
         const stickySection = document.getElementById('types-sticky-section');
@@ -406,8 +401,3 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-    if (document.getElementById('types-sticky-section')) {
-        initStickyTypes();
-    }
-
-});
