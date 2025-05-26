@@ -232,20 +232,6 @@
                         </div>
                     </div> 
                 {% endfor %}
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            // Initialise tous les carousels d'images
-                            document.querySelectorAll('.splideImg').forEach(carousel => {
-                                new Splide(carousel, {
-                                    type: 'fade',
-                                    rewind: true,
-                                    arrows: true,
-                                    pagination: true,
-                                    autoplay: false
-                                }).mount();
-                            });
-                        });
-                    </script>
             </div>
             {% if totalItems != 0 %}       
             <!-- Pagination -->

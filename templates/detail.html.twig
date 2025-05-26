@@ -25,6 +25,12 @@
                                         alt="El Wakil immobilier agence immobiliere en Algerie {{bien.libelle}}" 
                                         class="w-full h-96 object-cover">
                                 </li>
+                                {% else %}
+                                <li class="splide__slide">
+                                    <img src="{{ asset('uploads/default.jpg') }}" 
+                                        alt="Image par défaut El Wakil immobilier" 
+                                        class="w-full h-96 object-cover">
+                                </li>
                             {% endfor %}
                             </ul>
                         </div>
@@ -168,6 +174,34 @@
                             </div>
                             <script>
                                 document.addEventListener('DOMContentLoaded', function() {
+                                     // Initialisation du slider principal
+                                    var mainSlider = new Splide('.gallery-main', {
+                                        type: 'slide',
+                                        rewind: true,
+                                        pagination: false,
+                                        arrows: true,
+                                    });
+                                    
+                                    // Initialisation des miniatures
+                                    var thumbnailSlider = new Splide('.gallery-thumbnails', {
+                                        fixedWidth: 100,
+                                        fixedHeight: 60,
+                                        gap: 10,
+                                        rewind: true,
+                                        pagination: false,
+                                        isNavigation: true,
+                                        breakpoints: {
+                                            600: {
+                                                fixedWidth: 60,
+                                                fixedHeight: 44,
+                                            },
+                                        },
+                                    });
+                                    
+                                    // Synchronisation des sliders
+                                    mainSlider.sync(thumbnailSlider);
+                                    mainSlider.mount();
+                                    thumbnailSlider.mount();
                                     // Initialiser le carrousel des vidéos Facebook avec une classe unique
                                     new Splide('.facebook-videos-slider', {
                                         type: 'slide', // ou 'slide' selon vos besoins
@@ -262,11 +296,11 @@
                                     <div class="flex items-center">
                                         <div class="w-20 h-20 rounded-md overflow-hidden mr-3">
                                             {% if similarBien.entity.images is not empty %}
-                                                <img src="{{ asset('uploads/biens/' ~ similarBien.entity.images.first().nom) }}" 
+                                                <img src="{{ asset('uploads/biens/' ~ similarBien.entity.image.first().image) }}" 
                                                     alt="{{ similarBien.entity.libelle }}" 
                                                     class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
                                             {% else %}
-                                                <img src="{{ asset('images/default-property.jpg') }}" 
+                                                <img src="{{ asset('uploads/default.jpg') }}" 
                                                     alt="Image par défaut" 
                                                     class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
                                             {% endif %}
@@ -316,37 +350,4 @@
         </div>
     </section>
 
-    <!-- Script pour la galerie d'images -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialisation du slider principal
-            var mainSlider = new Splide('.gallery-main', {
-                type: 'slide',
-                rewind: true,
-                pagination: false,
-                arrows: true,
-            });
-            
-            // Initialisation des miniatures
-            var thumbnailSlider = new Splide('.gallery-thumbnails', {
-                fixedWidth: 100,
-                fixedHeight: 60,
-                gap: 10,
-                rewind: true,
-                pagination: false,
-                isNavigation: true,
-                breakpoints: {
-                    600: {
-                        fixedWidth: 60,
-                        fixedHeight: 44,
-                    },
-                },
-            });
-            
-            // Synchronisation des sliders
-            mainSlider.sync(thumbnailSlider);
-            mainSlider.mount();
-            thumbnailSlider.mount();
-        });
-    </script>
 {% endblock %}

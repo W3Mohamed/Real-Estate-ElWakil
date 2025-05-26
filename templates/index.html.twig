@@ -52,22 +52,6 @@
                     </div>
                 </div>
 
-                <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        // Initialisation du carrousel Hero avec une classe unique
-                        new Splide('#sliderImg', {
-                            type: 'slide', // Effet de fondu pour une transition douce
-                            autoplay: true,
-                            interval: 4000,
-                            pauseOnHover: false,
-                            arrows: true, // flèches pour un look épuré
-                            pagination: true, // pagination visible
-                            speed: 500, // Durée de la transition
-                            rewind: true,
-                            // Options spécifiques pour ce carrousel
-                        }).mount();
-                    });
-                </script>
             </div>
         </div>
 
@@ -97,27 +81,6 @@
                 </div>
             </div>
         </div>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                new Splide('#types-carousel', {
-                    type: 'slide',
-                    perPage: 8,
-                    perMove: 1,
-                    gap: '0.5rem',
-                    arrows: true,
-                    pagination: true,
-                    drag: true,
-                    breakpoints: {
-                        1280: { perPage: 7 },
-                        1024: { perPage: 6 },
-                        768: { perPage: 5 },
-                        640: { perPage: 4 },
-                        480: { perPage: 3 }
-                    }
-                }).mount();
-            });
-        </script>
     </section>
 
     <!-- Nos biens à vendre -->
@@ -216,21 +179,6 @@
                 </a>
             </div>
         </div>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Initialise tous les carousels d'images
-                document.querySelectorAll('.splideImg').forEach(carousel => {
-                    new Splide(carousel, {
-                        type: 'fade',
-                        rewind: true,
-                        arrows: true, 
-                        pagination: true,
-                        autoplay: false
-                    }).mount();
-                });
-            });
-        </script>
     </section>
 
     <!-- Section À propos - Optimisée SEO & UX -->
