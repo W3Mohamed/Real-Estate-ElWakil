@@ -71,7 +71,7 @@ final class HomeController extends AbstractController
             ->orderBy('b.id', 'DESC');
     
         if ($searchQuery) {
-            $queryBuilder->andWhere('b.libelle LIKE :query OR b.description LIKE :query')
+            $queryBuilder->andWhere('b.libelle LIKE :query OR b.description LIKE :query OR b.telephone LIKE :query')
                 ->setParameter('query', '%'.$searchQuery.'%');
         }
 

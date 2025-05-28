@@ -81,6 +81,38 @@
                 </div>
             </div>
         </div>
+        
+        <style>
+            /* Personnalisation des flèches Splide */
+            #types-carousel .splide__arrow {
+                width: 1.5rem;
+                height: 1.5rem;
+                opacity: 1;
+                background: white;
+                border: 1px solid #e5e7eb; /* couleur de bordure grise */
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+
+            #types-carousel .splide__arrow svg {
+                width: 0.5rem;
+                height: 0.5rem;
+            }
+
+            /* Positionnement des flèches */
+            #types-carousel .splide__arrow--prev {
+                left: -0.8rem; /* Déplacement vers la gauche */
+            }
+
+            #types-carousel .splide__arrow--next {
+                right: -0.8rem; /* Déplacement vers la droite */
+            }
+
+            /* Effet au survol */
+            #types-carousel .splide__arrow:hover:not(:disabled) {
+                background: #f3f4f6;
+            }
+        </style>
+
     </section>
 
     <!-- Nos biens à vendre -->
