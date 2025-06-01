@@ -224,6 +224,33 @@ final class HomeController extends AbstractController
         ]);
     }
 
+    #[Route('/api/biens', name: 'api_biens', methods: ['GET'])]
+    public function getBiens(BienRepository $bienRepository): JsonResponse
+    {
+        // Récupérer tous les biens qui ont des coordonnées
+        $biens = $bienRepository->createQueryBuilder('b')
+            ->where('b.latitude IS NOT NULL')
+            ->andWhere('b.longitude IS NOT NULL')
+            ->andWhere('b.latitude != 0')
+            ->andWhere('b.longitude != 0')
+            ->getQuery()
+            ->getResult();
+
+        $data = [];
+        foreach ($biens as $bien) {
+            $data[] = [
+                'id' => $bien->getId(),
+                'libelle' => $bien->getLibelle(),
+                'prix' => $bien->getPrix(),
+                'adresse' => $bien->getAdresse(),
+                'latitude' => (float) $bien->getLatitude(),
+                'longitude' => (float) $bien->getLongitude(),
+                'type' => $bien->getType() ? $bien->getType()->getLibelle() : null
+            ];
+        }
+
+        return new JsonResponse($data);
+    }
 
     #[Route('/get-communes/{wilayaId}', name: 'get_communes')]
     public function getCommunes(int $wilayaId, CommuneRepository $communeRepository): JsonResponse

@@ -120,8 +120,6 @@ class BienCrudController extends AbstractCrudController
             ->setLabel(' ')
             ->setFormTypeOption('attr', ['style' => 'display: none;']); // Cache visuellement mais garde dans le form
 
-
-
         yield IntegerField::new('piece', 'Nombre de pièces')->hideOnIndex();
         yield IntegerField::new('bain', 'Salle de bain')->hideOnIndex();
         yield IntegerField::new('superficie', 'Superficie (m²)')->hideOnIndex();
