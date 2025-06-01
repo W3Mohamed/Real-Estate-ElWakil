@@ -343,12 +343,12 @@
                         <div id="property-map" class="h-64 bg-gray-200 rounded-lg" style="height: 400px;"
                             data-property="{{ {
                                 'id': bien.id,
-                                'libelle': bien.libelle|escape('js'),
-                                'adresse': bien.adresse|escape('js'),
+                                'libelle': bien.libelle,
+                                'adresse': bien.adresse,
                                 'prix': bien.prix,
                                 'latitude': bien.latitude,
                                 'longitude': bien.longitude
-                            }|json_encode|e('html_attr') }}">
+                            }|json_encode(constant('JSON_UNESCAPED_UNICODE'))|e('html_attr') }}">
                             <div class="w-full h-full flex items-center justify-center text-gray-500">
                                 <p>Chargement de la carte...</p>
                             </div>
