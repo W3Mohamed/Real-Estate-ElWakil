@@ -1,4 +1,4 @@
-{% extends '@EasyAdmin/crud/edit.html.twig' %}
+{% extends '@EasyAdmin/crud/new.html.twig' %}
 
 {% block head_stylesheets %}
     {{ parent() }}
@@ -17,14 +17,14 @@
 {% endblock %}
 
 {% block content_footer_wrapper %}
-    <!-- Carte intégrée directement -->
+    <!-- Carte pour la page new -->
     <div class="mb-4">
         <div class="form-group">
             <label class="form-label">
                 <i class="fa fa-map-marker-alt"></i> Position sur la carte
             </label>
             <div class="help-text small text-muted mb-2">
-                Cliquez sur la carte pour modifier la position
+                Cliquez sur la carte pour définir la position du bien
             </div>
             <div id="property-map" 
                  style="height: 400px; width: 100%; border-radius: 8px; border: 1px solid #ddd; background-color: #f8f9fa;"></div>
@@ -46,23 +46,16 @@
         if (typeof L !== 'undefined') {
             console.log('Leaflet version:', L.version);
             
-            // Récupérer les coordonnées existantes
-            {% set currentEntity = entity.instance %}
-            const currentLat = {{ currentEntity.latitude ?? 36.747724 }};
-            const currentLng = {{ currentEntity.longitude ?? 3.052905 }};
-            
             // Initialiser la carte
-            const map = L.map('property-map').setView([currentLat, currentLng], 13);
+            const map = L.map('property-map').setView([36.747724, 3.052905], 13);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
             
-            // Ajouter le marqueur existant s'il y a des coordonnées
+            // Variable pour stocker le marqueur
             let marker = null;
-            {% if currentEntity.latitude and currentEntity.longitude %}
-            marker = L.marker([currentLat, currentLng]).addTo(map);
-            {% endif %}
             
             // Fonction pour mettre à jour les champs latitude/longitude
             function updateCoordinates(lat, lng) {
+                // Chercher les champs latitude et longitude dans le formulaire
                 const latField = document.querySelector('input[name*="[latitude]"]');
                 const lngField = document.querySelector('input[name*="[longitude]"]');
                 

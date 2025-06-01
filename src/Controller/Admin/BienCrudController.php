@@ -3,8 +3,6 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Bien;
-use App\Entity\Facebook;
-use App\Entity\Images;
 use App\Form\FacebookFormType;
 use App\Repository\CommuneRepository;
 use Doctrine\ORM\EntityRepository;
@@ -17,11 +15,10 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use App\Form\ImageFormType;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 
 class BienCrudController extends AbstractCrudController
 {
@@ -42,7 +39,16 @@ class BienCrudController extends AbstractCrudController
             ->setDefaultSort(['id' => 'DESC'])
             ->overrideTemplates([
                 'crud/edit' => 'admin/bien/edit.html.twig',
+                'crud/new' => 'admin/bien/new.html.twig'
             ]);
+    }
+
+    public function configureAssets(Assets $assets): Assets
+    {
+        return $assets
+            // Ajout de Leaflet CSS et JS
+            ->addCssFile('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css')
+            ->addJsFile('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js');
     }
 
     public function configureFields(string $pageName): iterable
@@ -95,6 +101,27 @@ class BienCrudController extends AbstractCrudController
 
 
         yield TextareaField::new('adresse', 'Adresse')->hideOnIndex();
+      
+        // yield TextField::new('latitude', 'Latitude')
+        //     ->hideOnForm()
+        //     ->hideOnIndex();
+            
+        // yield TextField::new('longitude', 'Longitude')
+        //     ->hideOnForm()
+        //     ->hideOnIndex();
+
+        yield NumberField::new('latitude', 'Latitude')
+            ->hideOnIndex()
+            ->setLabel(' ')
+            ->setFormTypeOption('attr', ['style' => 'display: none;']); // Cache visuellement mais garde dans le form
+            
+        yield NumberField::new('longitude', 'Longitude')
+            ->hideOnIndex()
+            ->setLabel(' ')
+            ->setFormTypeOption('attr', ['style' => 'display: none;']); // Cache visuellement mais garde dans le form
+
+
+
         yield IntegerField::new('piece', 'Nombre de pièces')->hideOnIndex();
         yield IntegerField::new('bain', 'Salle de bain')->hideOnIndex();
         yield IntegerField::new('superficie', 'Superficie (m²)')->hideOnIndex();
@@ -105,25 +132,25 @@ class BienCrudController extends AbstractCrudController
         yield TextareaField::new('tiktok', 'Lien tiktok')->hideOnIndex();
 
         yield CollectionField::new('facebooks', 'Liens Facebook')
-        ->setEntryType(FacebookFormType::class)
-        ->setFormTypeOption('by_reference', false)
-        ->onlyOnForms()
-        ->setEntryIsComplex(true)
-        ->setRequired(false)
-        ->setHelp('Ajoutez plusieurs liens Facebook (vidéos, posts, etc.)')
-        ->setFormTypeOptions([
-            'entry_options' => [
-                'label' => false,
-            ],
-            'allow_add' => true,
-            'allow_delete' => true,
-            'prototype' => true,
-            'by_reference' => false,
-            'delete_empty' => true,
-            'attr' => [
-                'class' => 'facebook-links-collection',
-            ]
-        ]);
+            ->setEntryType(FacebookFormType::class)
+            ->setFormTypeOption('by_reference', false)
+            ->onlyOnForms()
+            ->setEntryIsComplex(true)
+            ->setRequired(false)
+            ->setHelp('Ajoutez plusieurs liens Facebook (vidéos, posts, etc.)')
+            ->setFormTypeOptions([
+                'entry_options' => [
+                    'label' => false,
+                ],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'by_reference' => false,
+                'delete_empty' => true,
+                'attr' => [
+                    'class' => 'facebook-links-collection',
+                ]
+            ]);
 
 
         yield CollectionField::new('images')
@@ -150,4 +177,6 @@ class BienCrudController extends AbstractCrudController
                 ]
             ]);
     }
+
+
 }

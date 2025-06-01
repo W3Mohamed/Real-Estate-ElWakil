@@ -92,6 +92,12 @@ class Bien
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateCreation = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $latitude = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $longitude = null;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
@@ -406,6 +412,56 @@ class Bien
     public function setDateCreationValue(): void
     {
         $this->dateCreation = new \DateTime();
+    }
+
+    public function getLatitude(): ?float
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude(float $latitude): static
+    {
+        $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    public function getLongitude(): ?float
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(float $longitude): static
+    {
+        $this->longitude = $longitude;
+
+        return $this;
+    }
+    /**
+     * Méthode helper pour récupérer les coordonnées formatées
+     */
+    public function getCoordinates(): ?string
+    {
+        if ($this->latitude !== null && $this->longitude !== null) {
+            return $this->latitude . ',' . $this->longitude;
+        }
+        return null;
+    }
+
+    /**
+     * Méthode helper pour définir les coordonnées depuis une chaîne
+     */
+    public function setCoordinates(?string $coordinates): static
+    {
+        if ($coordinates && str_contains($coordinates, ',')) {
+            [$lat, $lng] = explode(',', $coordinates, 2);
+            $this->latitude = (float) trim($lat);
+            $this->longitude = (float) trim($lng);
+        } else {
+            $this->latitude = null;
+            $this->longitude = null;
+        }
+        return $this;
     }
 
 }

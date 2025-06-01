@@ -33,16 +33,19 @@
 
                 <!-- Image avec bordure arabe -->
                 <div class="md:w-1/2 relative">
-                    <div class="relative  rounded-xl overflow-hidden shadow-2xl transform h-[400px]"> <!-- Hauteur fixe ajoutée ici -->
+                    <div class="relative  rounded-xl overflow-hidden shadow-2xl transform h-[400px] w-full"> <!-- Hauteur fixe ajoutée ici -->
                         <!-- Carrousel Hero Splide -->
-                        <div class="splide hero-image-slider h-full" id="sliderImg"> <!-- h-full pour prendre toute la hauteur du parent -->
-                            <div class="splide__track h-full">
-                                <ul class="splide__list h-full">
+                        <div class="splide hero-image-slider h-full w-full" id="sliderImg"> <!-- h-full pour prendre toute la hauteur du parent -->
+                            <div class="splide__track h-full w-full">
+                                <ul class="splide__list h-full w-full">
                                     {% for slide in sliders %}
                                     <li class="splide__slide h-full">
-                                        <img src="{{ asset('uploads/slider/' ~ slide.image) }}" 
-                                            alt="ElWakil Immobilier" 
-                                            class="w-full h-full object-cover">
+                                        <div class="h-full w-full flex items-center justify-center overflow-hidden">
+                                            <img src="{{ asset('uploads/slider/' ~ slide.image) }}" 
+                                                alt="ElWakil Immobilier" 
+                                                class="min-w-full min-h-full object-cover object-center"
+                                                loading="lazy">
+                                        </div>
                                         <div class="absolute inset-0 bg-gradient-to-t from-gray-900/20 to-transparent"></div>
                                     </li>
                                     {% endfor %}

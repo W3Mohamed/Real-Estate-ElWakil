@@ -28,5 +28,8 @@ services:
     App\EventSubscriber\BienImageSubscriber:
         tags: ['kernel.event_subscriber']
 
+    App\Form\Extension\BienTypeExtension:
+        tags:
+            - { name: form.type_extension }
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

@@ -1,6 +1,6 @@
 // Dans votre script.js ou dans un fichier séparé
-document.addEventListener('turbo:load', function() {
-    console.log('sliders.js chargée');
+console.log('sliders.js chargée');
+function initSliders(){   
     // Initialisation du carrousel Hero
     if (document.querySelector('#sliderImg')) {
         new Splide('#sliderImg', {
@@ -89,4 +89,16 @@ document.addEventListener('turbo:load', function() {
             // Ajoutez d'autres options selon vos besoins
         }).mount();
     }
-});
+}
+function initializesAllScripts() {
+    console.log('Initialisations des scripts..');
+    initSliders();
+}
+document.addEventListener('turbo:load', initializesAllScripts);
+document.addEventListener('turbo:render', initializesAllScripts);
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializesAllScripts);
+} else {
+    initializesAllScripts();
+}

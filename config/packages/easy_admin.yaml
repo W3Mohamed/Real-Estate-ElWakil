@@ -12,4 +12,5 @@ easy_admin:
             enabled: true
             path: app_logout
             icon: 'fa fa-sign-out'
-            label: 'Déconnexion'
+            label: 'Déconnexion'     
+            
