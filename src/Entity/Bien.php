@@ -97,6 +97,9 @@ class Bien
 
     #[ORM\Column(nullable: true)]
     private ?float $longitude = null;
+    
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $googleMapsUrl = null;
 
     public function __construct()
     {
@@ -437,6 +440,18 @@ class Bien
 
         return $this;
     }
+    
+    public function getGoogleMapsUrl(): ?string
+    {
+        return $this->googleMapsUrl;
+    }
+
+    public function setGoogleMapsUrl(?string $googleMapsUrl): static
+    {
+        $this->googleMapsUrl = $googleMapsUrl;
+        return $this;
+    }
+
     /**
      * Méthode helper pour récupérer les coordonnées formatées
      */

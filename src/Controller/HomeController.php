@@ -317,5 +317,5 @@ final class HomeController extends AbstractController
         }
     
         return $result . ' DZD';
-    }
+    }   
 }
