@@ -9,7 +9,7 @@ function initSliders(){
             interval: 4000,
             pauseOnHover: false,
             arrows: true,
-            pagination: true,
+            pagination: false,
             speed: 500,
             rewind: true,
         }).mount();
@@ -23,7 +23,7 @@ function initSliders(){
             perMove: 1,
             gap: '0.5rem',
             arrows: true,
-            pagination: true,
+            pagination: false,
             drag: true,
             breakpoints: {
                 1280: { perPage: 7 },
@@ -41,7 +41,7 @@ function initSliders(){
             type: 'slide',
             rewind: true,
             arrows: true, 
-            pagination: true,
+            pagination: false,
             autoplay: false
         }).mount();
     });
