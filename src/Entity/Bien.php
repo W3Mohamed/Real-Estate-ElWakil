@@ -98,7 +98,7 @@ class Bien
     #[ORM\Column(nullable: true)]
     private ?float $longitude = null;
     
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $googleMapsUrl = null;
 
     public function __construct()
@@ -440,7 +440,7 @@ class Bien
 
         return $this;
     }
-    
+
     public function getGoogleMapsUrl(): ?string
     {
         return $this->googleMapsUrl;

@@ -1,11 +1,48 @@
 // assets/js/property-map.js
 
 // Fonction globale pour créer une icône avec prix
-function createPriceIcon(price, isCurrentProperty = false) {
-    const formattedPrice = new Intl.NumberFormat('fr-FR', {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-    }).format(price);
+// function createPriceIcon(price, isCurrentProperty = false) {
+//     const priceText = property.prix ? `${property.prix}` : 'Prix non disponible';
+//     const backgroundColor = isCurrentProperty ? '#dc2626' : '#2563eb';
+//     const textColor = 'white';
+    
+//     return L.divIcon({
+//         html: `
+//             <div style="position: relative; text-align: center;">
+//                 <!-- Prix au-dessus -->
+//                 <div style="
+//                     background: ${backgroundColor};
+//                     color: ${textColor};
+//                     padding: 2px 6px;
+//                     border-radius: 12px;
+//                     font-size: 11px;
+//                     font-weight: bold;
+//                     white-space: nowrap;
+//                     margin-bottom: 2px;
+//                     box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+//                     border: 1px solid white;
+//                 ">${priceText} DA</div>
+//                 <!-- Flèche de localisation -->
+//                 <div style="
+//                     width: 0;
+//                     height: 0;
+//                     border-left: 8px solid transparent;
+//                     border-right: 8px solid transparent;
+//                     border-top: 12px solid ${backgroundColor};
+//                     margin: 0 auto;
+//                     filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
+//                 "></div>
+//             </div>
+//         `,
+//         className: isCurrentProperty ? 'current-property-marker' : 'other-property-marker',
+//         iconSize: [120, 40],
+//         iconAnchor: [60, 40],
+//         popupAnchor: [0, -40]
+//     });
+// }
+function createPriceIcon(property, isCurrentProperty = false) {
+    // Utilisez property.prix directement (déjà formaté par le serveur)
+    const priceText = property.prix ? `${property.prix}` : 'Prix non disponible';
     
     const backgroundColor = isCurrentProperty ? '#dc2626' : '#2563eb';
     const textColor = 'white';
@@ -13,7 +50,6 @@ function createPriceIcon(price, isCurrentProperty = false) {
     return L.divIcon({
         html: `
             <div style="position: relative; text-align: center;">
-                <!-- Prix au-dessus -->
                 <div style="
                     background: ${backgroundColor};
                     color: ${textColor};
@@ -25,8 +61,7 @@ function createPriceIcon(price, isCurrentProperty = false) {
                     margin-bottom: 2px;
                     box-shadow: 0 2px 4px rgba(0,0,0,0.3);
                     border: 1px solid white;
-                ">${formattedPrice} DA</div>
-                <!-- Flèche de localisation -->
+                ">${priceText}</div>
                 <div style="
                     width: 0;
                     height: 0;
@@ -86,7 +121,7 @@ function initPropertyMap() {
             }).addTo(map);
 
             // Ajouter le marqueur du bien actuel avec prix visible
-            const currentIcon = createPriceIcon(propertyData.prix, true);
+            const currentIcon = createPriceIcon(propertyData, true);
             const currentMarker = L.marker([propertyData.latitude, propertyData.longitude], { icon: currentIcon })
                 .addTo(map);
 
@@ -148,12 +183,12 @@ async function loadAllProperties(map, currentPropertyId) {
             
             if (property.latitude && property.longitude) {
                 // Créer une icône avec prix pour chaque bien en utilisant la fonction globale
-                const otherIcon = createPriceIcon(property.prix, false);
+                const otherIcon = createPriceIcon(property, false);
                 const otherMarker = L.marker([property.latitude, property.longitude], { icon: otherIcon }).addTo(map);
                 
                 const otherPopupContent = `
                     <div class="property-popup">
-                        <div class="price">${new Intl.NumberFormat('fr-FR').format(property.prix)} DA</div>
+                        <div class="price">${property.prix} DA</div>
                         <div class="title">${property.libelle}</div>
                         <div class="address">${property.adresse}</div>
                         <a href="/detail?id=${property.id}" class="view-btn">Voir détails</a>

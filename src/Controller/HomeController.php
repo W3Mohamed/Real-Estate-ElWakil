@@ -194,6 +194,7 @@ final class HomeController extends AbstractController
         $types = $typeRepository->findAll();
         $bien = $bienRepository->findWithImages($bienId);
         $formatedPrix = $this->formatPrixDZD($bien->getPrix());
+        $formatedPrixMap = $this->formatPrixMap($bien->getPrix());
         if (!$bien) {
             throw $this->createNotFoundException('Le bien demandé n\'existe pas');
         }
@@ -218,6 +219,7 @@ final class HomeController extends AbstractController
         return $this->render('detail.html.twig', [
             'bien' => $bien,
             'prix' => $formatedPrix,
+            'prixMap' => $formatedPrixMap,
             'types' => $types,
             'parametres' => $parametres,
             'similarBiens' => $formatedSimilarBiens
@@ -241,7 +243,7 @@ final class HomeController extends AbstractController
             $data[] = [
                 'id' => $bien->getId(),
                 'libelle' => $bien->getLibelle(),
-                'prix' => $bien->getPrix(),
+                'prix' => $this->formatPrixMap($bien->getPrix()),
                 'adresse' => $bien->getAdresse(),
                 'latitude' => (float) $bien->getLatitude(),
                 'longitude' => (float) $bien->getLongitude(),
@@ -317,5 +319,51 @@ final class HomeController extends AbstractController
         }
     
         return $result . ' DZD';
-    }   
+    } 
+    
+    private function formatPrixMap(?int $prixCentimes): string
+    {
+        if ($prixCentimes === null) {
+            return 'Prix non disponible';
+        }
+    
+        // Convertir les centimes en unités standard (1 million = 10000 centimes)
+        $prixStandard = $prixCentimes * 100; // 10000 centimes = 1 million DZD
+        
+        $milliards = floor($prixStandard / 1000000000);
+        $reste = $prixStandard % 1000000000;
+        $millions = floor($reste / 1000000);
+        $milliers = floor(($reste % 1000000) / 1000);
+        $unites = $reste % 1000;
+    
+        $result = '';
+        
+        if ($milliards > 0) {
+            $result .= number_format($milliards, 0, ',', ' ') . ' Md';
+        }
+        
+        if ($millions > 0) {
+            if (!empty($result)) {
+                $result .= ' ';
+            }
+            $result .= number_format($millions, 0, ',', ' ') . ' M';
+        }
+        
+        if ($milliers > 0) {
+            if (!empty($result)) {
+                $result .= ' ';
+            }
+            $result .= number_format($milliers, 0, ',', ' ') . ' Mille';
+        }
+        
+        if ($unites > 0 && empty($result)) {
+            $result .= number_format($unites, 0, ',', ' ');
+        }
+    
+        if (empty($result)) {
+            return '0 DZD';
+        }
+    
+        return $result . ' DZD';
+    }
 }

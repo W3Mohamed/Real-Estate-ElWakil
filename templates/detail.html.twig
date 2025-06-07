@@ -335,7 +335,7 @@
                     </div>
                                     
                     <!-- Localisation -->
-                   <div class="mt-8">
+                    <div class="mt-8">
                         <h2 class="text-xl font-bold text-gray-900 mb-4">Localisation</h2>
                         <div class="bg-gray-100 p-4 rounded-lg mb-4">
                             <p class="text-gray-600">{{bien.adresse|nl2br}}</p>
@@ -345,7 +345,7 @@
                                 'id': bien.id,
                                 'libelle': bien.libelle,
                                 'adresse': bien.adresse,
-                                'prix': bien.prix,
+                                'prix': prixMap,
                                 'latitude': bien.latitude,
                                 'longitude': bien.longitude
                             }|json_encode(constant('JSON_UNESCAPED_UNICODE'))|e('html_attr') }}">
@@ -403,8 +403,8 @@
                                 <a href="{{ path('detail', {id: similarBien.entity.id}) }}" class="block group">
                                     <div class="flex items-center">
                                         <div class="w-20 h-20 rounded-md overflow-hidden mr-3">
-                                            {% if similarBien.entity.images is not empty %}
-                                                <img src="{{ asset('uploads/biens/' ~ similarBien.entity.image.first().image) }}" 
+                                            {% if similarBien.entity.images|length > 0 %}
+                                                <img src="{{ asset('uploads/biens/' ~ similarBien.entity.images[0].image) }}" 
                                                     alt="{{ similarBien.entity.libelle }}" 
                                                     class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
                                             {% else %}
