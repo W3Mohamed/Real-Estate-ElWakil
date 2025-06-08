@@ -308,7 +308,19 @@
             </div>
             
             <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; {{ "now"|date("Y") }} ElWakil Immobilier. Tous droits réservés.</p>
+                <p>
+                    &copy; {{ "now"|date("Y") }} ElWakil Immobilier. Tous droits réservés.
+                    <br class="sm:hidden"> <!-- Saut de ligne sur mobile -->
+                    <span class="mt-2 sm:mt-0 inline-block"> <!-- Marge top sur mobile -->
+                        Développé par 
+                        <a href="http://w3mohamed.infinityfreeapp.com" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        class="text-yellow-400 hover:text-yellow-600 hover:underline transition">
+                            W3mohamed
+                        </a>
+                    </span>
+                </p>
             </div>
         </div>
     </footer>

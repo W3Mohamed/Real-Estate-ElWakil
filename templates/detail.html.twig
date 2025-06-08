@@ -353,6 +353,17 @@
                                 <p>Chargement de la carte...</p>
                             </div>
                         </div>
+                        {% if bien.googleMapsUrl %}
+                            <div class="mt-3">
+                                <a href="{{ bien.googleMapsUrl }}" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                class="text-blue-600 hover:text-blue-800 underline hover:no-underline text-sm transition">
+                                    <i class="fas fa-external-link-alt mr-1"></i>
+                                    Voir l'emplacement sur Google Maps
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
 
