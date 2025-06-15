@@ -244,7 +244,60 @@
         });
     </script>
 
-    {% block body %}{% endblock %}
+    {% block body %}
+    {% endblock %}
+
+    <!-- Bouton principal Messenger -->
+    <a href="https://m.me/111107311979084" target="_blank" 
+    class="fixed z-10 bottom-4 right-4 h-12 w-12 bg-blue-600 text-white px-3 py-3 rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 transition hidden"
+    id="messenger-button">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="white" viewBox="0 0 24 24">
+        <path d="M12 2C6.486 2 2 6.092 2 11c0 2.537 1.167 4.839 3.067 6.486L4 22l4.677-2.55A11.638 11.638 0 0012 20c5.514 0 10-4.092 10-9s-4.486-9-10-9zm.66 12.198l-2.408-2.573-5.012 2.573 6.29-6.728 2.407 2.574 5.012-2.574-6.289 6.728z"/>
+    </svg>
+    </a>
+
+    <!-- Message "Contactez-nous" -->
+    <div id="messenger-message" 
+        class="fixed z-10 bottom-16 right-4 bg-white text-gray-800 px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-bounce transition-all duration-500 hidden">
+        <span>💬 Contactez-nous sur Messenger</span>
+        <button onclick="closeAllMessenger()" class="text-gray-500 hover:text-red-500 text-sm font-bold">✕</button>
+    </div>
+
+    <!-- Script -->
+    <script>
+        let timeoutId; // Variable pour stocker le timeout et éviter les conflits
+
+        // Fonction pour tout afficher
+        function showAllMessenger() {
+            const button = document.getElementById("messenger-button");
+            const messageBox = document.getElementById("messenger-message");
+            
+            if (button) button.classList.remove("hidden");
+            if (messageBox) messageBox.classList.remove("hidden");
+            
+            // Programmer la prochaine apparition dans 6 secondes
+            timeoutId = setTimeout(showAllMessenger, 10000);
+        }
+
+        // Fonction pour tout masquer
+        function closeAllMessenger() {
+            const button = document.getElementById("messenger-button");
+            const messageBox = document.getElementById("messenger-message");
+            
+            if (button) button.classList.add("hidden");
+            if (messageBox) messageBox.classList.add("hidden");
+            
+            // Annuler le précédent timeout s'il existe
+            if (timeoutId) clearTimeout(timeoutId);
+            
+            // Relancer un nouveau délai de 6 secondes après le clic
+            timeoutId = setTimeout(showAllMessenger, 10000);
+        }
+
+        // Démarrer le cycle après 6 secondes (première apparition)
+        timeoutId = setTimeout(showAllMessenger, 10000);
+    </script>
+
 
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-12">
