@@ -60,6 +60,7 @@ final class HomeController extends AbstractController
         $typeId = $request->query->get('type');
         $wilayaId = $request->query->get('wilaya');
         $commune = $request->query->get('commune');
+        $papier = $request->query->get('papier');
         $priceMin = $request->query->get('price_min');
         $priceMax = $request->query->get('price_max');
         $areaMin = $request->query->get('area_min');
@@ -99,6 +100,12 @@ final class HomeController extends AbstractController
                 ->setParameter('commune', $commune);
         }
     
+        // Filtre par papier
+        if ($papier) {
+            $queryBuilder->andWhere('b.papier = :papier')
+                ->setParameter('papier', $papier);
+        }
+
         // Filtre par plage de prix
         if ($priceMin || $priceMax) {
             if ($priceMin && $priceMax) {

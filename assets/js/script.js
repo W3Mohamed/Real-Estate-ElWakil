@@ -181,12 +181,12 @@ function initRange(){
         }
 
         noUiSlider.create(priceSlider, {
-            start: [0, 10000000], // Départ de 0 à 10M (1MD)
+            start: [0, 500000000], // Départ de 0 à 500M (50MD)
             connect: true,
             step: 100000, // Pas de 100 000 DA (0.1M)
             range: {
                 'min': 0,
-                'max': 100000000 // Maximum à 100M (10MD)
+                'max': 500000000 // Maximum à 500M (50MD)
             },
             format: {
                 // Format pour l'affichage
@@ -232,12 +232,12 @@ function initRange(){
         }
     
         noUiSlider.create(areaSlider, {
-            start: [0, 500], // Curseur min à 0, max à 500
+            start: [0, 10000], // Curseur min à 0, max à 10000
             connect: true,
             step: 5,
             range: {
                 'min': 0,
-                'max': 500
+                'max': 10000
             },
             format: {
                 to: function(value) {
@@ -250,7 +250,7 @@ function initRange(){
         });
     
         // Initialisation
-        updateAreaDisplay([0, 500]);
+        updateAreaDisplay([0, 10000]);
         
         areaSlider.noUiSlider.on('update', function(values, handle) {
             const numericValues = values.map(Number);

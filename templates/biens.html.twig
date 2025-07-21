@@ -106,13 +106,23 @@
                         </div>
                     </div>
 
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <!-- Papier -->
+                        <div>
+                            <select name="papier" class="w-full px-2 py-1.5 text-xs border border-gray-200 rounded-md focus:ring-1 focus:ring-yellow-400 text-gray-700">
+                                <option value="">Papier</option>
+                                <option value="Acte de propriété">Acte de propriété</option>
+                                <option value="Livret foncier">Livret foncier</option>
+                            </select>
+                        </div>
+                    </div>
                     <!-- Ligne 2 - Sliders compacts -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <!-- Prix Range -->
                         <div class="space-y-1">
                             <div class="flex justify-between text-xs text-gray-500">
                                 <span>Prix (DZD)</span>
-                                <span id="price-values">0 - 10M</span>
+                                <span id="price-values">0 - 50M</span>
                             </div>
                             <div id="price-slider" class="h-1 bg-gray-200 rounded-full"></div>
                             <input type="hidden" id="price-min" name="price_min">
@@ -123,7 +133,7 @@
                         <div class="space-y-1">
                             <div class="flex justify-between text-xs text-gray-500">
                                 <span>Superficie (m²)</span>
-                                <span id="area-values">0 - 500</span>
+                                <span id="area-values">0 - 10000</span>
                             </div>
                             <div id="area-slider" class="h-1 bg-gray-200 rounded-full"></div>
                             <input type="hidden" id="area-min" name="area_min">
