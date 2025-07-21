@@ -111,7 +111,11 @@ class BienCrudController extends AbstractCrudController
 
 
         yield TextareaField::new('adresse', 'Adresse')->hideOnIndex();
-
+        yield ChoiceField::new('papier')
+            ->setChoices([
+                'Acte de propriété' => 'Acte de propriété',
+                'Livret foncier' => 'Livret foncier',
+            ]);
         // yield NumberField::new('latitude', 'Latitude')
         //     ->hideOnIndex()
         //     ->setLabel(' ')

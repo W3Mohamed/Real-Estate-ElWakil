@@ -101,6 +101,9 @@ class Bien
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $googleMapsUrl = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $papier = null;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
@@ -476,6 +479,18 @@ class Bien
             $this->latitude = null;
             $this->longitude = null;
         }
+        return $this;
+    }
+
+    public function getPapier(): ?string
+    {
+        return $this->papier;
+    }
+
+    public function setPapier(string $papier): static
+    {
+        $this->papier = $papier;
+
         return $this;
     }
 
