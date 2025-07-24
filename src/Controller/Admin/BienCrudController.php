@@ -115,6 +115,8 @@ class BienCrudController extends AbstractCrudController
             ->setChoices([
                 'Acte de propriété' => 'Acte de propriété',
                 'Livret foncier' => 'Livret foncier',
+                'Acte et livret foncier' => 'Acte et livret foncier',
+                'Autre' => 'Autre',
             ]);
         // yield NumberField::new('latitude', 'Latitude')
         //     ->hideOnIndex()
