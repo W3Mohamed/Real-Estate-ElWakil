@@ -104,10 +104,17 @@ class Bien
     #[ORM\Column(length: 255)]
     private ?string $papier = null;
 
+    /**
+     * @var Collection<int, Clients>
+     */
+    #[ORM\ManyToMany(targetEntity: Clients::class, mappedBy: 'biens')]
+    private Collection $clients;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
         $this->facebooks = new ArrayCollection();
+        $this->clients = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -490,6 +497,33 @@ class Bien
     public function setPapier(string $papier): static
     {
         $this->papier = $papier;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Clients>
+     */
+    public function getClients(): Collection
+    {
+        return $this->clients;
+    }
+
+    public function addClient(Clients $client): static
+    {
+        if (!$this->clients->contains($client)) {
+            $this->clients->add($client);
+            $client->addBien($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClient(Clients $client): static
+    {
+        if ($this->clients->removeElement($client)) {
+            $client->removeBien($this);
+        }
 
         return $this;
     }

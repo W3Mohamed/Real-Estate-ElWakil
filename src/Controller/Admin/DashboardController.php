@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Bien;
+use App\Entity\Clients;
 use App\Entity\Contact;
 use App\Entity\Paramettre;
 use App\Entity\Proposition;
@@ -72,6 +73,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Immobilier');
         yield MenuItem::linkToCrud('Types de biens', 'fas fa-tags', Type::class);
         yield MenuItem::linkToCrud('Biens immobiliers', 'fas fa-home', Bien::class);
+        yield MenuItem::linkToCrud('Clients', 'fas fa-home', Clients::class);
         
         // Section Configuration
         yield MenuItem::section('Configuration');
