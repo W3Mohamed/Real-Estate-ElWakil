@@ -1,0 +1,15 @@
+{# templates/admin/field/client_potential_biens.html.twig #}
+
+{% set count = field.formattedValue %}
+
+{% if count > 0 %}
+    <a href="{{ ea_url()
+        .setController('App\\Controller\\Admin\\ClientsCrudController')
+        .setAction('viewPotentialBiens')
+        .setEntityId(entity.instance.id)
+    }}" class="btn btn-sm btn-primary">
+        <i class="fa fa-home"></i> {{ count }} bien(s)
+    </a>
+{% else %}
+    <span class="badge badge-secondary">{{ count }} bien(s)</span>
+{% endif %}

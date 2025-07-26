@@ -1,0 +1,88 @@
+{# templates/admin/potential_biens.html.twig #}
+
+{% extends '@EasyAdmin/layout.html.twig' %}
+
+{% block page_title %}
+    Biens potentiels pour {{ client.nom }}
+{% endblock %}
+
+{% block content_title %}
+    <h1 class="title">Biens potentiels pour {{ client.nom }}</h1>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa fa-search"></i> Critères de recherche
+                    </div>
+                    <div class="card-subtitle">
+                        Budget max : {{ client.budjet }}€
+                        {% if client.wilaya %} | Wilaya : {{ client.wilaya.nom }}{% endif %}
+                        {% if client.type %} | Type : {{ client.type.libelle }}{% endif %}
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    {% if biens|length > 0 %}
+                        <div class="table-responsive">
+                            <table class="table table-striped mb-0">
+                                <thead>
+                                    <tr>
+                                        <th width="60">ID</th>
+                                        <th>Titre</th>
+                                        <th width="120">Prix</th>
+                                        <th width="150">Wilaya</th>
+                                        <th width="150">Commune</th>
+                                        <th width="120">Type</th>
+                                        <th width="100" class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for bien in biens %}
+                                        <tr>
+                                            <td><span class="badge badge-primary">{{ bien.id }}</span></td>
+                                            <td>{{ bien.libelle ?? 'N/A' }}</td>
+                                            <td><strong>{{ bien.prix }}Da</strong></td>
+                                            <td>{{ bien.wilaya ? bien.wilaya.nom : 'N/A' }}</td>
+                                            <td>{{ bien.commune ? bien.commune.nom : 'N/A' }}</td>
+                                            <td>{{ bien.type ? bien.type.libelle : 'N/A' }}</td>
+                                            <td class="text-center">
+                                                <a href="admin/bien/{{bien.id}}/edit" class="btn btn-sm btn-primary" title="Modifier">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+
+                                                <a href="detail?id={{bien.id}}" class="btn btn-sm btn-primary" title="Modifier">
+                                                    Voir dans le site
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="empty-collection">
+                            <i class="fa fa-info-circle"></i>
+                            <p>Aucun bien ne correspond aux critères de ce client.</p>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">
+                            <i class="fa fa-chart-bar"></i> Total : {{ biens|length }} bien(s) trouvé(s)
+                        </span>
+                        <a href="{{ path('admin', {
+                            'crudAction': 'index',
+                            'crudControllerFqcn': 'App\\Controller\\Admin\\ClientsCrudController'
+                        }) }}" class="btn btn-secondary">
+                            <i class="fa fa-arrow-left"></i> Retour aux clients
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
