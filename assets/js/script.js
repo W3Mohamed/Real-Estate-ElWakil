@@ -232,12 +232,12 @@ function initRange(){
         }
     
         noUiSlider.create(areaSlider, {
-            start: [0, 10000], // Curseur min à 0, max à 10000
+            start: [0, 100000], // Curseur min à 0, max à 10000
             connect: true,
             step: 5,
             range: {
                 'min': 0,
-                'max': 10000
+                'max': 100000
             },
             format: {
                 to: function(value) {
@@ -250,7 +250,7 @@ function initRange(){
         });
     
         // Initialisation
-        updateAreaDisplay([0, 10000]);
+        updateAreaDisplay([0, 100000]);
         
         areaSlider.noUiSlider.on('update', function(values, handle) {
             const numericValues = values.map(Number);

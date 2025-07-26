@@ -167,7 +167,7 @@ final class HomeController extends AbstractController
     
         $communes = [];
         if ($wilayaId) {
-            $communes = $communeRepository->findBy(['wilaya' => $wilayaId]);
+            $communes = $communeRepository->findBy(['wilaya' => $wilayaId],['nom' => 'ASC']);
         }
 
         return $this->render('biens.html.twig',[
@@ -264,7 +264,7 @@ final class HomeController extends AbstractController
     #[Route('/get-communes/{wilayaId}', name: 'get_communes')]
     public function getCommunes(int $wilayaId, CommuneRepository $communeRepository): JsonResponse
     {
-        $communes = $communeRepository->findBy(['wilaya' => $wilayaId]);
+        $communes = $communeRepository->findBy(['wilaya' => $wilayaId],['nom' => 'ASC']);
         
         if (empty($communes)) {
             return new JsonResponse([], 404);
