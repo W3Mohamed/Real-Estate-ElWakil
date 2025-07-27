@@ -27,7 +27,7 @@ class Clients
     private ?Type $type = null;
 
     #[ORM\Column]
-    private ?int $budjet = null;
+    private ?int $budjetMin = null;
 
     /**
      * @var Collection<int, Bien>
@@ -35,17 +35,25 @@ class Clients
     #[ORM\ManyToMany(targetEntity: Bien::class, inversedBy: 'clients')]
     private Collection $biens;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Wilaya $wilaya = null;
+    #[ORM\ManyToMany(targetEntity: Wilaya::class, inversedBy: 'clients')]
+    private Collection $wilayas;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Commune $commune = null;
+
+    #[ORM\Column]
+    private ?int $budjetMax = null;
+
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $createdAt = null;
+
+// + les getters/setters
 
     public function __construct()
     {
         $this->biens = new ArrayCollection();
+        $this->wilayas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -89,14 +97,14 @@ class Clients
         return $this;
     }
 
-    public function getBudjet(): ?int
+    public function getBudjetMin(): ?int
     {
-        return $this->budjet;
+        return $this->budjetMin;
     }
 
-    public function setBudjet(int $budjet): static
+    public function setBudjetMin(int $budjetMin): static
     {
-        $this->budjet = $budjet;
+        $this->budjetMin = $budjetMin;
 
         return $this;
     }
@@ -125,15 +133,22 @@ class Clients
         return $this;
     }
 
-    public function getWilaya(): ?Wilaya
+    public function getWilayas(): Collection
     {
-        return $this->wilaya;
+        return $this->wilayas;
     }
 
-    public function setWilaya(?Wilaya $wilaya): static
+    public function addWilaya(Wilaya $wilaya): self
     {
-        $this->wilaya = $wilaya;
+        if (!$this->wilayas->contains($wilaya)) {
+            $this->wilayas[] = $wilaya;
+        }
+        return $this;
+    }
 
+    public function removeWilaya(Wilaya $wilaya): self
+    {
+        $this->wilayas->removeElement($wilaya);
         return $this;
     }
 
@@ -146,6 +161,29 @@ class Clients
     {
         $this->commune = $commune;
 
+        return $this;
+    }
+
+    public function getBudjetMax(): ?int
+    {
+        return $this->budjetMax;
+    }
+
+    public function setBudjetMax(int $budjetMax): static
+    {
+        $this->budjetMax = $budjetMax;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
         return $this;
     }
 }

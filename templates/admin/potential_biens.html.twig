@@ -19,8 +19,14 @@
                         <i class="fa fa-search"></i> Critères de recherche
                     </div>
                     <div class="card-subtitle">
-                        Budget max : {{ client.budjet }}€
-                        {% if client.wilaya %} | Wilaya : {{ client.wilaya.nom }}{% endif %}
+                        Budget min : {{ client.budjetMin }} Da
+                        | Budget max : {{ client.budjetMax }} Da
+                        {% if client.wilayas is not empty %}
+                            | Wilaya(s) : 
+                            {% for wilaya in client.wilayas %}
+                                {{ wilaya.nom }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        {% endif %}
                         {% if client.type %} | Type : {{ client.type.libelle }}{% endif %}
                     </div>
                 </div>

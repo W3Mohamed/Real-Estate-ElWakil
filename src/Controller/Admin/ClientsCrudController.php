@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Clients;
+use App\Entity\Wilaya;
 use App\Repository\CommuneRepository;
 use App\Service\BienMatchingService;
 use Doctrine\ORM\EntityRepository;
@@ -11,12 +12,21 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class ClientsCrudController extends AbstractCrudController
 {
     public function __construct(private BienMatchingService $matchingService) {}
+
+    public function createEntity(string $entityFqcn)
+    {
+        $entity = parent::createEntity($entityFqcn);
+        $entity->setCreatedAt(new \DateTimeImmutable());
+        
+        return $entity;
+    }
 
     public static function getEntityFqcn(): string
     {
@@ -29,29 +39,49 @@ class ClientsCrudController extends AbstractCrudController
             TextField::new('nom', 'Nom du client'),
             TextField::new('telephone', 'Numéro de téléphone'),
 
-            AssociationField::new('wilaya')
+            // Pour les wilayas (sélection multiple)
+            AssociationField::new('wilayas')
                 ->setFormTypeOption('choice_label', 'nom')
-                ->setFormTypeOption('query_builder', function (EntityRepository $er) {
-                    return $er->createQueryBuilder('w')
-                        ->orderBy('w.id', 'ASC');
-                })
+                ->setFormTypeOption('multiple', true) // Permettre plusieurs sélections
+                ->setFormTypeOption('by_reference', false)
                 ->formatValue(function ($value, $entity) {
-                    return $entity->getWilaya() ? $entity->getWilaya()->getNom() : '';
+                    return implode(', ', $entity->getWilayas()->map(fn(Wilaya $w) => $w->getNom())->toArray());
                 }),
 
+            // Pour la commune (si ManyToOne est conservé)
             AssociationField::new('commune')
                 ->setFormTypeOptions([
                     'choice_label' => 'nom',
-                    'placeholder' => 'Choisissez d\'abord une wilaya',
-                    'query_builder' => function(CommuneRepository $repo) {
-                        return $repo->createQueryBuilder('c')
-                            ->orderBy('c.nom', 'ASC');
-                    }
+                    'placeholder' => 'Choisissez une commune',
                 ])
-                // Supprimez les autres options qui pourraient interférer
                 ->formatValue(function ($value, $entity) {
-                    return $entity->getCommune() ? $entity->getCommune()->getNom() : '';
+                    return $entity->getCommune()?->getNom();
                 }),
+
+            // AssociationField::new('wilaya')
+            //     ->setFormTypeOption('choice_label', 'nom')
+            //     ->setFormTypeOption('multiple', true)
+            //     ->setFormTypeOption('query_builder', function (EntityRepository $er) {
+            //         return $er->createQueryBuilder('w')
+            //             ->orderBy('w.id', 'ASC');
+            //     })
+            //     ->formatValue(function ($value, $entity) {
+            //         return $entity->getWilaya() ? $entity->getWilayas()->getNom() : '';
+            //     }),
+
+            // AssociationField::new('commune')
+            //     ->setFormTypeOptions([
+            //         'choice_label' => 'nom',
+            //         'placeholder' => 'Choisissez d\'abord une wilaya',
+            //         'query_builder' => function(CommuneRepository $repo) {
+            //             return $repo->createQueryBuilder('c')
+            //                 ->orderBy('c.nom', 'ASC');
+            //         }
+            //     ])
+            //     // Supprimez les autres options qui pourraient interférer
+            //     ->formatValue(function ($value, $entity) {
+            //         return $entity->getCommune() ? $entity->getCommune()->getNom() : '';
+            //     }),
                 
             AssociationField::new('type')
                 ->setFormTypeOption('choice_label', 'libelle')
@@ -62,7 +92,8 @@ class ClientsCrudController extends AbstractCrudController
                 ->formatValue(function ($value, $entity) {
                     return $entity->getType() ? $entity->getType()->getLibelle() : '';
                 }),
-            IntegerField::new('budjet', 'Budget'),
+            IntegerField::new('budjetMin', 'Budget Min'),
+            IntegerField::new('budjetMax', 'Budget Max'),
 
             IntegerField::new('potentialBiensCount', 'Biens Potentiels')
                 ->setTemplatePath('admin/field/client_potential_biens.html.twig')
@@ -70,8 +101,14 @@ class ClientsCrudController extends AbstractCrudController
                 ->setSortable(false)
                 ->formatValue(function ($value, Clients $entity) {
                     return $this->countPotentialBiens($entity);
-                })
-            
+                }),
+
+            DateTimeField::new('createdAt', 'Date de création')
+                ->setFormat('dd/MM/Y HH:mm')
+                ->onlyOnIndex() // Ne s'affiche que dans la liste
+                ->hideWhenCreating() // Cache le champ dans le formulaire de création
+                ->setFormTypeOption('disabled', true) // Empêche la modification si affiché
+                        
         ];
     }
 

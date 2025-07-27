@@ -19,12 +19,15 @@ class BienMatchingService
         $qb = $this->em->getRepository(Bien::class)->createQueryBuilder('b');
         
         // Exemple de critères de matching (à adapter)
-        $qb->where('b.prix <= :budget')
-           ->setParameter('budget', $client->getBudjet());
+        $qb->where('b.prix >= :budgetMin')
+           ->setParameter('budgetMin', $client->getBudjetMin());
+
+        $qb->andWhere('b.prix <= :budgetMax')
+           ->setParameter('budgetMax', $client->getBudjetMax());
         
-        if ($client->getWilaya()) {
-            $qb->andWhere('b.wilaya = :wilaya')
-               ->setParameter('wilaya', $client->getWilaya());
+        if ($client->getWilayas()) {
+            $qb->andWhere('b.wilaya IN (:wilayas)')
+               ->setParameter('wilayas', $client->getWilayas());
         }
 
         if ($client->getCommune()) {
