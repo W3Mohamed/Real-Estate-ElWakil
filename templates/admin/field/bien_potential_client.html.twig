@@ -3,9 +3,9 @@
 
 {% if count > 0 %}
     <a href="{{ ea_url()
-        .setController('App\\Controller\\Admin\\ClientsCrudController')
-        .setAction('index')
-        .set('query', {'bien_id': entity.instance.id})
+        .setController('App\\Controller\\Admin\\BienCrudController')
+        .setAction('viewPotentialClients')
+        .setEntityId(entity.instance.id)
     }}" class="btn btn-sm btn-primary">
         <i class="fa fa-users"></i> {{ count }} client(s)
     </a>

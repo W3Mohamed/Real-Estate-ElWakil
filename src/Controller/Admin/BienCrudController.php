@@ -18,6 +18,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use App\Form\ImageFormType;
 use App\Service\BienMatchingService;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
@@ -345,9 +347,31 @@ class BienCrudController extends AbstractCrudController
         return null;
     }
 
+    public function configureActions(Actions $actions): Actions
+    {
+        // Ajoute une action pour voir les clients potentiels
+        $viewPotentialClients = Action::new('viewPotentialClients', 'Voir clients', 'fa fa-users')
+            ->linkToCrudAction('viewPotentialClients');
+
+        return $actions
+            ->add(Crud::PAGE_INDEX, $viewPotentialClients)
+            ->add(Crud::PAGE_DETAIL, $viewPotentialClients);
+    }
+
     public function countPotentialClients(Bien $bien): int
     {
         return count($this->matchingService->findPotentialClientsForBien($bien));
+    }
+
+    public function viewPotentialClients()
+    {
+        $bien = $this->getContext()->getEntity()->getInstance();
+        $clients = $this->matchingService->findPotentialClientsForBien($bien);
+
+        return $this->render('admin/potential_clients.html.twig', [
+            'bien' => $bien,
+            'clients' => $clients,
+        ]);
     }
 
 }
