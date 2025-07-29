@@ -47,6 +47,9 @@ class Clients
     #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $paiement = null;
+
 // + les getters/setters
 
     public function __construct()
@@ -183,6 +186,18 @@ class Clients
     public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    public function getPaiement(): ?string
+    {
+        return $this->paiement;
+    }
+
+    public function setPaiement(?string $paiement): static
+    {
+        $this->paiement = $paiement;
+
         return $this;
     }
 }

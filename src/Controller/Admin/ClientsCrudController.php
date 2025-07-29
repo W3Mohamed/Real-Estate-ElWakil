@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -69,6 +70,12 @@ class ClientsCrudController extends AbstractCrudController
 
             IntegerField::new('budjetMin', 'Budget Min'),
             IntegerField::new('budjetMax', 'Budget Max'),
+
+            ChoiceField::new('paiement')
+                ->setChoices([
+                    'Par banque' => 'banque',
+                    'Normal' => 'normal'
+                ]),
 
             IntegerField::new('potentialBiensCount', 'Biens Potentiels')
                 ->setTemplatePath('admin/field/client_potential_biens.html.twig')
