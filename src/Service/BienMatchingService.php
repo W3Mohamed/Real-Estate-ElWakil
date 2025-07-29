@@ -42,4 +42,36 @@ class BienMatchingService
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findPotentialClientsForBien(Bien $bien): array
+    {
+        $qb = $this->em->getRepository(Clients::class)->createQueryBuilder('c');
+        
+        // Exemple de critères de matching (à adapter)
+        $qb->where('c.budjetMin <= :prix')
+           ->setParameter('prix', $bien->getPrix());
+
+        $qb->andWhere('c.budjetMax >= :prix')
+           ->setParameter('prix', $bien->getPrix());
+        
+         if ($bien->getWilaya()) {
+            $qb->leftJoin('c.wilayas', 'client_wilaya')
+            ->andWhere('client_wilaya.id = :wilayaId OR SIZE(c.wilayas) = 0')
+            ->setParameter('wilayaId', $bien->getWilaya()->getId());
+        }  
+
+        if ($bien->getCommune()) {
+            $qb->andWhere('c.commune = :commune OR c.commune IS NULL')
+            ->setParameter('commune', $bien->getCommune());
+        }
+        
+        if ($bien->getType()) {
+            $qb->leftJoin('c.type', 't') // 'types' doit être le nom de la propriété dans Clients.php
+            ->andWhere('t.id = :typeId OR c.type IS EMPTY')
+            ->setParameter('typeId', $bien->getType()->getId());
+        }
+
+        $qb->distinct();
+        return $qb->getQuery()->getResult();
+    }
 }
