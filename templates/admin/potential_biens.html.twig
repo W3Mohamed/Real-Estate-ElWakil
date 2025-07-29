@@ -27,7 +27,12 @@
                                 {{ wilaya.nom }}{% if not loop.last %}, {% endif %}
                             {% endfor %}
                         {% endif %}
-                        {% if client.type %} | Type : {{ client.type.libelle }}{% endif %}
+                        {% if client.type is not empty %}
+                            | Type(s) : 
+                            {% for type in client.type %}
+                                {{ type.libelle }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
                 <div class="card-body p-0">

@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Clients;
+use App\Entity\Type;
 use App\Entity\Wilaya;
 use App\Repository\CommuneRepository;
 use App\Service\BienMatchingService;
@@ -57,41 +58,15 @@ class ClientsCrudController extends AbstractCrudController
                 ->formatValue(function ($value, $entity) {
                     return $entity->getCommune()?->getNom();
                 }),
-
-            // AssociationField::new('wilaya')
-            //     ->setFormTypeOption('choice_label', 'nom')
-            //     ->setFormTypeOption('multiple', true)
-            //     ->setFormTypeOption('query_builder', function (EntityRepository $er) {
-            //         return $er->createQueryBuilder('w')
-            //             ->orderBy('w.id', 'ASC');
-            //     })
-            //     ->formatValue(function ($value, $entity) {
-            //         return $entity->getWilaya() ? $entity->getWilayas()->getNom() : '';
-            //     }),
-
-            // AssociationField::new('commune')
-            //     ->setFormTypeOptions([
-            //         'choice_label' => 'nom',
-            //         'placeholder' => 'Choisissez d\'abord une wilaya',
-            //         'query_builder' => function(CommuneRepository $repo) {
-            //             return $repo->createQueryBuilder('c')
-            //                 ->orderBy('c.nom', 'ASC');
-            //         }
-            //     ])
-            //     // Supprimez les autres options qui pourraient interférer
-            //     ->formatValue(function ($value, $entity) {
-            //         return $entity->getCommune() ? $entity->getCommune()->getNom() : '';
-            //     }),
                 
             AssociationField::new('type')
                 ->setFormTypeOption('choice_label', 'libelle')
-                ->setFormTypeOption('query_builder', function (EntityRepository $er) {
-                    return $er->createQueryBuilder('t')
-                        ->orderBy('t.id', 'ASC');
-                })
+                ->setFormTypeOption('multiple', true)
+                ->setFormTypeOption('by_reference', false)
                 ->formatValue(function ($value, $entity) {
-                    return $entity->getType() ? $entity->getType()->getLibelle() : '';
+                    return implode(', ', $entity->getType()->map(fn(Type $w) => $w->getLibelle())->toArray());
                 }),
+
             IntegerField::new('budjetMin', 'Budget Min'),
             IntegerField::new('budjetMax', 'Budget Max'),
 

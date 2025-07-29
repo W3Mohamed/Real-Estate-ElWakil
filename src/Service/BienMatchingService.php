@@ -36,7 +36,7 @@ class BienMatchingService
         }
         
         if ($client->getType()) {
-            $qb->andWhere('b.type = :type')
+            $qb->andWhere('b.type IN (:type)')
                ->setParameter('type', $client->getType());
         }
 

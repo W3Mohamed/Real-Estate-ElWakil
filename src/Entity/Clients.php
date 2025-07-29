@@ -22,9 +22,8 @@ class Clients
     #[ORM\Column(length: 15)]
     private ?string $telephone = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Type $type = null;
+    #[ORM\ManyToMany(targetEntity: Type::class, inversedBy: 'clients')]
+    private Collection $type;
 
     #[ORM\Column]
     private ?int $budjetMin = null;
@@ -85,12 +84,12 @@ class Clients
         return $this;
     }
 
-    public function getType(): ?Type
+    public function getType(): Collection
     {
         return $this->type;
     }
 
-    public function setType(?Type $type): static
+    public function setType(Collection $type): static
     {
         $this->type = $type;
 
