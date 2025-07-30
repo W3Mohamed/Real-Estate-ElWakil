@@ -11,12 +11,16 @@ use Doctrine\ORM\EntityRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\NumericFilter;
 
 class ClientsCrudController extends AbstractCrudController
 {
@@ -119,6 +123,62 @@ class ClientsCrudController extends AbstractCrudController
             'client' => $client,
             'biens' => $biens,
         ]);
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            // Filtre pour les wilayas
+            ->add(EntityFilter::new('wilayas', 'Wilaya(s)')
+                ->setFormTypeOption('value_type_options', [
+                    'class' => 'App\Entity\Wilaya',
+                    'multiple' => true,
+                    'choice_label' => 'nom',
+                    'placeholder' => 'Sélectionner wilayas...',
+                    'query_builder' => function (EntityRepository $er) {
+                        return $er->createQueryBuilder('w')
+                            ->orderBy('w.nom', 'ASC');
+                    }
+                ])
+                ->canSelectMultiple()
+            )
+            
+            // Filtre pour le type
+            ->add(EntityFilter::new('type', 'Type(s)')
+                ->setFormTypeOption('value_type_options', [
+                    'class' => 'App\Entity\Type',
+                    'multiple' => true,
+                    'choice_label' => 'libelle',
+                    'placeholder' => 'Sélectionner types...',
+                    'query_builder' => function (EntityRepository $er) {
+                        return $er->createQueryBuilder('t')
+                            ->orderBy('t.libelle', 'ASC');
+                    }
+                ])
+                ->canSelectMultiple()
+            )
+            
+            // Filtres pour budget
+            ->add(NumericFilter::new('budjetMin', 'Budget minimum')
+                ->setFormTypeOptions([
+                    'attr' => [
+                        'placeholder' => 'Montant minimum...',
+                        'min' => 0,
+                        'step' => 1000
+                    ]
+                ])
+            )
+            ->add(NumericFilter::new('budjetMax', 'Budget maximum')
+                ->setFormTypeOptions([
+                    'attr' => [
+                        'placeholder' => 'Montant maximum...',
+                        'min' => 0,
+                        'step' => 1000
+                    ]
+                ])
+                    );
+            
+
     }
     
 }

@@ -73,7 +73,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Immobilier');
         yield MenuItem::linkToCrud('Types de biens', 'fas fa-tags', Type::class);
         yield MenuItem::linkToCrud('Biens immobiliers', 'fas fa-home', Bien::class);
-        yield MenuItem::linkToCrud('Clients', 'fas fa-users', Clients::class);
+        yield MenuItem::linkToCrud('Acheteurs', 'fas fa-users', Clients::class);
         
         // Section Configuration
         yield MenuItem::section('Configuration');
