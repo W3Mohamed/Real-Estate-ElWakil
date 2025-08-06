@@ -50,6 +50,12 @@ class Clients
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $paiement = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $categorie = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $transaction = null;
+
 // + les getters/setters
 
     public function __construct()
@@ -197,6 +203,30 @@ class Clients
     public function setPaiement(?string $paiement): static
     {
         $this->paiement = $paiement;
+
+        return $this;
+    }
+
+    public function getCategorie(): ?string
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(string $categorie): static
+    {
+        $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    public function getTransaction(): ?string
+    {
+        return $this->transaction;
+    }
+
+    public function setTransaction(string $transaction): static
+    {
+        $this->transaction = $transaction;
 
         return $this;
     }

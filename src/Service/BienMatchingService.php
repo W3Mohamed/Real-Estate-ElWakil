@@ -40,6 +40,11 @@ class BienMatchingService
                ->setParameter('type', $client->getType());
         }
 
+        if($client->getTransaction()) {
+            $qb->andWhere('b.transaction = :transaction')
+               ->setParameter('transaction', $client->getTransaction());
+        }
+
         return $qb->getQuery()->getResult();
     }
 
@@ -69,6 +74,11 @@ class BienMatchingService
             $qb->leftJoin('c.type', 't') // 'types' doit être le nom de la propriété dans Clients.php
             ->andWhere('t.id = :typeId OR c.type IS EMPTY')
             ->setParameter('typeId', $bien->getType()->getId());
+        }
+
+        if($bien->getTransaction()) {
+            $qb->andWhere('c.transaction = :transaction')
+               ->setParameter('transaction', $bien->getTransaction());
         }
 
         $qb->distinct();

@@ -71,7 +71,15 @@ class ClientsCrudController extends AbstractCrudController
                 ->formatValue(function ($value, $entity) {
                     return implode(', ', $entity->getType()->map(fn(Type $w) => $w->getLibelle())->toArray());
                 }),
-
+            
+            ChoiceField::new(('transaction'))
+                ->setChoices([
+                    'Achat' => 'vente',
+                    'Location' => 'location'
+                ])
+                ->setRequired(true)
+                ->renderExpanded(false), // Affiche sous forme de liste déroulante
+                
             IntegerField::new('budjetMin', 'Budget Min'),
             IntegerField::new('budjetMax', 'Budget Max'),
 
