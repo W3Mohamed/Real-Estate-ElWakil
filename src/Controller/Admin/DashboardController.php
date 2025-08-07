@@ -10,6 +10,7 @@ use App\Entity\Proposition;
 use App\Entity\Reservation;
 use App\Entity\Slider;
 use App\Entity\Type;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -74,6 +75,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Types de biens', 'fas fa-tags', Type::class);
         yield MenuItem::linkToCrud('Biens immobiliers', 'fas fa-home', Bien::class);
         yield MenuItem::linkToCrud('Acheteurs', 'fas fa-users', Clients::class);
+        yield MenuItem::linkToCrud('Vendeurs', 'fas fa-user', User::class);
         
         // Section Configuration
         yield MenuItem::section('Configuration');

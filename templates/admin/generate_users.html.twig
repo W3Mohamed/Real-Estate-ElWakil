@@ -1,0 +1,53 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}
+    <i class="fa fa-plus-circle"></i> Générer des comptes utilisateurs
+{% endblock %}
+
+{% block main %}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Création automatique de comptes</h3>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                <div class="form-group mb-3">
+                    <label for="count" class="form-label">Nombre de comptes à créer :</label>
+                    <input 
+                        type="number" 
+                        id="count" 
+                        name="count" 
+                        class="form-control" 
+                        min="1" 
+                        max="50" 
+                        value="5"
+                        required
+                    >
+                    <small class="form-text text-muted">Entre 1 et 50 comptes maximum</small>
+                </div>
+                
+                <div class="alert alert-info">
+                    <i class="fa fa-info-circle"></i>
+                    <strong>Information :</strong>
+                    <ul class="mb-0 mt-2">
+                        <li>Les comptes seront créés avec le rôle <code>ROLE_AGENCE</code></li>
+                        <li>Les noms d'utilisateur seront générés automatiquement (ex: agence_xxxxx)</li>
+                        <li>Les mots de passe seront générés aléatoirement et hashés</li>
+                        <li>Tous les comptes seront activés par défaut</li>
+                        <li>Vous verrez les informations de connexion après la création</li>
+                    </ul>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fa fa-plus"></i> Créer les comptes
+                    </button>
+                    <a href="{{ ea_url().setController('App\\Controller\\Admin\\UserCrudController').setAction('index') }}" 
+                       class="btn btn-secondary">
+                        <i class="fa fa-arrow-left"></i> Retour à la liste
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

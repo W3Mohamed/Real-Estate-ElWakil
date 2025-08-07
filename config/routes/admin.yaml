@@ -1,0 +1,7 @@
+admin_generate_users:
+    path: /admin/generate-users
+    controller: App\Controller\Admin\UserCrudController::generateUsers
+
+admin_show_created_users:
+    path: /admin/show-created-users  
+    controller: App\Controller\Admin\UserCrudController::showCreatedUsers
