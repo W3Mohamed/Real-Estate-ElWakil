@@ -17,21 +17,6 @@
   <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
     <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
       {{ form_start(registrationForm, {'attr': {'class': 'space-y-6'}}) }}
-        
-        <div>
-          {{ form_label(registrationForm.email, 'Email professionnel', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
-          <div class="mt-1">
-            {{ form_widget(registrationForm.email, {'attr': {'class': 'appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'}}) }}
-          </div>
-        </div>
-
-        <div>
-          {{ form_label(registrationForm.telephone, 'Téléphone', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
-          <div class="mt-1">
-            {{ form_widget(registrationForm.telephone, {'attr': {'class': 'appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm'}}) }}
-          </div>
-        </div>
-
         <div>
           {{ form_label(registrationForm.username, 'Identifiant', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
           <div class="mt-1">
@@ -42,9 +27,9 @@
         
         {# Champ Mot de passe #}
         <div>
-            {{ form_label(registrationForm.plainPassword.first, 'Mot de passe', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+            {{ form_label(registrationForm.password, 'Mot de passe', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
             <div class="mt-1">
-                {{ form_widget(registrationForm.plainPassword.first, {
+                {{ form_widget(registrationForm.password, {
                     'attr': {
                         'class': 'appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm',
                         'autocomplete': 'new-password'
@@ -52,20 +37,6 @@
                 }) }}
             </div>
         </div>
-
-        {# Champ Confirmation mot de passe #}
-        <div>
-            {{ form_label(registrationForm.plainPassword.second, 'Confirmer le mot de passe', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
-            <div class="mt-1">
-                {{ form_widget(registrationForm.plainPassword.second, {
-                    'attr': {
-                        'class': 'appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm',
-                        'autocomplete': 'new-password'
-                    }
-                }) }}
-            </div>
-        </div>
-
         {# <div class="flex items-center">
           {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded'}}) }}
           {{ form_label(registrationForm.agreeTerms, 'J\'accepte les conditions générales', {'label_attr': {'class': 'ml-2 block text-sm text-gray-900'}}) }}

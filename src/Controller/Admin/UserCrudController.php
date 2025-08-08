@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Dom\Text;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -23,22 +24,18 @@ use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 class UserCrudController extends AbstractCrudController
 {
     private EntityManagerInterface $entityManager;
-    private UserPasswordHasherInterface $passwordHasher;
     private AdminUrlGenerator $adminUrlGenerator;
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher,
         AdminUrlGenerator $adminUrlGenerator
     ) {
         $this->entityManager = $entityManager;
-        $this->passwordHasher = $passwordHasher;
         $this->adminUrlGenerator = $adminUrlGenerator;
     }
 
@@ -47,26 +44,26 @@ class UserCrudController extends AbstractCrudController
         return User::class;
     }
 
-    // public function configureActions(Actions $actions): Actions
-    // {
-    //     $generateUsers = Action::new('generateUsers', 'Générer des comptes', 'fas fa-plus-circle')
-    //         ->linkToUrl(function () {
-    //             return $this->adminUrlGenerator->setRoute('admin_generate_users')->generateUrl();
-    //         })
-    //         ->addCssClass('btn btn-success')
-    //         ->createAsGlobalAction(); // Action globale sur la page
+    public function configureActions(Actions $actions): Actions
+    {
+        $generateUsers = Action::new('generateUsers', 'Générer des comptes', 'fas fa-plus-circle')
+            ->linkToUrl(function () {
+                return $this->adminUrlGenerator->setRoute('admin_generate_users')->generateUrl();
+            })
+            ->addCssClass('btn btn-success')
+            ->createAsGlobalAction(); // Action globale sur la page
 
-    //     return $actions
-    //         ->add(Crud::PAGE_INDEX, $generateUsers)
-    //         ->setPermission('generateUsers', 'ROLE_ADMIN');
-    // }
+        return $actions
+            ->add(Crud::PAGE_INDEX, $generateUsers)
+            ->setPermission('generateUsers', 'ROLE_ADMIN');
+    }
 
     public function configureFields(string $pageName): iterable
     {
         return [
             IdField::new('id')->onlyOnIndex(),
             TextField::new('username', 'Nom d\'utilisateur'),
-            ArrayField::new('roles', 'Rôles'),
+            TextField::new('password', 'Mot de passe'),
             BooleanField::new('status', 'Statut')
                 ->renderAsSwitch(false),
             DateTimeField::new('createdAt', 'Date de création')
@@ -112,10 +109,7 @@ class UserCrudController extends AbstractCrudController
                 $user->setCreatedAt(new \DateTimeImmutable());
                 $user->setSubscribedAt(new \DateTimeImmutable());
                 $user->setDuration(1);
-
-                // Hasher le mot de passe
-                $hashedPassword = $this->passwordHasher->hashPassword($user, $plainPassword);
-                $user->setPassword($hashedPassword);
+                $user->setPassword($plainPassword);
 
                 $this->entityManager->persist($user);
 

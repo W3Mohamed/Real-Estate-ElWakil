@@ -39,8 +39,7 @@ class SecurityController extends AbstractController
     public function sign(Request $request,
      TypeRepository $typeRepository,
      ParamettreRepository $paramettreRepository,
-     EntityManagerInterface $entityManager,
-     UserPasswordHasherInterface $userPasswordHasher): Response
+     EntityManagerInterface $entityManager): Response
     {
         $types = $typeRepository->findAll();
         $parametres = $paramettreRepository->find(1);
@@ -50,15 +49,7 @@ class SecurityController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Encodage du mot de passe
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
-            
+        if ($form->isSubmitted() && $form->isValid()) {            
             // Définition des valeurs par défaut
             $user->setRoles(['ROLE_AGENCE']);
             $user->setStatus(true);
