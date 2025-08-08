@@ -3,6 +3,8 @@ security:
     password_hashers:
         App\Entity\User:
             algorithm: plaintext
+        Symfony\Component\Security\Core\User\InMemoryUser:
+            algorithm: auto       # Pour l'admin avec mot de passe hashé
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         # used to reload user from session & other features (e.g. switch_user)

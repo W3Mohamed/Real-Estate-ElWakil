@@ -1,0 +1,229 @@
+{% extends 'agence/base.html.twig' %}
+{% block title %}Interface agence{% endblock %}
+
+{% block body %}
+
+    <!-- Titre principal -->
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">Acheteurs</h1>
+    </div>
+
+    <!-- Barre de recherche et filtres -->
+    <div class="bg-white rounded-lg shadow p-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <!-- Barre de recherche -->
+            <div class="md:col-span-2">
+                <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Recherche</label>
+                <div class="relative">
+                    <input type="text" id="search" placeholder="Nom, téléphone..." 
+                           class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtre Wilaya -->
+            <div>
+                <label for="wilaya" class="block text-sm font-medium text-gray-700 mb-1">Wilaya</label>
+                <select id="wilaya" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">Toutes</option>
+                    <option>Alger</option>
+                    <option>Oran</option>
+                    <option>Constantine</option>
+                    <!-- Ajoutez d'autres wilayas -->
+                </select>
+            </div>
+
+            <!-- Filtre Commune -->
+            <div>
+                <label for="commune" class="block text-sm font-medium text-gray-700 mb-1">Commune</label>
+                <select id="commune" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">Toutes</option>
+                    <option>Hydra</option>
+                    <option>El Biar</option>
+                    <option>Ben Aknoun</option>
+                    <!-- Ajoutez d'autres communes -->
+                </select>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+            <!-- Budget Min -->
+            <div>
+                <label for="min-price" class="block text-sm font-medium text-gray-700 mb-1">Budget min (DA)</label>
+                <input type="number" id="min-price" placeholder="0" 
+                       class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <!-- Budget Max -->
+            <div>
+                <label for="max-price" class="block text-sm font-medium text-gray-700 mb-1">Budget max (DA)</label>
+                <input type="number" id="max-price" placeholder="Max" 
+                       class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <!-- Type de transaction -->
+            <div>
+                <label for="transaction" class="block text-sm font-medium text-gray-700 mb-1">Transaction</label>
+                <select id="transaction" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">Tous</option>
+                    <option>Vente</option>
+                    <option>Location</option>
+                </select>
+            </div>
+
+            <!-- Paiement -->
+            <div>
+                <label for="payment" class="block text-sm font-medium text-gray-700 mb-1">Paiement</label>
+                <select id="payment" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">Tous</option>
+                    <option>Banque</option>
+                    <option>Normal</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="flex justify-end mt-4">
+            <button class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg mr-2">
+                Réinitialiser
+            </button>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+                Appliquer
+            </button>
+        </div>
+    </div>
+
+    <!-- Tableau des acheteurs -->
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Téléphone</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Budget (DA)</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Types</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Wilayas</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Commune</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Transaction</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Paiement</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Biens Potentiels</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <!-- Exemple de ligne -->
+                    {% for client in clients %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <span class="text-blue-600 font-medium">{{ client.nom|first|upper }}</span>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">{{ client.nom }}</div>
+                                    <div class="text-xs text-gray-500">
+                                        {% set difference = date().diff(date(client.createdAt)) %}
+                                        {% if difference.y > 0 %}
+                                            Il y a {{ difference.y }} an{% if difference.y > 1 %}s{% endif %}
+                                        {% elseif difference.m > 0 %}
+                                            Il y a {{ difference.m }} mois
+                                        {% elseif difference.d > 7 %}
+                                            Il y a {{ (difference.d / 7)|round(0, 'floor') }} semaine{% if (difference.d / 7)|round(0, 'floor') > 1 %}s{% endif %}
+                                        {% elseif difference.d > 0 %}
+                                            Il y a {{ difference.d }} jour{% if difference.d > 1 %}s{% endif %}
+                                        {% elseif difference.h > 0 %}
+                                            Il y a {{ difference.h }} heure{% if difference.h > 1 %}s{% endif %}
+                                        {% elseif difference.i > 0 %}
+                                            Il y a {{ difference.i }} minute{% if difference.i > 1 %}s{% endif %}
+                                        {% else %}
+                                            À l'instant
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">{{ client.telephone }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900"><span class="px-2 inline-flex rounded-full bg-yellow-100 text-yellow-800">{{client.formatedMin}}</span> à <span class="px-2 inline-flex rounded-full bg-purple-100 text-purple-800">{{client.formatedMax}}</span></div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">
+                            {% for type in client.type %}
+                                {{ type.libelle }}
+                                {% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">
+                               {% for wilaya in client.wilayas %}
+                                    {{ wilaya.nom }}
+                                    {% if not loop.last %}, {% endif %}
+                                {% endfor %} 
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">{{ client.commune ? client.commune.nom : '' }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{client.transaction == 'vente' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">{{ client.transaction }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ client.paiement == 'banque' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}}">{{ client.paiement }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <a href="#">
+                                <span class="p-2 inline-flex text-xs leading-5 font-semibold rounded-lg bg-orange-100 text-black">
+                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                                    </svg>
+                                    {{ nbBiens[client.id] }} Biens
+                                </span>
+                            </a>                        
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
+            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                <div>
+                    <p class="text-sm text-gray-700">
+                        Affichage de <span class="font-medium">1</span> à <span class="font-medium">10</span> sur <span class="font-medium">{{ nbClients }}</span> acheteurs
+                    </p>
+                </div>
+                <div>
+                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">Précédent</span>
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                        <a href="#" aria-current="page" class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium"> 1 </a>
+                        <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"> 2 </a>
+                        <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"> 3 </a>
+                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                            <span class="sr-only">Suivant</span>
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
