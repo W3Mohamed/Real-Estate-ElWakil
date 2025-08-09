@@ -43,7 +43,7 @@ final class AgenceController extends AbstractController
         if($request->query->get('id') !== null) {
             $id = $request->query->get('id');
             $bien = $bienRepository->find($id);
-            $clients = $bienMatching->findPotentialClientsForBien($bien);
+            $clients = $bienMatching->findPotentialClientsForBien($bien, $limit, $offset);
             $totalClients = count($clients);
         }else{
             // Récupération des clients paginés
@@ -104,7 +104,7 @@ final class AgenceController extends AbstractController
         if($request->query->get('id') !== null){
             $id = $request->query->get('id');
             $client = $clientsRepository->find($id);
-            $biens = $bienMatching->findPotentialBiensForClient($client);
+            $biens = $bienMatching->findPotentialBiensForClient($client, $limit, $offset);
             $totalBiens = count($biens);
         }else{
             // Récupération des biens paginés

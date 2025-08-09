@@ -14,7 +14,7 @@ class BienMatchingService
         $this->em = $em;
     }
 
-    public function findPotentialBiensForClient(Clients $client): array
+    public function findPotentialBiensForClient(Clients $client, ?int $limit = null, ?int $offset = null): array
     {
         $qb = $this->em->getRepository(Bien::class)->createQueryBuilder('b');
         
@@ -45,10 +45,19 @@ class BienMatchingService
                ->setParameter('transaction', $client->getTransaction());
         }
 
+        $qb->distinct();
+
+        if ($limit !== null) {
+            $qb->setMaxResults($limit);
+        }
+        if ($offset !== null) {
+            $qb->setFirstResult($offset);
+        }
+
         return $qb->getQuery()->getResult();
     }
 
-    public function findPotentialClientsForBien(Bien $bien): array
+    public function findPotentialClientsForBien(Bien $bien, ?int $limit = null, ?int $offset = null): array
     {
         $qb = $this->em->getRepository(Clients::class)->createQueryBuilder('c');
         
@@ -82,6 +91,14 @@ class BienMatchingService
         }
 
         $qb->distinct();
+
+        if ($limit !== null) {
+            $qb->setMaxResults($limit);
+        }
+        if ($offset !== null) {
+            $qb->setFirstResult($offset);
+        }
+        
         return $qb->getQuery()->getResult();
     }
 }
