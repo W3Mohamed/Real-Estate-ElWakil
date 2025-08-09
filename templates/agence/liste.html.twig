@@ -144,13 +144,13 @@
         <div class="flex items-center justify-between mt-6">
             <div class="flex-1 flex justify-between sm:hidden">
                 {% if current_page > 1 %}
-                    <a href="{{ path('liste', {'page': current_page - 1}) }}" 
+                    <a href="{{ path('liste', app.request.query.all | merge({'page': current_page - 1})) }}" 
                     class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
                         Précédent
                     </a>
                 {% endif %}
                 {% if current_page < total_pages %}
-                    <a href="{{ path('liste', {'page': current_page + 1}) }}" 
+                    <a href="{{ path('liste', app.request.query.all | merge({'page': current_page + 1})) }}" 
                     class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
                         Suivant
                     </a>
@@ -168,7 +168,7 @@
                 <div>
                     <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
                         {% if current_page > 1 %}
-                            <a href="{{ path('liste', {'page': current_page - 1}) }}" 
+                            <a href="{{ path('liste', app.request.query.all | merge({'page': current_page - 1})) }}" 
                             class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
                                 <span class="sr-only">Précédent</span>
                                 <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
@@ -182,7 +182,7 @@
                         {% set end_page = min(total_pages, current_page + 2) %}
 
                         {% if start_page > 1 %}
-                            <a href="{{ path('liste', {'page': 1}) }}" 
+                            <a href="{{ path('liste', app.request.query.all | merge({'page': 1})) }}" 
                             class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
                                 1
                             </a>
@@ -194,7 +194,7 @@
                         {% endif %}
 
                         {% for i in start_page..end_page %}
-                            <a href="{{ path('liste', {'page': i}) }}" 
+                            <a href="{{ path('liste', app.request.query.all | merge({'page': i})) }}" 
                             class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium {% if i == current_page %}bg-blue-50 text-blue-600{% else %}bg-white text-gray-700 hover:bg-gray-50{% endif %}">
                                 {{ i }}
                             </a>
@@ -206,14 +206,14 @@
                                     ...
                                 </span>
                             {% endif %}
-                            <a href="{{ path('liste', {'page': total_pages}) }}" 
+                            <a href="{{ path('liste', app.request.query.all | merge({'page': total_pages})) }}" 
                             class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
                                 {{ total_pages }}
                             </a>
                         {% endif %}
 
                         {% if current_page < total_pages %}
-                            <a href="{{ path('liste', {'page': current_page + 1}) }}" 
+                            <a href="{{ path('liste', app.request.query.all | merge({'page': current_page + 1})) }}" 
                             class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
                                 <span class="sr-only">Suivant</span>
                                 <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
