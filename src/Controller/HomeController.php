@@ -11,6 +11,7 @@ use App\Repository\ParamettreRepository;
 use App\Repository\SliderRepository;
 use App\Repository\TypeRepository;
 use App\Repository\WilayaRepository;
+use App\Service\BienMatchingService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,7 +25,8 @@ final class HomeController extends AbstractController
     public function index(TypeRepository $typeRepository,
         ParamettreRepository $paramettreRepository,
         SliderRepository $sliderRepository,
-        BienRepository $bienRepository): Response
+        BienRepository $bienRepository,
+        BienMatchingService $bienMatching): Response
     {
         $types = $typeRepository->findAll();
         $sliders = $sliderRepository->findBy([], ['ordre' => 'ASC']);
@@ -33,6 +35,7 @@ final class HomeController extends AbstractController
         // Formater les prix pour chaque bien
         foreach ($biens as $bien) {
             $bien->formattedPrix = $this->formatPrixDZD($bien->getPrix());
+            $bien->nbAcheteurs = count($bienMatching->findPotentialClientsForBien($bien));
         }
         // Récupérer les biens séparés par type de transaction
         $biensALouer = $bienRepository->findBiensALouer();
@@ -52,7 +55,8 @@ final class HomeController extends AbstractController
     public function biens(Request $request, 
         BienRepository $bienRepository, WilayaRepository $wilayaRepository,
         TypeRepository $typeRepository, CommuneRepository $communeRepository,
-        ParamettreRepository $paramettreRepository): Response
+        ParamettreRepository $paramettreRepository,
+        BienMatchingService $bienMatching): Response
     {
         $searchQuery = $request->query->get('query');
         // Récupération des paramètres de filtrage
@@ -158,6 +162,7 @@ final class HomeController extends AbstractController
         foreach ($paginator as $bien) {
             $bien->formattedPrix = $this->formatPrixDZD($bien->getPrix());
             $biens[] = $bien;
+            $bien->nbAcheteurs = count($bienMatching->findPotentialClientsForBien($bien));
         }
 
         // Récupération des données pour les listes déroulantes
