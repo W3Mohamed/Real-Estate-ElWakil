@@ -44,7 +44,7 @@ final class AgenceController extends AbstractController
             $id = $request->query->get('id');
             $bien = $bienRepository->find($id);
             $clients = $bienMatching->findPotentialClientsForBien($bien, $limit, $offset);
-            $totalClients = count($clients);
+            $totalClients = count($bienMatching->findPotentialClientsForBien($bien));
         }else{
             // Récupération des clients paginés
             $clients = $clientsRepository->findBy(
@@ -105,7 +105,7 @@ final class AgenceController extends AbstractController
             $id = $request->query->get('id');
             $client = $clientsRepository->find($id);
             $biens = $bienMatching->findPotentialBiensForClient($client, $limit, $offset);
-            $totalBiens = count($biens);
+            $totalBiens = count($bienMatching->findPotentialBiensForClient($client));
         }else{
             // Récupération des biens paginés
             $biens = $bienRepository->findBy(
