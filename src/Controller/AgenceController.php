@@ -108,12 +108,15 @@ final class AgenceController extends AbstractController
                 ->getQuery()
                 ->getResult();
 
-            // Comptage total sans pagination
-            //$totalClients = $clientsRepository->count($queryBuilder->getQuery()->getResult());
+            // Comptage total - version sécurisée
             $countQuery = clone $queryBuilder;
-            $totalClients = (int) $countQuery->select('COUNT(c.id)')
-                ->getQuery()
-                ->getSingleScalarResult();
+            $countQuery->select('COUNT(c.id)');
+            
+            try {
+                $totalClients = (int) $countQuery->getQuery()->getSingleScalarResult();
+            } catch (\Doctrine\ORM\NoResultException $e) {
+                $totalClients = 0;
+            } 
         }
         foreach ($clients as $client) {
             // Format the price from cents to a readable format
@@ -129,7 +132,7 @@ final class AgenceController extends AbstractController
         }   
 
         $user = $this->getUser();
-        $totalPages = ceil($totalClients / $limit);
+        $totalPages = $totalClients > 0 ? ceil($totalClients / $limit) : 1; // Si aucun client, on affiche une seule page
 
         return $this->render('agence/acheteur.html.twig', [
             'biens' => $biens,
@@ -196,11 +199,15 @@ final class AgenceController extends AbstractController
                 ->setMaxResults($limit)
                 ->getQuery()
                 ->getResult();
-            // Comptage total sans pagination
+             // Comptage total - version sécurisée
             $countQuery = clone $queryBuilder;
-            $totalBiens = (int) $countQuery->select('COUNT(b.id)')
-                ->getQuery()
-                ->getSingleScalarResult();       
+            $countQuery->select('COUNT(b.id)');
+            
+            try {
+                $totalBiens = (int) $countQuery->getQuery()->getSingleScalarResult();
+            } catch (\Doctrine\ORM\NoResultException $e) {
+                $totalBiens = 0;
+            }   
         }
         $nbAcheteurs = count($clientsRepository->findAll());
 
@@ -216,7 +223,7 @@ final class AgenceController extends AbstractController
             $clients[$bien->getId()] = $clientBien;
             $nbClients[$bien->getId()] = count($clientBien);
         }  
-        $totalPages = ceil($totalBiens / $limit);
+        $totalPages = $totalBiens > 0 ? ceil($totalBiens / $limit) : 1; // Si aucun bien, on affiche une seule page
 
         return $this->render('agence/liste.html.twig', [
             'user' => $user,
