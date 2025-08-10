@@ -101,13 +101,6 @@ final class AgenceController extends AbstractController
                     ->setParameter('paiement', $paiement);
             }
 
-            // Récupération des clients paginés
-            $clients = $queryBuilder
-                ->setFirstResult($offset)
-                ->setMaxResults($limit)
-                ->getQuery()
-                ->getResult();
-
             // Comptage total - version sécurisée
             $countQuery = clone $queryBuilder;
             $countQuery->select('COUNT(c.id)');
@@ -117,6 +110,13 @@ final class AgenceController extends AbstractController
             } catch (\Doctrine\ORM\NoResultException $e) {
                 $totalClients = 0;
             } 
+            
+            // Récupération des clients paginés
+            $clients = $queryBuilder
+                ->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->getQuery()
+                ->getResult();
         }
         foreach ($clients as $client) {
             // Format the price from cents to a readable format
@@ -193,12 +193,6 @@ final class AgenceController extends AbstractController
                 $queryBuilder->andWhere('b.transaction = :transaction')
                     ->setParameter('transaction', $transaction);
             }
-            // Récupération des biens paginés
-            $biens = $queryBuilder
-                ->setFirstResult($offset)
-                ->setMaxResults($limit)
-                ->getQuery()
-                ->getResult();
              // Comptage total - version sécurisée
             $countQuery = clone $queryBuilder;
             $countQuery->select('COUNT(b.id)');
@@ -208,6 +202,11 @@ final class AgenceController extends AbstractController
             } catch (\Doctrine\ORM\NoResultException $e) {
                 $totalBiens = 0;
             }   
+            $biens = $queryBuilder
+                ->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->getQuery()
+                ->getResult();
         }
         $nbAcheteurs = count($clientsRepository->findAll());
 
