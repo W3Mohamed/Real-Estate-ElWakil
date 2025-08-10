@@ -152,13 +152,14 @@ final class AgenceController extends AbstractController
      BienMatchingService $bienMatching,ClientsRepository $clientsRepository,
      TypeRepository $typeRepository): Response
     {
+        $search = $request->query->get('search');
+        $typeId = $request->query->get('type');
+        $transaction = $request->query->get('transaction');
+
         $user = $this->getUser();
         $types = $typeRepository->findAll();
         $page = $request->query->getInt('page', 1); // Page courante (1 par défaut)
         $limit = 20; // Nombre d'éléments par page
-
-        // Récupération du total avant pagination
-        $totalBiens = $bienRepository->count([]);
         
         // Calcul de l'offset
         $offset = ($page - 1) * $limit;
@@ -169,14 +170,37 @@ final class AgenceController extends AbstractController
             $biens = $bienMatching->findPotentialBiensForClient($client, $limit, $offset);
             $totalBiens = count($bienMatching->findPotentialBiensForClient($client));
         }else{
+            $queryBuilder = $bienRepository->createQueryBuilder('b')
+                ->orderBy('b.id', 'DESC');
+            // Application des filtres
+            if ($search) {
+                $queryBuilder
+                    ->leftJoin('b.wilaya', 'w') // 'b.wilaya' est la relation vers l'entité Wilaya
+                    ->leftJoin('b.commune', 'c') // 'b.commune' est la relation vers l'entité Commune
+                    ->andWhere('b.libelle LIKE :search 
+                            OR w.nom LIKE :search 
+                            OR c.nom LIKE :search')
+                    ->setParameter('search', '%'.$search.'%');
+            }
+            if ($typeId) {
+                $queryBuilder->andWhere('b.type = :typeId')
+                    ->setParameter('typeId', (int)$typeId);
+            }
+            if ($transaction) {
+                $queryBuilder->andWhere('b.transaction = :transaction')
+                    ->setParameter('transaction', $transaction);
+            }
             // Récupération des biens paginés
-            $biens = $bienRepository->findBy(
-                [], 
-                ['id' => 'DESC'],
-                $limit, 
-                $offset
-            );
-            $totalBiens = $bienRepository->count([]);
+            $biens = $queryBuilder
+                ->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->getQuery()
+                ->getResult();
+            // Comptage total sans pagination
+            $countQuery = clone $queryBuilder;
+            $totalBiens = (int) $countQuery->select('COUNT(b.id)')
+                ->getQuery()
+                ->getSingleScalarResult();       
         }
         $nbAcheteurs = count($clientsRepository->findAll());
 
@@ -193,6 +217,7 @@ final class AgenceController extends AbstractController
             $nbClients[$bien->getId()] = count($clientBien);
         }  
         $totalPages = ceil($totalBiens / $limit);
+
         return $this->render('agence/liste.html.twig', [
             'user' => $user,
             'biens' => $biens,
