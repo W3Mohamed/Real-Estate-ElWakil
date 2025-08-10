@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\BienRepository;
 use App\Repository\ClientsRepository;
+use App\Repository\CommuneRepository;
 use App\Repository\TypeRepository;
 use App\Repository\WilayaRepository;
 use App\Service\BienMatchingService;
@@ -31,9 +32,22 @@ final class AgenceController extends AbstractController
     #[Route('/agence/acheteur', name: 'acheteur')]
     public function acheteur(ClientsRepository $clientsRepository,
      BienMatchingService $bienMatching,Request $request,
-     BienRepository $bienRepository,WilayaRepository $wilayaRepository): Response
+     BienRepository $bienRepository,WilayaRepository $wilayaRepository,
+     CommuneRepository $communeRepository): Response
     {
+        $wilayaId = $request->query->get('wilaya');
+        $commune = $request->query->get('commune');
+        $search = $request->query->get('search');
+        $prixMin = $request->query->get('prixMin');
+        $prixMax = $request->query->get('prixMax');
+        $transaction = $request->query->get('transaction');
+        $paiement = $request->query->get('paiement');
+
         $wilayas = $wilayaRepository->findAll();
+        $communes = [];
+        if ($wilayaId) {
+            $communes = $communeRepository->findBy(['wilaya' => $wilayaId],['nom' => 'ASC']);
+        }
         $page = $request->query->getInt('page', 1); // Page courante (1 par défaut)
         $limit = 20; // Nombre d'éléments par page
         
@@ -46,15 +60,60 @@ final class AgenceController extends AbstractController
             $clients = $bienMatching->findPotentialClientsForBien($bien, $limit, $offset);
             $totalClients = count($bienMatching->findPotentialClientsForBien($bien));
         }else{
+            // Cas général avec filtres
+            $queryBuilder = $clientsRepository->createQueryBuilder('c')
+                ->orderBy('c.id', 'DESC');
+            
+            // Application des filtres
+            if ($wilayaId) {
+                $queryBuilder->innerJoin('c.wilayas', 'w')
+                    ->andWhere('w.id = :wilayaId')
+                    ->setParameter('wilayaId', (int)$wilayaId);
+            }
+
+            if ($commune) {
+                $queryBuilder->andWhere('c.commune = :communeId')
+                    ->setParameter('communeId', $commune);
+            }
+
+            if ($search) {
+                $queryBuilder->andWhere('c.nom LIKE :search')
+                    ->setParameter('search', '%'.$search.'%');
+            }
+
+            if ($prixMin) {
+                $queryBuilder->andWhere('c.budjetMin >= :prixMin')
+                    ->setParameter('prixMin', $prixMin);
+            }
+
+            if ($prixMax) {
+                $queryBuilder->andWhere('c.budjetMax <= :prixMax')
+                    ->setParameter('prixMax', $prixMax);
+            }
+
+            if ($transaction) {
+                $queryBuilder->andWhere('c.transaction = :transaction')
+                    ->setParameter('transaction', $transaction);
+            }
+
+            if ($paiement) {
+                $queryBuilder->andWhere('c.paiement = :paiement')
+                    ->setParameter('paiement', $paiement);
+            }
+
             // Récupération des clients paginés
-            $clients = $clientsRepository->findBy(
-                [], 
-                ['id' => 'DESC'],
-                $limit, 
-                $offset
-            );          
-            // Récupération du total avant pagination
-            $totalClients = $clientsRepository->count([]);
+            $clients = $queryBuilder
+                ->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->getQuery()
+                ->getResult();
+
+            // Comptage total sans pagination
+            //$totalClients = $clientsRepository->count($queryBuilder->getQuery()->getResult());
+            $countQuery = clone $queryBuilder;
+            $totalClients = (int) $countQuery->select('COUNT(c.id)')
+                ->getQuery()
+                ->getSingleScalarResult();
         }
         foreach ($clients as $client) {
             // Format the price from cents to a readable format
@@ -81,7 +140,10 @@ final class AgenceController extends AbstractController
             'current_page' => $page,
             'total_pages' => $totalPages,
             'limit' => $limit,
-            'wilayas' => $wilayas
+            'wilayas' => $wilayas,
+            'communes' => $communes,
+            'currentWilaya' => $wilayaId,
+            'currentCommune' => $commune
         ]);
     }
 
