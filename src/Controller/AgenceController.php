@@ -35,6 +35,12 @@ final class AgenceController extends AbstractController
      BienRepository $bienRepository,WilayaRepository $wilayaRepository,
      CommuneRepository $communeRepository): Response
     {
+        $idBien = $request->query->get('id') ?? null;
+        $bien = null;
+        if ($idBien !== null) {
+            $bien = $bienRepository->find($idBien);
+        }
+
         $wilayaId = $request->query->get('wilaya');
         $commune = $request->query->get('commune');
         $search = $request->query->get('search');
@@ -146,7 +152,9 @@ final class AgenceController extends AbstractController
             'wilayas' => $wilayas,
             'communes' => $communes,
             'currentWilaya' => $wilayaId,
-            'currentCommune' => $commune
+            'currentCommune' => $commune,
+            'idBien' => $idBien,
+            'bien' => $bien ?? null,
         ]);
     }
 
