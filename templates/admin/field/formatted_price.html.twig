@@ -1,0 +1,4 @@
+{# templates/admin/field/formatted_price.html.twig #}
+{% if value is not null %}
+    {{ ea_call_function_if_exists('App\\Service\\PriceFormatter', 'formatPrixMap', value) }}
+{% endif %}

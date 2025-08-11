@@ -5,11 +5,13 @@ namespace App\Controller\Admin;
 use App\Entity\Clients;
 use App\Entity\Type;
 use App\Entity\Wilaya;
+use App\Field\FormattedPriceField;
 use App\Repository\CommuneRepository;
 use App\Service\BienMatchingService;
 use Doctrine\ORM\EntityRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -25,6 +27,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Filter\NumericFilter;
 class ClientsCrudController extends AbstractCrudController
 {
     public function __construct(private BienMatchingService $matchingService) {}
+
+    public function configureAssets(Assets $assets): Assets
+    {
+        return $assets
+            ->addJsFile('admin/js/price-formatter.js');
+    }
 
     public function createEntity(string $entityFqcn)
     {
@@ -80,8 +88,13 @@ class ClientsCrudController extends AbstractCrudController
                 ->setRequired(true)
                 ->renderExpanded(false), // Affiche sous forme de liste déroulante
                 
-            IntegerField::new('budjetMin', 'Budget Min'),
-            IntegerField::new('budjetMax', 'Budget Max'),
+            IntegerField::new('budjetMin', 'Budget Min')
+                ->setFormTypeOption('attr', ['class' => 'price-input', 'data-target' => 'min-price']),
+            FormattedPriceField::new('budjetMin', 'Formaté')->onlyOnDetail(),
+
+            IntegerField::new('budjetMax', 'Budget Max')
+                ->setFormTypeOption('attr', ['class' => 'price-input', 'data-target' => 'max-price']),
+            FormattedPriceField::new('budjetMax', 'Formaté')->onlyOnDetail(),
 
             ChoiceField::new('paiement')
                 ->setChoices([

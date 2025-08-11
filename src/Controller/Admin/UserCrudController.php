@@ -70,8 +70,7 @@ class UserCrudController extends AbstractCrudController
                 ->setFormat('dd/MM/yyyy HH:mm')
                 ->onlyOnIndex(),
             DateTimeField::new('subscribedAt', 'Date d\'abonnement')
-                ->setFormat('dd/MM/yyyy HH:mm')
-                ->onlyOnIndex(),
+                ->setFormat('dd/MM/yyyy HH:mm'),
             IntegerField::new('duration', 'Durée d\'abonnement (en mois)')
                 ->setHelp('Durée de l\'abonnement en mois.'),
         ];

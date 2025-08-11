@@ -31,5 +31,7 @@ services:
     App\Form\Extension\BienTypeExtension:
         tags:
             - { name: form.type_extension }
+    
+    App\Service\PriceFormatter: ~
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
