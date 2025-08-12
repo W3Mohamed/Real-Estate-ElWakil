@@ -208,10 +208,10 @@ final class AgenceController extends AbstractController
             $biens[$client->getId()] = $biensClient;
             $nbBiens[$client->getId()] = count($biensClient);
         }   
-
+        $allClients = $clientsRepository->findAll();
         // Tri par nbBiens si demandé
         if (isset($sortByNbBiens)) {
-            usort($clients, function($a, $b) use ($nbBiens, $sortByNbBiens) {
+            usort($allClients, function($a, $b) use ($nbBiens, $sortByNbBiens) {
                 $countA = $nbBiens[$a->getId()] ?? 0;
                 $countB = $nbBiens[$b->getId()] ?? 0;
                 
