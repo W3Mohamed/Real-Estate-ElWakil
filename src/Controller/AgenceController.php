@@ -160,9 +160,7 @@ final class AgenceController extends AbstractController
                         }elseif ($field === 'date_creation') {
                             $queryBuilder->addOrderBy('c.createdAt', $direction);
                         }elseif ($field === 'nbBiens'){
-                            // Pour nbBiens, on ne peut pas trier dans la requête SQL
-                            // car c'est calculé après. On marque juste qu'un tri sera appliqué
-                            $sortByNbBiens = ['field' => 'nbBiens', 'direction' => $direction];
+                            $sortByNbBiens = $direction;
                         }else{
                             $queryBuilder->addOrderBy('c.' . $field, $direction);
                         }
@@ -170,27 +168,89 @@ final class AgenceController extends AbstractController
                     }
                 }
             }
-            // Ordre par défaut seulement si aucun tri personnalisé n'a été appliqué
-            if (!$orderApplied) {
-                $queryBuilder->orderBy('c.id', 'DESC');
+
+            // Gestion spécifique du tri par nbBiens
+            if ($sortByNbBiens) {
+                // 1. Récupérer TOUS les clients correspondant aux filtres (sans pagination)
+                $allClientsQuery = clone $queryBuilder;
+                $allClients = $allClientsQuery->getQuery()->getResult();
+                
+                // 2. Calculer nbBiens pour tous les clients
+                $allNbBiens = [];
+                foreach ($allClients as $client) {
+                    $allNbBiens[$client->getId()] = count($bienMatching->findPotentialBiensForClient($client));
+                }
+                
+                // 3. Trier tous les clients selon nbBiens
+                usort($allClients, function($a, $b) use ($allNbBiens, $sortByNbBiens) {
+                    $countA = $allNbBiens[$a->getId()] ?? 0;
+                    $countB = $allNbBiens[$b->getId()] ?? 0;
+                    
+                    return strtoupper($sortByNbBiens) === 'ASC' 
+                        ? $countA <=> $countB 
+                        : $countB <=> $countA;
+                });
+                
+                // 4. Extraire la portion paginée
+                $clients = array_slice($allClients, $offset, $limit);
+                $totalClients = count($allClients);
+                
+                // 5. Marquer que le tri a été appliqué
+                $orderApplied = true;
+            } else {
+                // Cas normal (sans tri par nbBiens)
+                if (!$orderApplied) {
+                    $queryBuilder->orderBy('c.id', 'DESC');
+                }
+                
+                // Comptage total
+                $countQuery = clone $queryBuilder;
+                $countQuery->select('COUNT(c.id)');
+                $totalClients = (int) $countQuery->getQuery()->getSingleScalarResult();
+                
+                // Récupération paginée
+                $clients = $queryBuilder
+                    ->setFirstResult($offset)
+                    ->setMaxResults($limit)
+                    ->getQuery()
+                    ->getResult();
             }
 
-            // Comptage total - version sécurisée
-            $countQuery = clone $queryBuilder;
-            $countQuery->select('COUNT(c.id)');
+            // Formatage et calculs supplémentaires...
+            // foreach ($clients as $client) {
+            //     $client->formatedMin = $this->formatPrix($client->getBudjetMin());
+            //     $client->formatedMax = $this->formatPrix($client->getBudjetMax());
+                
+            //     // Calcul nbBiens pour l'affichage (même si pas utilisé pour le tri)
+            //     $biensClient = $bienMatching->findPotentialBiensForClient($client);
+            //     $biens[$client->getId()] = $biensClient;
+            //     $nbBiens[$client->getId()] = count($biensClient);
+            // }
+
+
+
+
+            // // Ordre par défaut seulement si aucun tri personnalisé n'a été appliqué
+            // if (!$orderApplied) {
+            //     $queryBuilder->orderBy('c.id', 'DESC');
+            // }
+
+            // // Comptage total - version sécurisée
+            // $countQuery = clone $queryBuilder;
+            // $countQuery->select('COUNT(c.id)');
             
-            try {
-                $totalClients = (int) $countQuery->getQuery()->getSingleScalarResult();
-            } catch (\Doctrine\ORM\NoResultException $e) {
-                $totalClients = 0;
-            } 
+            // try {
+            //     $totalClients = (int) $countQuery->getQuery()->getSingleScalarResult();
+            // } catch (\Doctrine\ORM\NoResultException $e) {
+            //     $totalClients = 0;
+            // } 
             
-            // Récupération des clients paginés
-            $clients = $queryBuilder
-                ->setFirstResult($offset)
-                ->setMaxResults($limit)
-                ->getQuery()
-                ->getResult();
+            // // Récupération des clients paginés
+            // $clients = $queryBuilder
+            //     ->setFirstResult($offset)
+            //     ->setMaxResults($limit)
+            //     ->getQuery()
+            //     ->getResult();
 
         }
 
@@ -208,20 +268,20 @@ final class AgenceController extends AbstractController
             $biens[$client->getId()] = $biensClient;
             $nbBiens[$client->getId()] = count($biensClient);
         }   
-        $allClients = $clientsRepository->findAll();
+
         // Tri par nbBiens si demandé
-        if (isset($sortByNbBiens)) {
-            usort($allClients, function($a, $b) use ($nbBiens, $sortByNbBiens) {
-                $countA = $nbBiens[$a->getId()] ?? 0;
-                $countB = $nbBiens[$b->getId()] ?? 0;
+        // if (isset($sortByNbBiens)) {
+        //     usort($clients, function($a, $b) use ($nbBiens, $sortByNbBiens) {
+        //         $countA = $nbBiens[$a->getId()] ?? 0;
+        //         $countB = $nbBiens[$b->getId()] ?? 0;
                 
-                if ($sortByNbBiens['direction'] === 'ASC') {
-                    return $countA <=> $countB;
-                } else {
-                    return $countB <=> $countA;
-                }
-            });
-        }
+        //         if ($sortByNbBiens['direction'] === 'ASC') {
+        //             return $countA <=> $countB;
+        //         } else {
+        //             return $countB <=> $countA;
+        //         }
+        //     });
+        // }
 
         $user = $this->getUser();
         $totalPages = $totalClients > 0 ? ceil($totalClients / $limit) : 1; // Si aucun client, on affiche une seule page
