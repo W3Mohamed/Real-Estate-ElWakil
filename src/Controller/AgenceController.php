@@ -7,6 +7,7 @@ use App\Repository\BienRepository;
 use App\Repository\ClientsRepository;
 use App\Repository\CommuneRepository;
 use App\Repository\TypeRepository;
+use App\Repository\UserRepository;
 use App\Repository\WilayaRepository;
 use App\Service\BienMatchingService;
 use Doctrine\ORM\Mapping\Id;
@@ -20,12 +21,41 @@ use Symfony\Component\Validator\Constraints\All;
 final class AgenceController extends AbstractController
 {
     #[Route('/agence', name: 'agence')]
-    public function index(): Response
+    public function index(BienRepository $bienRepository,
+     ClientsRepository $clientsRepository, UserRepository $userRepository): Response
     {
+        $nbBiens = count($bienRepository->findAll());
+        $nbClients = count($clientsRepository->findAll());
+
         $user = $this->getUser();
+        $utilisateur = $userRepository->find($user);
+
+        $now = new \DateTimeImmutable();
+        // Calcul des jours restants
+        $subscriptionEnd = $utilisateur->getSubscribedAt()->add(new \DateInterval('P' . $utilisateur->getDuration() . 'M'));
+        $daysRemaining = $now->diff($subscriptionEnd)->days;
+
+        // Déterminer la classe CSS en fonction des jours restants
+        $statusClass = 'bg-green-100 text-green-800'; // Par défaut
+        $statusText = 'Abonnement Actif';
+        
+        if ($daysRemaining <= 5) {
+            $statusClass = 'bg-red-100 text-red-800';
+            $statusText = 'Expire bientôt';
+        } elseif ($daysRemaining <= 0) {
+            $statusClass = 'bg-gray-100 text-gray-800';
+            $statusText = 'Abonnement expiré';
+        }
         
         return $this->render('agence/index.html.twig', [
             'user' => $user,
+            'nbBiens' => $nbBiens,
+            'nbClients' => $nbClients,
+            'days_remaining' => $daysRemaining,
+            'status_class' => $statusClass,
+            'status_text' => $statusText,
+            'subscription_end' => $subscriptionEnd,
+            'utilisateur' => $utilisateur,
         ]);
     }
 
@@ -57,6 +87,7 @@ final class AgenceController extends AbstractController
 
         //$sort = $request->query->all('sort') ?? [];
         $sort = $request->query->all('sort');
+        $sortByNbBiens = null;
         $page = $request->query->getInt('page', 1); // Page courante (1 par défaut)
         $limit = 20; // Nombre d'éléments par page
         
@@ -114,7 +145,7 @@ final class AgenceController extends AbstractController
             foreach ($sort as $field => $direction) {
                 if (in_array(strtoupper($direction), ['ASC', 'DESC'])) {
                     // Vérification des champs autorisés pour le tri
-                    $allowedFields = ['nom', 'telephone', 'transaction', 'type', 'wilayas', 'commune', 'paiement', 'date_creation'];
+                    $allowedFields = ['nom', 'telephone', 'transaction', 'type', 'wilayas', 'commune', 'paiement', 'nbBiens', 'date_creation'];
                     if (in_array($field, $allowedFields)) {
                         // Cas particulier pour les relations
                         if ($field === 'wilayas') {
@@ -128,6 +159,10 @@ final class AgenceController extends AbstractController
                                 ->addOrderBy('t.libelle', $direction);
                         }elseif ($field === 'date_creation') {
                             $queryBuilder->addOrderBy('c.createdAt', $direction);
+                        }elseif ($field === 'nbBiens'){
+                            // Pour nbBiens, on ne peut pas trier dans la requête SQL
+                            // car c'est calculé après. On marque juste qu'un tri sera appliqué
+                            $sortByNbBiens = ['field' => 'nbBiens', 'direction' => $direction];
                         }else{
                             $queryBuilder->addOrderBy('c.' . $field, $direction);
                         }
@@ -173,6 +208,20 @@ final class AgenceController extends AbstractController
             $biens[$client->getId()] = $biensClient;
             $nbBiens[$client->getId()] = count($biensClient);
         }   
+
+        // Tri par nbBiens si demandé
+        if (isset($sortByNbBiens)) {
+            usort($clients, function($a, $b) use ($nbBiens, $sortByNbBiens) {
+                $countA = $nbBiens[$a->getId()] ?? 0;
+                $countB = $nbBiens[$b->getId()] ?? 0;
+                
+                if ($sortByNbBiens['direction'] === 'ASC') {
+                    return $countA <=> $countB;
+                } else {
+                    return $countB <=> $countA;
+                }
+            });
+        }
 
         $user = $this->getUser();
         $totalPages = $totalClients > 0 ? ceil($totalClients / $limit) : 1; // Si aucun client, on affiche une seule page

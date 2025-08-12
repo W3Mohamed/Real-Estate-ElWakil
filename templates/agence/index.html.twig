@@ -10,10 +10,37 @@
         <p class="text-lg text-gray-600">
             Accès exclusif à notre portefeuille de biens premium et à votre réseau de clients qualifiés.
         </p>
-        <div class="mt-4 flex flex-wrap gap-2">
-            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Abonnement Actif</span>
-            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">{{ user.duration }} mois restants</span>
+        <div class="mt-4 flex flex-wrap gap-2 items-center">
+            <!-- Statut abonnement -->
+            <span class="{{ status_class }} text-xs font-medium px-2.5 py-0.5 rounded">
+                {{ status_text }}
+            </span>
+            
+            <!-- Jours restants -->
+            {% if days_remaining > 0 %}
+                <span class="{{ days_remaining <= 5 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' }} text-xs font-medium px-2.5 py-0.5 rounded">
+                    {{ days_remaining }} jours restants
+                </span>
+            {% else %}
+                <span class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                    Abonnement expiré
+                </span>
+            {% endif %}
+            
+            <!-- Bouton de renouvellement -->
+            <a href="https://m.me/elwakilimmobilier" 
+            target="_blank"
+            class="ml-auto bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium px-3 py-1.5 rounded transition-colors">
+                Renouveler mon abonnement
+            </a>
         </div>
+        
+        <!-- Message d'alerte si expiration proche -->
+        {% if days_remaining > 0 and days_remaining <= 5 %}
+            <div class="mt-2 text-sm text-red-600">
+                ⚠ Votre abonnement expire dans {{ days_remaining }} jours. Renouvelez-le pour continuer à profiter de nos services.
+            </div>
+        {% endif %}
     </div>
     
     <!-- Stats Cards -->
@@ -23,7 +50,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-gray-500">Biens disponibles</p>
-                    <h3 class="text-2xl font-bold">127</h3>
+                    <h3 class="text-2xl font-bold">{{nbBiens}}</h3>
                 </div>
                 <div class="p-3 rounded-full bg-blue-100 text-blue-600">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -31,7 +58,7 @@
                     </svg>
                 </div>
             </div>
-            <a href="#" class="mt-4 inline-flex items-center text-blue-600 hover:text-blue-800">
+            <a href="{{path('liste')}}" class="mt-4 inline-flex items-center text-blue-600 hover:text-blue-800">
                 Voir tous les biens
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -44,7 +71,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-gray-500">Clients actifs</p>
-                    <h3 class="text-2xl font-bold">89</h3>
+                    <h3 class="text-2xl font-bold">{{nbClients}}</h3>
                 </div>
                 <div class="p-3 rounded-full bg-green-100 text-green-600">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -52,7 +79,7 @@
                     </svg>
                 </div>
             </div>
-            <a href="#" class="mt-4 inline-flex items-center text-green-600 hover:text-green-800">
+            <a href="{{path('acheteur')}}" class="mt-4 inline-flex items-center text-green-600 hover:text-green-800">
                 Voir tous les clients
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -78,12 +105,12 @@
                     </svg>
                     <span>Filtres avancés par critères clients</span>
                 </li>
-                <li class="flex items-start">
+                {# <li class="flex items-start">
                     <svg class="h-5 w-5 text-blue-500 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                     </svg>
                     <span>Notifications pour nouveaux biens correspondant à vos clients</span>
-                </li>
+                </li> #}
             </ul>
         </div>
 
