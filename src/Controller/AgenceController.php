@@ -54,6 +54,9 @@ final class AgenceController extends AbstractController
         if ($wilayaId) {
             $communes = $communeRepository->findBy(['wilaya' => $wilayaId],['nom' => 'ASC']);
         }
+
+        //$sort = $request->query->all('sort') ?? [];
+        $sort = $request->query->all('sort');
         $page = $request->query->getInt('page', 1); // Page courante (1 par défaut)
         $limit = 20; // Nombre d'éléments par page
         
@@ -67,8 +70,8 @@ final class AgenceController extends AbstractController
             $totalClients = count($bienMatching->findPotentialClientsForBien($bien));
         }else{
             // Cas général avec filtres
-            $queryBuilder = $clientsRepository->createQueryBuilder('c')
-                ->orderBy('c.id', 'DESC');
+            $queryBuilder = $clientsRepository->createQueryBuilder('c');
+             //   ->orderBy('c.id', 'DESC');
             
             // Application des filtres
             if ($wilayaId) {
@@ -107,6 +110,36 @@ final class AgenceController extends AbstractController
                     ->setParameter('paiement', $paiement);
             }
 
+            $orderApplied = false;
+            foreach ($sort as $field => $direction) {
+                if (in_array(strtoupper($direction), ['ASC', 'DESC'])) {
+                    // Vérification des champs autorisés pour le tri
+                    $allowedFields = ['nom', 'telephone', 'transaction', 'type', 'wilayas', 'commune', 'paiement', 'date_creation'];
+                    if (in_array($field, $allowedFields)) {
+                        // Cas particulier pour les relations
+                        if ($field === 'wilayas') {
+                            $queryBuilder->leftJoin('c.wilayas', 'w')
+                                ->addOrderBy('w.nom', $direction);
+                        } elseif ($field === 'commune') {
+                            $queryBuilder->leftJoin('c.commune', 'co')
+                                ->addOrderBy('co.nom', $direction);
+                        }elseif ($field === 'type') {
+                            $queryBuilder->leftJoin('c.type', 't')
+                                ->addOrderBy('t.libelle', $direction);
+                        }elseif ($field === 'date_creation') {
+                            $queryBuilder->addOrderBy('c.createdAt', $direction);
+                        }else{
+                            $queryBuilder->addOrderBy('c.' . $field, $direction);
+                        }
+                        $orderApplied = true;
+                    }
+                }
+            }
+            // Ordre par défaut seulement si aucun tri personnalisé n'a été appliqué
+            if (!$orderApplied) {
+                $queryBuilder->orderBy('c.id', 'DESC');
+            }
+
             // Comptage total - version sécurisée
             $countQuery = clone $queryBuilder;
             $countQuery->select('COUNT(c.id)');
@@ -123,14 +156,18 @@ final class AgenceController extends AbstractController
                 ->setMaxResults($limit)
                 ->getQuery()
                 ->getResult();
+
         }
+
         foreach ($clients as $client) {
             // Format the price from cents to a readable format
             $client->formatedMin = $this->formatPrix($client->getBudjetMin());
             $client->formatedMax = $this->formatPrix($client->getBudjetMax());
         }
+
         $biens = [];
         $nbBiens = [];
+
         foreach ($clients as $client) {
             $biensClient = $bienMatching->findPotentialBiensForClient($client);
             $biens[$client->getId()] = $biensClient;
