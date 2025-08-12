@@ -92,11 +92,15 @@ class BienRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findLastEight()
+   public function findLastEight()
     {
         return $this->createQueryBuilder('b')
-            ->orderBy('b.id', 'DESC')  // Tri par ID décroissant
-            ->setMaxResults(8)         // Limite à 8 résultats
+            ->leftJoin('b.images', 'i')
+            ->leftJoin('b.facebooks', 'f')
+            ->where('i.id IS NOT NULL') // Au moins une image
+            ->andWhere('(b.youtube IS NOT NULL OR b.insta IS NOT NULL OR b.tiktok IS NOT NULL OR f.id IS NOT NULL)') // Au moins un lien
+            ->orderBy('b.id', 'DESC')
+            ->setMaxResults(8)
             ->getQuery()
             ->getResult();
     }

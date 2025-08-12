@@ -72,7 +72,10 @@ final class HomeController extends AbstractController
     
         $queryBuilder = $bienRepository->createQueryBuilder('b')
             ->leftJoin('b.images', 'i') // Charge TOUTES les images associées
-            ->addSelect('i') // Important pour éviter le N+1 problem
+            ->leftJoin('b.facebooks', 'f')
+            ->addSelect('i')
+            ->where('i.id IS NOT NULL') // Filtre les biens avec images
+            ->andWhere('(b.youtube IS NOT NULL OR b.insta IS NOT NULL OR b.tiktok IS NOT NULL OR f.id IS NOT NULL)')  // Important pour éviter le N+1 problem
             ->orderBy('b.id', 'DESC');
     
         if ($searchQuery) {
