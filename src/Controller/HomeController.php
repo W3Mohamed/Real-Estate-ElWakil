@@ -333,7 +333,7 @@ final class HomeController extends AbstractController
             return '0 DZD';
         }
     
-        return $result . ' DZD';
+        return $result;
     } 
     
     private function formatPrixMap(?int $prixCentimes): string
