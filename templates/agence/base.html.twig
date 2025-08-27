@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Agence -ElWakil{% endblock %}</title>
-    {# <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>"> #}
     <link rel="icon" type="image/x-icon" href="{{ asset('img/logo2.jpg')}}">
     <script src="{{ asset('js/script.js') }}"></script>
     <!-- Tailwind CSS -->
@@ -13,14 +12,55 @@
     
     <!-- Font Awesome pour les icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .sidebar-transition {
+            transition: transform 0.3s ease-in-out;
+        }
+        @media (max-width: 768px) {
+            .sidebar-hidden {
+                transform: translateX(-100%);
+            }
+            .sidebar-visible {
+                transform: translateX(0);
+            }
+            .overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 40;
+            }
+            .overlay-active {
+                display: block;
+            }
+        }
+    </style>
 </head>
 <body class="bg-white">
-    <!-- Sidebar Container -->
-    <div class="flex flex-col h-screen bg-gray-800 text-white w-64 fixed left-0 top-0">
+    <!-- Overlay pour mobile -->
+    <div class="overlay" id="overlay"></div>
 
+    <!-- Bouton hamburger pour mobile -->
+    <button id="sidebarToggle" class="md:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-gray-800 text-white">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </button>
+
+    <!-- Sidebar Container -->
+    <div class="flex flex-col h-screen bg-gray-800 text-white w-64 fixed left-0 top-0 z-40 sidebar-transition md:translate-x-0 sidebar-hidden" id="sidebar">
         <!-- Logo / Header -->
-        <div class="p-4 border-b border-gray-700">
+        <div class="p-4 border-b border-gray-700 flex justify-between items-center">
             <h1 class="text-xl font-bold">MonEspacePro</h1>
+            <button id="closeSidebar" class="md:hidden">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
         </div>
 
         <!-- User Profile Section -->
@@ -80,13 +120,73 @@
     </div>
 
     <!-- Main Content Offset -->
-    <div class="ml-64 p-6">
+    <div class="md:ml-64 p-4 md:p-6 mt-14 md:mt-0" id="mainContent">
         {% block body %}
         {% endblock %}
     </div>
 
-   
-
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const closeSidebar = document.getElementById('closeSidebar');
+            const overlay = document.getElementById('overlay');
+            const mainContent = document.getElementById('mainContent');
+            
+            // Fonction pour ouvrir le sidebar
+            function openSidebar() {
+                sidebar.classList.remove('sidebar-hidden');
+                sidebar.classList.add('sidebar-visible');
+                overlay.classList.add('overlay-active');
+                sidebarToggle.style.display = 'none';
+                document.body.style.overflow = 'hidden';
+            }
+            
+            // Fonction pour fermer le sidebar
+            function closeSidebarFunc() {
+                sidebar.classList.remove('sidebar-visible');
+                sidebar.classList.add('sidebar-hidden');
+                overlay.classList.remove('overlay-active');
+                sidebarToggle.style.display = 'block';
+                document.body.style.overflow = 'auto';
+            }
+            
+            // Événements pour le bouton hamburger
+            sidebarToggle.addEventListener('click', openSidebar);
+            
+            // Événements pour fermer le sidebar
+            closeSidebar.addEventListener('click', closeSidebarFunc);
+            overlay.addEventListener('click', closeSidebarFunc);
+            
+            // Fermer le sidebar en cliquant sur un lien (sur mobile)
+            const sidebarLinks = document.querySelectorAll('#sidebar a');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth < 768) {
+                        closeSidebarFunc();
+                    }
+                });
+            });
+            
+            // Ajuster en fonction de la taille de l'écran
+            function handleResize() {
+                if (window.innerWidth >= 768) {
+                    sidebar.classList.remove('sidebar-hidden', 'sidebar-visible');
+                    overlay.classList.remove('overlay-active');
+                    document.body.style.overflow = 'auto';
+                } else {
+                    if (!sidebar.classList.contains('sidebar-hidden') && !sidebar.classList.contains('sidebar-visible')) {
+                        sidebar.classList.add('sidebar-hidden');
+                    }
+                }
+            }
+            
+            // Écouter les changements de taille d'écran
+            window.addEventListener('resize', handleResize);
+            
+            // Initialiser
+            handleResize();
+        });
+    </script>
 </body>
 </html>
