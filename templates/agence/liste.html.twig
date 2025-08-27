@@ -67,81 +67,148 @@
         </div>
 
         <!-- Table Container -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Libellé</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prix</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Transaction</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Wilaya</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Commune</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Papier</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <!-- Example Row 1 -->
-                        {% for bien in biens %}
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="h-16 w-24 bg-gray-200 rounded-lg overflow-hidden">
-                                    {% if bien.images|length > 0 %}
-                                        <img src="{{ asset('uploads/biens/' ~ bien.images|first.image) }}" class="h-full w-full object-cover">                                        
-                                    {% else %} 
-                                        <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Bien" class="h-full w-full object-cover">
-                                    {% endif %}
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="text-sm font-medium text-gray-900">{{ bien.libelle }}</div>
-                                    <div class="text-sm text-gray-500">{{bien.type.libelle}}</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-semibold text-gray-900">{{bien.formatPrix}} DA</div>
-                                    <div class="text-sm text-gray-500">{{bien.superficie}} m²</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{bien.transaction == 'vente' ? ' bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}}">
-                                        {{bien.transaction}}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{bien.wilaya.nom}}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{bien.commune.nom}}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-pink-100 text-pink-800">
-                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
-                                        {{bien.papier}}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <a href="{{ path('detail' ,{'id': bien.id}) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200 inline-flex items-center">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="overflow-x-auto">
+            <!-- Version desktop -->
+            <table class="min-w-full divide-y divide-gray-200 hidden md:table">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Libellé</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prix</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Transaction</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Wilaya</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Commune</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Papier</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for bien in biens %}
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="h-16 w-24 bg-gray-200 rounded-lg overflow-hidden">
+                                {% if bien.images|length > 0 %}
+                                    <img src="{{ asset('uploads/biens/' ~ bien.images|first.image) }}" class="h-full w-full object-cover">                                        
+                                {% else %} 
+                                    <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Bien" class="h-full w-full object-cover">
+                                {% endif %}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="text-sm font-medium text-gray-900">{{ bien.libelle }}</div>
+                                <div class="text-sm text-gray-500">{{bien.type.libelle}}</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-semibold text-gray-900">{{bien.formatPrix}} DA</div>
+                                <div class="text-sm text-gray-500">{{bien.superficie}} m²</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{bien.transaction == 'vente' ? ' bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}}">
+                                    {{bien.transaction}}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{bien.wilaya.nom}}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{bien.commune.nom}}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-pink-100 text-pink-800">
+                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    {{bien.papier}}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <div class="flex flex-col space-y-2">
+                                    <a href="{{ path('detail' ,{'id': bien.id}) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition duration-200 inline-flex items-center justify-center">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                         </svg>
                                         Voir
                                     </a>
-                                    <a href="{{ path('acheteur' ,{'id': bien.id}) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200 inline-flex items-center">
-                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <a href="{{ path('acheteur' ,{'id': bien.id}) }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition duration-200 inline-flex items-center justify-center">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                                         </svg>
                                         {{nbClients[bien.id]}} Acheteurs
                                     </a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Version mobile -->
+            <div class="md:hidden">
+                {% for bien in biens %}
+                <div class="border-b border-gray-200 p-4">
+                    <!-- En-tête avec image et informations principales -->
+                    <div class="flex items-start space-x-4 mb-3">
+                        <div class="flex-shrink-0">
+                            <div class="h-20 w-28 bg-gray-200 rounded-lg overflow-hidden">
+                                {% if bien.images|length > 0 %}
+                                    <img src="{{ asset('uploads/biens/' ~ bien.images|first.image) }}" class="h-full w-full object-cover">                                        
+                                {% else %} 
+                                    <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Bien" class="h-full w-full object-cover">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-sm font-medium text-gray-900 truncate">{{ bien.libelle }}</h3>
+                            <p class="text-sm text-gray-500">{{bien.type.libelle}}</p>
+                            <div class="mt-1 flex flex-wrap items-center gap-2">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium {{bien.transaction == 'vente' ? ' bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}}">
+                                    {{bien.transaction}}
+                                </span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-pink-100 text-pink-800">
+                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    {{bien.papier}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Détails -->
+                    <div class="grid grid-cols-2 gap-2 text-sm mb-3">
+                        <div class="text-gray-500">Prix:</div>
+                        <div class="font-semibold">{{bien.formatPrix}} DA</div>
+
+                        <div class="text-gray-500">Superficie:</div>
+                        <div>{{bien.superficie}} m²</div>
+
+                        <div class="text-gray-500">Wilaya:</div>
+                        <div>{{bien.wilaya.nom}}</div>
+
+                        <div class="text-gray-500">Commune:</div>
+                        <div>{{bien.commune.nom}}</div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex space-x-2">
+                        <a href="{{ path('detail' ,{'id': bien.id}) }}" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition duration-200 inline-flex items-center justify-center">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                            Voir
+                        </a>
+                        <a href="{{ path('acheteur' ,{'id': bien.id}) }}" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition duration-200 inline-flex items-center justify-center">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                            {{nbClients[bien.id]}}
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </div>
 
-        <!-- Pagination -->
-        <div class="flex items-center justify-between mt-6">
+        <!-- Pagination (responsive) -->
+        <div class="flex items-center justify-between mt-6 px-4 pb-4">
             <div class="flex-1 flex justify-between sm:hidden">
                 {% if current_page > 1 %}
                     <a href="{{ path('liste', app.request.query.all | merge({'page': current_page - 1})) }}" 
@@ -157,15 +224,15 @@
                 {% endif %}
             </div>
             
-            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                <div>
+            <div class="hidden sm:flex-1 sm:flex sm:flex-col sm:space-y-3 md:flex-row md:space-y-0 md:items-center md:justify-between">
+                <div class="text-center md:text-left">
                     <p class="text-sm text-gray-700">
                         Affichage de <span class="font-medium">{{ ((current_page - 1) * limit) + 1 }}</span> 
                         à <span class="font-medium">{{ min(current_page * limit, nbBiens) }}</span>
                         sur <span class="font-medium">{{ nbBiens }}</span> biens
                     </p>
                 </div>
-                <div>
+                <div class="flex justify-center">
                     <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
                         {% if current_page > 1 %}
                             <a href="{{ path('liste', app.request.query.all | merge({'page': current_page - 1})) }}" 
@@ -183,11 +250,11 @@
 
                         {% if start_page > 1 %}
                             <a href="{{ path('liste', app.request.query.all | merge({'page': 1})) }}" 
-                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 hidden sm:inline-block">
                                 1
                             </a>
                             {% if start_page > 2 %}
-                                <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                                <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hidden sm:inline-block">
                                     ...
                                 </span>
                             {% endif %}
@@ -202,12 +269,12 @@
 
                         {% if end_page < total_pages %}
                             {% if end_page < total_pages - 1 %}
-                                <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+                                <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hidden sm:inline-block">
                                     ...
                                 </span>
                             {% endif %}
                             <a href="{{ path('liste', app.request.query.all | merge({'page': total_pages})) }}" 
-                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 hidden sm:inline-block">
                                 {{ total_pages }}
                             </a>
                         {% endif %}
