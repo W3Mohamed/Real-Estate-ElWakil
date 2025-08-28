@@ -1,19 +1,18 @@
 {
   "entrypoints": {
-    "admin": {
-      "js": [
-        "/build/runtime.js",
-        "/build/vendors-node_modules_core-js_modules_es_array_for-each_js-node_modules_core-js_modules_es_arr-abde4f.js",
-        "/build/admin.js"
-      ]
-    },
     "app": {
       "js": [
-        "/build/runtime.js",
-        "/build/app.js"
+        "/build/runtime.7337ff42.js",
+        "/build/app.5c5da79f.js"
       ],
       "css": [
-        "/build/app.css"
+        "/build/app.d9309bd8.css"
+      ]
+    },
+    "admin": {
+      "js": [
+        "/build/runtime.7337ff42.js",
+        "/build/admin.42e30503.js"
       ]
     }
   }
