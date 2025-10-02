@@ -107,7 +107,7 @@ class UserCrudController extends AbstractCrudController
                 $user->setStatus(true);
                 $user->setCreatedAt(new \DateTimeImmutable());
                 $user->setSubscribedAt(new \DateTimeImmutable());
-                $user->setDuration(1);
+                $user->setDuration(6);
                 $user->setPassword($plainPassword);
 
                 $this->entityManager->persist($user);
