@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\PromoteurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PromoteurRepository::class)]
@@ -43,6 +44,18 @@ class Promoteur
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $password = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $subscribedAt = null;
+
+    #[ORM\Column]
+    private ?int $duration = null;
+
+    #[ORM\Column(type: 'json')]
+    private ?array $roles = [];
 
     public function __construct()
     {
@@ -158,6 +171,57 @@ class Promoteur
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    public function getSubscribedAt(): ?\DateTimeImmutable
+    {
+        return $this->subscribedAt;
+    }
+
+    public function setSubscribedAt(\DateTimeImmutable $subscribedAt): static
+    {
+        $this->subscribedAt = $subscribedAt;
+
+        return $this;
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(int $duration): static
+    {
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        $roles[] = 'ROLE_PROMOTEUR';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(?array $roles): static
+    {
+        $this->roles = $roles ?? [];
 
         return $this;
     }

@@ -1,0 +1,117 @@
+<html lang=fr>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Promoteur - ElWakil{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/logo2.jpg')}}">
+    <script src="{{ asset('js/script.js') }}"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .sidebar-transition {
+            transition: transform 0.3s ease-in-out;
+        }
+        @media (max-width: 768px) {
+            .sidebar-hidden {
+                transform: translateX(-100%);
+            }
+            .sidebar-visible {
+                transform: translateX(0);
+            }
+            .overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 40;
+            }
+            .overlay-active {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Overlay pour mobile -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Bouton hamburger pour mobile -->
+    <button id="sidebarToggle" class="md:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-gray-800 text-white">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </button>
+
+    <!-- Sidebar Container -->
+    <div class="flex flex-col h-screen bg-gray-800 text-white w-64 fixed left-0 top-0 z-40 sidebar-transition md:translate-x-0 sidebar-hidden" id="sidebar">
+        <!-- Logo / Header -->
+        <div class="p-4 border-b border-gray-700 flex justify-between items-center">
+            <h1 class="text-xl font-bold">MonEspacePro</h1>
+            <button id="closeSidebar" class="md:hidden">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto p-4">
+            <ul>
+                <li class="mb-2">
+                    <a href="" class="flex items-center p-2 rounded hover:bg-gray-700 {% if app.request.attributes.get('_route') == 'promoteur' %}bg-gray-700{% endif %}">
+                        <i class="fa fa-home mr-3"></i>
+                        Tableau de bord
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="" class="flex items-center p-2 rounded hover:bg-gray-700 {% if app.request.attributes.get('_route') == 'promoteur_potential_terrains' %}bg-gray-700{% endif %}">
+                        <i class="fa fa-map-marker-alt mr-3"></i>
+                        Terrains potentiels
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="" class="flex items-center p-2 rounded hover:bg-gray-700 {% if app.request.attributes.get('_route') == 'promoteur_profile' %}bg-gray-700{% endif %}">
+                        <i class="fa fa-user mr-3"></i>
+                        Mon profil
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="md:ml-64 p-6">
+        {% block body %}
+        {% endblock %}  
+    </div>
+    <script>
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const closeSidebar = document.getElementById('closeSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.remove('sidebar-hidden');
+            sidebar.classList.add('sidebar-visible');
+            overlay.classList.add('overlay-active');
+        });
+
+        closeSidebar.addEventListener('click', () => {
+            sidebar.classList.remove('sidebar-visible');
+            sidebar.classList.add('sidebar-hidden');
+            overlay.classList.remove('overlay-active');
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('sidebar-visible');
+            sidebar.classList.add('sidebar-hidden');
+            overlay.classList.remove('overlay-active');
+        });
+    </script>
+</body>
+</html>

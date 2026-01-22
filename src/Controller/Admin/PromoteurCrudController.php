@@ -5,6 +5,8 @@ namespace App\Controller\Admin;
 use App\Entity\Promoteur;
 use App\Entity\Type;
 use App\Service\TerrainMatching;
+use Doctrine\ORM\EntityManagerInterface;
+use Dom\Text;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -25,7 +27,7 @@ class PromoteurCrudController extends AbstractCrudController
     {
         $entity = parent::createEntity($entityFqcn);
         $entity->setCreatedAt(new \DateTimeImmutable());
-        
+
         return $entity;
     }
 
@@ -34,7 +36,16 @@ class PromoteurCrudController extends AbstractCrudController
         return Promoteur::class;
     }
 
-    
+    public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        if ($entityInstance instanceof Promoteur) {
+            // On force le rôle à la création
+            $entityInstance->setRoles(['ROLE_PROMOTEUR']);
+        }
+
+        parent::persistEntity($entityManager, $entityInstance);
+    }
+
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -49,8 +60,10 @@ class PromoteurCrudController extends AbstractCrudController
                 ->formatValue(function ($value, $entity) {
                     return $entity->getType()?->getLibelle();
                 }),
-            IntegerField::new('superficie_min'),
-            IntegerField::new('superficie_max'),
+            IntegerField::new('superficie_min')
+                ->hideOnIndex(),
+            IntegerField::new('superficie_max')
+                ->hideOnIndex(),
             // Association avec l'entité Wilaya (ManyToMany)
             AssociationField::new('wilayas')
                 ->setFormTypeOption('choice_label', 'nom')
@@ -68,12 +81,12 @@ class PromoteurCrudController extends AbstractCrudController
                 ->formatValue(function ($value, $entity) {
                     return $entity->getCommune()?->getNom();
                 }),
-                
+
             IntegerField::new('countPotontielTerrains', 'Terrains potentiels')
                 ->setTemplatePath('admin/field/terrain_potential_promoteur.html.twig')
                 ->onlyOnIndex()
                 ->setSortable(false)
-                ->formatValue(function ($value,Promoteur $entity) {
+                ->formatValue(function ($value, Promoteur $entity) {
                     return $this->countPotontielTerrains($entity);
                 }),
             DateTimeField::new('createdAt')
@@ -81,6 +94,12 @@ class PromoteurCrudController extends AbstractCrudController
                 ->setFormat('dd/MM/yyyy HH:mm')
                 ->hideWhenCreating()
                 ->setFormTypeOption('disabled', true),
+            DateTimeField::new('subscribedAt')
+                ->setFormat('dd/MM/yyyy HH:mm'),
+            IntegerField::new('duration', 'Durée d\'abonnement (en mois)')
+                ->setHelp('Durée de l\'abonnement en mois.'),
+            TextField::new('password', 'Mot de passe')
+                ->setHelp('Le mot de passe doit être sécurisé et unique.'),
         ];
     }
 
@@ -95,7 +114,7 @@ class PromoteurCrudController extends AbstractCrudController
     }
 
     public function countPotontielTerrains(Promoteur $promoteur): int
-    {  
+    {
         return count($this->matchingService->findPotentialTerrainsForPromoteur($promoteur));
     }
 
@@ -109,5 +128,4 @@ class PromoteurCrudController extends AbstractCrudController
             'terrains' => $terrains,
         ]);
     }
-    
 }
