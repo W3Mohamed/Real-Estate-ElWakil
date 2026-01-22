@@ -27,9 +27,16 @@ class Type
     #[ORM\Column(length: 255)]
     private ?string $icon = null;
 
+    /**
+     * @var Collection<int, Promoteur>
+     */
+    #[ORM\OneToMany(targetEntity: Promoteur::class, mappedBy: 'type')]
+    private Collection $promoteurs;
+
     public function __construct()
     {
         $this->biens = new ArrayCollection();
+        $this->promoteurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -86,6 +93,36 @@ class Type
             // set the owning side to null (unless already changed)
             if ($bien->getType() === $this) {
                 $bien->setType(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Promoteur>
+     */
+    public function getPromoteurs(): Collection
+    {
+        return $this->promoteurs;
+    }
+
+    public function addPromoteur(Promoteur $promoteur): static
+    {
+        if (!$this->promoteurs->contains($promoteur)) {
+            $this->promoteurs->add($promoteur);
+            $promoteur->setType($this);
+        }
+
+        return $this;
+    }
+
+    public function removePromoteur(Promoteur $promoteur): static
+    {
+        if ($this->promoteurs->removeElement($promoteur)) {
+            // set the owning side to null (unless already changed)
+            if ($promoteur->getType() === $this) {
+                $promoteur->setType(null);
             }
         }
 

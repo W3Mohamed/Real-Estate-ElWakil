@@ -6,6 +6,7 @@ use App\Entity\Bien;
 use App\Entity\Clients;
 use App\Entity\Contact;
 use App\Entity\Paramettre;
+use App\Entity\Promoteur;
 use App\Entity\Proposition;
 use App\Entity\Reservation;
 use App\Entity\Slider;
@@ -76,6 +77,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Biens immobiliers', 'fas fa-home', Bien::class);
         yield MenuItem::linkToCrud('Acheteurs', 'fas fa-users', Clients::class);
         yield MenuItem::linkToCrud('Vendeurs', 'fas fa-user', User::class);
+        yield MenuItem::linkToCrud('Promoteurs', 'fas fa-user', Promoteur::class);
         
         // Section Configuration
         yield MenuItem::section('Configuration');

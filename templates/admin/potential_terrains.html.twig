@@ -1,0 +1,81 @@
+{# templates/admin/potential_terrain.twig #}
+
+{% extends '@EasyAdmin/layout.html.twig' %}
+
+{% block page_title %}
+    Terrains potentiels pour {{ promoteur.nom }}
+{% endblock %}
+
+{% block content_title %}
+    <h1 class="title">Terrains potentiels pour {{ promoteur.nom }}</h1>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa fa-search"></i> Critères de recherche
+                    </div>
+                    <div class="card-subtitle">
+                        {% if promoteur.wilayas is not empty %}
+                            | Wilaya(s) : 
+                            {% for wilaya in promoteur.wilayas %}
+                                {{ wilaya.nom }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {% if promoteur.type is not empty %}
+                            | Type(s) : 
+                            {% for type in promoteur.type %}
+                                {{ type.libelle }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    {% if terrains|length > 0 %}
+                        <div class="table-responsive">
+                            <table class="table table-striped mb-0">
+                                <thead>
+                                    <tr>
+                                        <th width="60">ID</th>
+                                        <th>Titre</th>
+                                        <th width="120">Prix</th>
+                                        <th width="150">Wilaya</th>
+                                        <th width="150">Commune</th>
+                                        <th width="120">Type</th>
+                                        <th>Superficie</th>
+                                        <th width="100" class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for terrain in terrains %}
+                                        <tr>
+                                            <td><span class="badge badge-primary">{{ terrain.id }}</span></td>
+                                            <td>{{ terrain.libelle ?? 'N/A' }}</td>
+                                            <td><strong>{{ terrain.prix }}Da</strong></td>
+                                            <td>{{ terrain.wilaya ? terrain.wilaya.nom : 'N/A' }}</td>
+                                            <td>{{ terrain.commune ? terrain.commune.nom : 'N/A' }}</td>
+                                            <td>{{ terrain.type ? terrain.type.libelle : 'N/A' }}</td>
+                                            <td>{{ terrain.superficie }} m²</td>
+                                            <td class="text-center">
+                                                <a href="detail?id={{ terrain.id }}" class="btn btn-sm btn-primary" title="Voir dans le site">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info m-3">
+                            Aucun terrain ne correspond aux critères de ce promoteur.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
