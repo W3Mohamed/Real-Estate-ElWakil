@@ -78,4 +78,30 @@ class SecurityController extends AbstractController
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
+
+    // login pour les promoteurs
+    #[Route(path: '/promoteur/login', name: 'app_promoteur_login')]
+    public function promoteurLogin(AuthenticationUtils $authenticationUtils,
+        TypeRepository $typeRepository,
+        ParamettreRepository $paramettreRepository): Response
+    {
+        // get the login error if there is one
+        $error = $authenticationUtils->getLastAuthenticationError();
+        // last username entered by the user
+        $lastUsername = $authenticationUtils->getLastUsername();
+        $types = $typeRepository->findAll();
+        $parametres = $paramettreRepository->find(1);
+        return $this->render('security/promoteur/login.html.twig', [
+            'types' => $types,
+            'parametres' => $parametres,
+            'last_username' => $lastUsername,
+            'error' => $error,
+        ]);
+    }  
+    
+    #[Route(path: '/promoteur/logout', name: 'app_promoteur_logout')]
+    public function promoteurLogout(): void
+    {
+        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    }   
 }
