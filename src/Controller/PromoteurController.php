@@ -6,21 +6,27 @@ use App\Repository\BienRepository;
 use App\Repository\PromoteurRepository;
 use App\Service\TerrainMatching;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class PromoteurController extends AbstractController
 {
     #[Route('/promoteur', name: 'promoteur')]
-    public function index(TerrainMatching $terrainMatching, PromoteurRepository $promoteurRepository): Response
-    {   
+    public function index(TerrainMatching $terrainMatching, 
+     PromoteurRepository $promoteurRepository,Request $request): Response
+    {
         $user = $this->getUser();
         $promoteur = $promoteurRepository->find($user);
-        
-        $limit = 10;
 
-        $terrainMatching = $terrainMatching->findPotentialTerrainsForPromoteur($promoteur);
-        $nbTerrain = count($terrainMatching);
+        $limit = 10;
+        $page = $request->query->getInt('page', 1);
+        $offset = ($page - 1) * $limit;
+
+        $allTerrains = $terrainMatching->findPotentialTerrainsForPromoteur($promoteur);
+        $totalTerrains = count($allTerrains);
+
+        $terrainsPaginated = $terrainMatching->findPotentialTerrainsForPromoteur($promoteur, $limit, $offset);
 
         // Calcul des jours restants pour l'abonnement
         $now = new \DateTimeImmutable();
@@ -30,7 +36,7 @@ final class PromoteurController extends AbstractController
         // Déterminer la classe CSS en fonction des jours restants
         $statusClass = 'bg-green-100 text-green-800'; // Par défaut
         $statusText = 'Abonnement Actif';
-        
+
         if ($daysRemaining <= 5) {
             $statusClass = 'bg-red-100 text-red-800';
             $statusText = 'Expire bientôt';
@@ -40,11 +46,14 @@ final class PromoteurController extends AbstractController
         }
 
         return $this->render('promoteur/index.html.twig', [
-            'terrains' => $terrainMatching,
-            'nbTerrain' => $nbTerrain,
+            'terrains' => $terrainsPaginated,
+            'totalTerrains' => $totalTerrains,
+            'currentPage' => $page,
+            'maxPages' => ceil($totalTerrains / $limit),
             'days_remaining' => $daysRemaining,
             'status_class' => $statusClass,
-            'status_text' => $statusText
+            'status_text' => $statusText,
+            'promoteur' => $promoteur
         ]);
     }
 }
