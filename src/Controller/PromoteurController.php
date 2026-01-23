@@ -31,18 +31,20 @@ final class PromoteurController extends AbstractController
         // Calcul des jours restants pour l'abonnement
         $now = new \DateTimeImmutable();
         $subscriptionEnd = $promoteur->getSubscribedAt()->add(new \DateInterval('P' . $promoteur->getDuration() . 'M'));
-        $daysRemaining = $now->diff($subscriptionEnd)->days;
+        $interval = $now->diff($subscriptionEnd);
+        $daysRemaining = $interval->invert ? -($interval->days) : $interval->days;
 
         // Déterminer la classe CSS en fonction des jours restants
         $statusClass = 'bg-green-100 text-green-800'; // Par défaut
         $statusText = 'Abonnement Actif';
 
-        if ($daysRemaining <= 5) {
-            $statusClass = 'bg-red-100 text-red-800';
-            $statusText = 'Expire bientôt';
-        } elseif ($daysRemaining <= 0) {
+        if ($daysRemaining <= 0) {
             $statusClass = 'bg-gray-100 text-gray-800';
             $statusText = 'Abonnement expiré';
+
+        } elseif ($daysRemaining <= 5) {
+            $statusClass = 'bg-red-100 text-red-800';
+            $statusText = 'Expire bientôt';            
         }
 
         return $this->render('promoteur/index.html.twig', [

@@ -43,6 +43,7 @@ security:
         promoteur:
             pattern: ^/promoteur
             provider: app_promoteur_provider
+            user_checker: App\Security\PromoteurChecker
             form_login:
                 login_path: app_promoteur_login
                 check_path: app_promoteur_login
