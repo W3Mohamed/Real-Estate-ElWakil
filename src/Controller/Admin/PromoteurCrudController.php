@@ -6,6 +6,7 @@ use App\Entity\Promoteur;
 use App\Entity\Type;
 use App\Service\TerrainMatching;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Dom\Text;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -69,6 +70,10 @@ class PromoteurCrudController extends AbstractCrudController
                 ->setFormTypeOption('choice_label', 'nom')
                 ->setFormTypeOption('multiple', true) // Permettre plusieurs sélections
                 ->setFormTypeOption('by_reference', false)
+                ->setFormTypeOption('query_builder', function (EntityRepository $er) {
+                    return $er->createQueryBuilder('w')
+                        ->orderBy('w.nom', 'ASC');
+                })
                 ->formatValue(function ($value, $entity) {
                     return implode(', ', $entity->getWilayas()->map(fn($w) => $w->getNom())->toArray());
                 }),

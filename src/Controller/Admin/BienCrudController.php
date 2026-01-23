@@ -92,7 +92,7 @@ class BienCrudController extends AbstractCrudController
             ->setFormTypeOption('choice_label', 'nom')
             ->setFormTypeOption('query_builder', function (EntityRepository $er) {
                 return $er->createQueryBuilder('w')
-                    ->orderBy('w.id', 'ASC');
+                    ->orderBy('w.nom', 'ASC');
             })
             ->formatValue(function ($value, $entity) {
                 return $entity->getWilaya() ? $entity->getWilaya()->getNom() : '';

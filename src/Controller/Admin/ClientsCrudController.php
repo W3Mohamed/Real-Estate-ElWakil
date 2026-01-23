@@ -58,6 +58,10 @@ class ClientsCrudController extends AbstractCrudController
                 ->setFormTypeOption('choice_label', 'nom')
                 ->setFormTypeOption('multiple', true) // Permettre plusieurs sélections
                 ->setFormTypeOption('by_reference', false)
+                ->setFormTypeOption('query_builder', function (EntityRepository $er) {
+                    return $er->createQueryBuilder('w')
+                        ->orderBy('w.nom', 'ASC');
+                })
                 ->formatValue(function ($value, $entity) {
                     return implode(', ', $entity->getWilayas()->map(fn(Wilaya $w) => $w->getNom())->toArray());
                 }),

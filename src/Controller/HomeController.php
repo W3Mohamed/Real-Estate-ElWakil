@@ -171,8 +171,9 @@ final class HomeController extends AbstractController
         // Récupération des données pour les listes déroulantes
         $types = $typeRepository->findAll();
         $parametres = $paramettreRepository->find(1); 
-        $wilayas = $wilayaRepository->findAll();
-    
+        // par ordre alphabétique
+        $wilayas = $wilayaRepository->findBy([], ['nom' => 'ASC']);
+
         $communes = [];
         if ($wilayaId) {
             $communes = $communeRepository->findBy(['wilaya' => $wilayaId],['nom' => 'ASC']);
