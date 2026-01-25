@@ -208,11 +208,11 @@ class ClientsCrudController extends AbstractCrudController
             // );
             ->add(
                 NumericFilter::new('budjetMin', 'Budget minimum')
-                    ->setFormTypeOption('comparison_type_options.data', '>=') // Force l'opérateur par défaut
+                    ->setFormTypeOption('comparison_type_options.data', '<=') // Force l'opérateur par défaut
             )
             ->add(
                 NumericFilter::new('budjetMax', 'Budget maximum')
-                    ->setFormTypeOption('comparison_type_options.data', '<=') // Force l'opérateur par défaut
+                    ->setFormTypeOption('comparison_type_options.data', '>=') // Force l'opérateur par défaut
             );
     }
 }
