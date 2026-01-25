@@ -62,8 +62,10 @@ class PromoteurCrudController extends AbstractCrudController
                     return $entity->getType()?->getLibelle();
                 }),
             IntegerField::new('superficie_min')
+                 ->setHelp('Superficie minimale en m².')
                 ->hideOnIndex(),
             IntegerField::new('superficie_max')
+                ->setHelp('Superficie maximale en m².')
                 ->hideOnIndex(),
             // Association avec l'entité Wilaya (ManyToMany)
             AssociationField::new('wilayas')

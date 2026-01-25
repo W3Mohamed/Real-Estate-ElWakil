@@ -38,7 +38,7 @@ class ClientsCrudController extends AbstractCrudController
     {
         $entity = parent::createEntity($entityFqcn);
         $entity->setCreatedAt(new \DateTimeImmutable());
-        
+
         return $entity;
     }
 
@@ -46,7 +46,7 @@ class ClientsCrudController extends AbstractCrudController
     {
         return Clients::class;
     }
-    
+
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -75,7 +75,7 @@ class ClientsCrudController extends AbstractCrudController
                 ->formatValue(function ($value, $entity) {
                     return $entity->getCommune()?->getNom();
                 }),
-                
+
             AssociationField::new('type')
                 ->setFormTypeOption('choice_label', 'libelle')
                 ->setFormTypeOption('multiple', true)
@@ -83,7 +83,7 @@ class ClientsCrudController extends AbstractCrudController
                 ->formatValue(function ($value, $entity) {
                     return implode(', ', $entity->getType()->map(fn(Type $w) => $w->getLibelle())->toArray());
                 }),
-            
+
             ChoiceField::new(('transaction'))
                 ->setChoices([
                     'Achat' => 'vente',
@@ -91,7 +91,7 @@ class ClientsCrudController extends AbstractCrudController
                 ])
                 ->setRequired(true)
                 ->renderExpanded(false), // Affiche sous forme de liste déroulante
-                
+
             IntegerField::new('budjetMin', 'Budget Min')
                 ->setFormTypeOption('attr', ['class' => 'price-input', 'data-target' => 'min-price']),
             FormattedPriceField::new('budjetMin', 'Formaté')->onlyOnDetail(),
@@ -119,7 +119,7 @@ class ClientsCrudController extends AbstractCrudController
                 ->onlyOnIndex() // Ne s'affiche que dans la liste
                 ->hideWhenCreating() // Cache le champ dans le formulaire de création
                 ->setFormTypeOption('disabled', true) // Empêche la modification si affiché
-                        
+
         ];
     }
 
@@ -143,7 +143,7 @@ class ClientsCrudController extends AbstractCrudController
         $client = $this->getContext()->getEntity()->getInstance();
         $biens = $this->matchingService->findPotentialBiensForClient($client);
 
-         // Créer une page personnalisée pour afficher les biens
+        // Créer une page personnalisée pour afficher les biens
         return $this->render('admin/potential_biens.html.twig', [
             'client' => $client,
             'biens' => $biens,
@@ -154,56 +154,65 @@ class ClientsCrudController extends AbstractCrudController
     {
         return $filters
             // Filtre pour les wilayas
-            ->add(EntityFilter::new('wilayas', 'Wilaya(s)')
-                ->setFormTypeOption('value_type_options', [
-                    'class' => 'App\Entity\Wilaya',
-                    'multiple' => true,
-                    'choice_label' => 'nom',
-                    'placeholder' => 'Sélectionner wilayas...',
-                    'query_builder' => function (EntityRepository $er) {
-                        return $er->createQueryBuilder('w')
-                            ->orderBy('w.nom', 'ASC');
-                    }
-                ])
-                ->canSelectMultiple()
+            ->add(
+                EntityFilter::new('wilayas', 'Wilaya(s)')
+                    ->setFormTypeOption('value_type_options', [
+                        'class' => 'App\Entity\Wilaya',
+                        'multiple' => true,
+                        'choice_label' => 'nom',
+                        'placeholder' => 'Sélectionner wilayas...',
+                        'query_builder' => function (EntityRepository $er) {
+                            return $er->createQueryBuilder('w')
+                                ->orderBy('w.nom', 'ASC');
+                        }
+                    ])
+                    ->canSelectMultiple()
             )
-            
-            // Filtre pour le type
-            ->add(EntityFilter::new('type', 'Type(s)')
-                ->setFormTypeOption('value_type_options', [
-                    'class' => 'App\Entity\Type',
-                    'multiple' => true,
-                    'choice_label' => 'libelle',
-                    'placeholder' => 'Sélectionner types...',
-                    'query_builder' => function (EntityRepository $er) {
-                        return $er->createQueryBuilder('t')
-                            ->orderBy('t.libelle', 'ASC');
-                    }
-                ])
-                ->canSelectMultiple()
-            )
-            
-            // Filtres pour budget
-            ->add(NumericFilter::new('budjetMin', 'Budget minimum')
-                ->setFormTypeOptions([
-                    'attr' => [
-                        'placeholder' => 'Montant minimum...',
-                        'min' => 0,
-                        'step' => 1000
-                    ]
-                ])
-            )
-            ->add(NumericFilter::new('budjetMax', 'Budget maximum')
-                ->setFormTypeOptions([
-                    'attr' => [
-                        'placeholder' => 'Montant maximum...',
-                        'min' => 0,
-                        'step' => 1000
-                    ]
-                ])
-                    );
-            
 
+            // Filtre pour le type
+            ->add(
+                EntityFilter::new('type', 'Type(s)')
+                    ->setFormTypeOption('value_type_options', [
+                        'class' => 'App\Entity\Type',
+                        'multiple' => true,
+                        'choice_label' => 'libelle',
+                        'placeholder' => 'Sélectionner types...',
+                        'query_builder' => function (EntityRepository $er) {
+                            return $er->createQueryBuilder('t')
+                                ->orderBy('t.libelle', 'ASC');
+                        }
+                    ])
+                    ->canSelectMultiple()
+            )
+
+            // Filtres pour budget min et max
+            // ->add(
+            //     NumericFilter::new('budjetMin', 'Budget minimum')
+            //         ->setFormTypeOptions([
+            //             'attr' => [
+            //                 'placeholder' => 'Montant minimum...',
+            //                 'min' => 0,
+            //                 'step' => 1000
+            //             ]
+            //         ])
+            // )
+            // ->add(
+            //     NumericFilter::new('budjetMax', 'Budget maximum')
+            //         ->setFormTypeOptions([
+            //             'attr' => [
+            //                 'placeholder' => 'Montant maximum...',
+            //                 'min' => 0,
+            //                 'step' => 1000
+            //             ]
+            //         ])
+            // );
+            ->add(
+                NumericFilter::new('budjetMin', 'Budget minimum')
+                    ->setFormTypeOption('comparison_type_options.data', '>=') // Force l'opérateur par défaut
+            )
+            ->add(
+                NumericFilter::new('budjetMax', 'Budget maximum')
+                    ->setFormTypeOption('comparison_type_options.data', '<=') // Force l'opérateur par défaut
+            );
     }
-    
 }

@@ -63,7 +63,8 @@ final class AgenceController extends AbstractController
     public function acheteur(ClientsRepository $clientsRepository,
      BienMatchingService $bienMatching,Request $request,
      BienRepository $bienRepository,WilayaRepository $wilayaRepository,
-     CommuneRepository $communeRepository): Response
+     CommuneRepository $communeRepository,
+     TypeRepository $typeRepository): Response
     {
         $idBien = $request->query->get('id') ?? null;
         $bien = null;
@@ -73,19 +74,19 @@ final class AgenceController extends AbstractController
 
         $wilayaId = $request->query->get('wilaya');
         $commune = $request->query->get('commune');
+        $typeId = $request->query->get('type');
         $search = $request->query->get('search');
         $prixMin = $request->query->get('prixMin');
         $prixMax = $request->query->get('prixMax');
         $transaction = $request->query->get('transaction');
         $paiement = $request->query->get('paiement');
-
-        $wilayas = $wilayaRepository->findAll();
+        $wilayas = $wilayaRepository->findBy([], ['nom' => 'ASC']);
         $communes = [];
         if ($wilayaId) {
             $communes = $communeRepository->findBy(['wilaya' => $wilayaId],['nom' => 'ASC']);
         }
+        $types = $typeRepository->findAll();
 
-        //$sort = $request->query->all('sort') ?? [];
         $sort = $request->query->all('sort');
         $sortByNbBiens = null;
         $page = $request->query->getInt('page', 1); // Page courante (1 par défaut)
@@ -119,6 +120,12 @@ final class AgenceController extends AbstractController
             if ($search) {
                 $queryBuilder->andWhere('c.nom LIKE :search')
                     ->setParameter('search', '%'.$search.'%');
+            }
+
+            if ($typeId) {
+                $queryBuilder->innerJoin('c.type', 't') 
+                 ->andWhere('t.id = :typeId')
+                 ->setParameter('typeId', (int)$typeId);
             }
 
             if ($prixMin) {
@@ -297,6 +304,8 @@ final class AgenceController extends AbstractController
             'limit' => $limit,
             'wilayas' => $wilayas,
             'communes' => $communes,
+            'types' => $types,
+            'currentType' => $typeId,
             'currentWilaya' => $wilayaId,
             'currentCommune' => $commune,
             'idBien' => $idBien,
