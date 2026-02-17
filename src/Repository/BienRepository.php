@@ -104,8 +104,7 @@ class BienRepository extends ServiceEntityRepository
             ->andWhere('(b.youtube IS NOT NULL OR b.insta IS NOT NULL OR b.tiktok IS NOT NULL OR f.id IS NOT NULL)') // Au moins un lien
             ->orderBy('b.id', 'DESC')
             ->setMaxResults(8)
-            ->getQuery()
-            ->getResult();
+            ->getQuery();
 
         $paginator = new Paginator($query);
         return iterator_to_array($paginator);
