@@ -191,6 +191,7 @@ final class HomeController extends AbstractController
             'currentType' => $typeId,
             'currentWilaya' => $wilayaId,
             'currentCommune' => $commune,
+            'currentPapier' => $papier,
             'currentPriceMin' => $priceMin,
             'currentPriceMax' => $priceMax,
             'currentAreaMin' => $areaMin,
