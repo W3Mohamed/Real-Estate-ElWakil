@@ -61,14 +61,14 @@ final class HomeController extends AbstractController
         $searchQuery = $request->query->get('query');
         // Récupération des paramètres de filtrage
         $transaction = $request->query->get('t');
-        $typeId = $request->query->get('type');
-        $wilayaId = $request->query->get('wilaya');
-        $commune = $request->query->get('commune');
+        $typeId = (int)$request->query->get('type');
+        $wilayaId = (int)$request->query->get('wilaya');
+        $commune = (int)$request->query->get('commune');
         $papier = $request->query->get('papier');
-        $priceMin = $request->query->get('price_min');
-        $priceMax = $request->query->get('price_max');
-        $areaMin = $request->query->get('area_min');
-        $areaMax = $request->query->get('area_max');
+        $priceMin = (int)$request->query->get('price_min');
+        $priceMax = (int)$request->query->get('price_max');
+        $areaMin = (int)$request->query->get('area_min');
+        $areaMax = (int)$request->query->get('area_max');
     
         $queryBuilder = $bienRepository->createQueryBuilder('b')
             ->leftJoin('b.images', 'i') // Charge TOUTES les images associées
