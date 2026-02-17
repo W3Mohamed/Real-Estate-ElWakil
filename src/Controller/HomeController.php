@@ -65,10 +65,10 @@ final class HomeController extends AbstractController
         $wilayaId = (int)$request->query->get('wilaya');
         $commune = (int)$request->query->get('commune');
         $papier = $request->query->get('papier');
-        $priceMin = (int)$request->query->get('price_min');
-        $priceMax = (int)$request->query->get('price_max');
-        $areaMin = (int)$request->query->get('area_min');
-        $areaMax = (int)$request->query->get('area_max');
+        $priceMin = (int)$request->query->get('price_min') ?? null;
+        $priceMax = (int)$request->query->get('price_max') ?? null;
+        $areaMin = (int)$request->query->get('area_min') ?? null;
+        $areaMax = (int)$request->query->get('area_max') ?? null;
     
         $queryBuilder = $bienRepository->createQueryBuilder('b')
             ->leftJoin('b.images', 'i') // Charge TOUTES les images associées
@@ -178,6 +178,85 @@ final class HomeController extends AbstractController
         if ($wilayaId) {
             $communes = $communeRepository->findBy(['wilaya' => $wilayaId],['nom' => 'ASC']);
         }
+        // jusqu'à 20 milliards
+        $priceOptions = [
+            ['label' => '300 millions', 'value' => '3000000'],
+            ['label' => '600 millions', 'value' => '6000000'],
+            ['label' => '900 millions', 'value' => '9000000'],
+            ['label' => '1.2 milliard', 'value' => '12000000'],
+            ['label' => '1.5 milliard', 'value' => '15000000'],
+            ['label' => '1.8 milliard', 'value' => '18000000'],
+            ['label' => '2.1 milliards', 'value' => '21000000'],
+            ['label' => '2.4 milliards', 'value' => '24000000'],
+            ['label' => '2.7 milliards', 'value' => '27000000'],
+            ['label' => '3 milliards', 'value' => '30000000'],
+            ['label' => '3.5 milliards', 'value' => '35000000'],
+            ['label' => '4 milliards', 'value' => '40000000'],
+            ['label' => '4.5 milliards', 'value' => '45000000'],
+            ['label' => '5 milliards', 'value' => '50000000'],
+            ['label' => '5.5 milliards', 'value' => '55000000'],
+            ['label' => '6 milliards', 'value' => '60000000'],
+            ['label' => '6.5 milliards', 'value' => '65000000'],
+            ['label' => '7 milliards', 'value' => '70000000'],
+            ['label' => '7.5 milliards', 'value' => '75000000'],
+            ['label' => '8 milliards', 'value' => '80000000'],
+            ['label' => '8.5 milliards', 'value' => '85000000'],
+            ['label' => '9 milliards', 'value' => '90000000'],
+            ['label' => '9.5 milliards', 'value' => '95000000'],
+            ['label' => '10 milliards', 'value' => '100000000'],
+            ['label' => '11 milliards', 'value' => '110000000'],
+            ['label' => '12 milliards', 'value' => '120000000'],
+            ['label' => '13 milliards', 'value' => '130000000'],
+            ['label' => '14 milliards', 'value' => '140000000'],
+            ['label' => '15 milliards', 'value' => '150000000'],
+            ['label' => '16 milliards', 'value' => '160000000'],
+            ['label' => '17 milliards', 'value' => '170000000'],
+            ['label' => '18 milliards', 'value' => '180000000'],
+            ['label' => '19 milliards', 'value' => '190000000'],
+            ['label' => '20 milliards et plus', 'value' => '200000000-9999999999']
+        ];
+        // jusqu'à 20 hektares
+        $areaOptions = [
+            ['label' => '50 m²', 'value' => '50'],
+            ['label' => '100 m²', 'value' => '100'],
+            ['label' => '200 m²', 'value' => '200'],
+            ['label' => '300 m²', 'value' => '300'],
+            ['label' => '400 m²', 'value' => '400'],
+            ['label' => '500 m²', 'value' => '500'],
+            ['label' => '600 m²', 'value' => '600'],
+            ['label' => '700 m²', 'value' => '700'],
+            ['label' => '800 m²', 'value' => '800'],
+            ['label' => '900 m²', 'value' => '900'],
+            ['label' => '0.1 hektares', 'value' => '1000'],
+            ['label' => '0.2 hektares', 'value' => '2000'],
+            ['label' => '0.3 hektares', 'value' => '3000'],
+            ['label' => '0.4 hektares', 'value' => '4000'],
+            ['label' => '0.5 hektares', 'value' => '5000'],
+            ['label' => '0.6 hektares', 'value' => '6000'],
+            ['label' => '0.7 hektares', 'value' => '7000'],
+            ['label' => '0.8 hektares', 'value' => '8000'],
+            ['label' => '0.9 hektares', 'value' => '9000'],
+            ['label' => '1 hektares', 'value' => '10000'],
+            ['label' => '2 hektares', 'value' => '20000'],
+            ['label' => '3 hektares', 'value' => '30000'],
+            ['label' => '4 hektares', 'value' => '40000'],
+            ['label' => '5 hektares', 'value' => '50000'],
+            ['label' => '6 hektares', 'value' => '60000'],
+            ['label' => '7 hektares', 'value' => '70000'],
+            ['label' => '8 hektares', 'value' => '80000'],
+            ['label' => '9 hektares', 'value' => '90000'],
+            ['label' => '10 hektares', 'value' => '100000'],
+            ['label' => '11 hektares', 'value' => '110000'],
+            ['label' => '12 hektares', 'value' => '120000'],
+            ['label' => '13 hektares', 'value' => '130000'],
+            ['label' => '14 hektares', 'value' => '140000'],
+            ['label' => '15 hektares', 'value' => '150000'],
+            ['label' => '16 hektares', 'value' => '160000'],
+            ['label' => '17 hektares', 'value' => '170000'],
+            ['label' => '18 hektares', 'value' => '180000'],
+            ['label' => '19 hektares', 'value' => '190000'],
+            ['label' => '20 hektares et plus', 'value' => '200000']
+        ];
 
         return $this->render('biens.html.twig',[
             'types' => $types,
@@ -197,7 +276,9 @@ final class HomeController extends AbstractController
             'currentAreaMin' => $areaMin,
             'currentAreaMax' => $areaMax,
             'communes' => $communes,
-            'wilayas' => $wilayas
+            'wilayas' => $wilayas,
+            'priceOptions' => $priceOptions,
+            'areaOptions' => $areaOptions
         ]);
     }
 

@@ -45,13 +45,13 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400 mr-2" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                         </svg>
-                        +500 biens disponibles
+                        +2500 biens disponibles
                     </div>
                     <div class="flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400 mr-2" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                         </svg>
-                        Agence certifiée
+                        Agence agréée par l'État
                     </div>
                 </div>
             </div>
@@ -123,25 +123,44 @@
                     <!-- Ligne 2 - Sliders compacts -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <!-- Prix Range -->
+                        <!-- Prix min et max dans un select -->
                         <div class="space-y-1">
                             <div class="flex justify-between text-xs text-gray-500">
                                 <span>Prix (DZD)</span>
-                                <span id="price-values">0 - 50M</span>
                             </div>
-                            <div id="price-slider" class="h-1 bg-gray-200 rounded-full"></div>
-                            <input type="hidden" id="price-min" name="price_min" value="{{ currentPriceMin }}">
-                            <input type="hidden" id="price-max" name="price_max" value="{{ currentPriceMax }}">
+                            <div class="flex gap-2">
+                                <select name="price_min" class="w-full px-2 py-1.5 text-xs border border-gray-200 rounded-md focus:ring-1 focus:ring-yellow-400 text-gray-700">
+                                    <option value="">Min</option>
+                                    {% for price in priceOptions %}
+                                        <option value="{{ price.value }}" {{ currentPriceMin == price.value ? 'selected' : '' }}>{{ price.label }}</option>
+                                    {% endfor %}
+                                </select>
+                                <select name="price_max" class="w-full px-2 py-1.5 text-xs border border-gray-200 rounded-md focus:ring-1 focus:ring-yellow-400 text-gray-700">
+                                    <option value="">Max</option>
+                                    {% for price in priceOptions %}
+                                        <option value="{{ price.value }}" {{ currentPriceMax == price.value ? 'selected' : '' }}>{{ price.label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
-                        
-                        <!-- Superficie Range -->
                         <div class="space-y-1">
                             <div class="flex justify-between text-xs text-gray-500">
                                 <span>Superficie (m²)</span>
-                                <span id="area-values">0 - 100000</span>
                             </div>
-                            <div id="area-slider" class="h-1 bg-gray-200 rounded-full"></div>
-                            <input type="hidden" id="area-min" name="area_min" value="{{ currentAreaMin }}">
-                            <input type="hidden" id="area-max" name="area_max" value="{{ currentAreaMax }}">
+                            <div class="flex gap-2">
+                                <select name="area_min" class="w-full px-2 py-1.5 text-xs border border-gray-200 rounded-md focus:ring-1 focus:ring-yellow-400 text-gray-700">
+                                    <option value="">Min</option>
+                                    {% for area in areaOptions %}
+                                        <option value="{{ area.value }}" {{ currentAreaMin == area.value ? 'selected' : '' }}>{{ area.label }}</option>
+                                    {% endfor %}
+                                </select>
+                                <select name="area_max" class="w-full px-2 py-1.5 text-xs border border-gray-200 rounded-md focus:ring-1 focus:ring-yellow-400 text-gray-700">
+                                    <option value="">Max</option>
+                                    {% for area in areaOptions %}
+                                        <option value="{{ area.value }}" {{ currentAreaMax == area.value ? 'selected' : '' }}>{{ area.label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
                     </div>
 
