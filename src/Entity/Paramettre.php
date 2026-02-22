@@ -38,6 +38,9 @@ class Paramettre
     #[ORM\Column(type: Types::TEXT)]
     private ?string $horaires = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $google_maps = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -135,6 +138,18 @@ class Paramettre
     public function setHoraires(string $horaires): static
     {
         $this->horaires = $horaires;
+
+        return $this;
+    }
+
+    public function getgoogle_maps(): ?string
+    {
+        return $this->google_maps;
+    }
+
+    public function setgoogle_maps(string $google_maps): static
+    {
+        $this->google_maps = $google_maps;
 
         return $this;
     }
