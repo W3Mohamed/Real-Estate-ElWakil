@@ -4,18 +4,12 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Dom\Text;
-use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
-use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
-use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
@@ -71,8 +65,15 @@ class UserCrudController extends AbstractCrudController
                 ->onlyOnIndex(),
             DateTimeField::new('subscribedAt', 'Date d\'abonnement')
                 ->setFormat('dd/MM/yyyy HH:mm'),
-            IntegerField::new('duration', 'Durée d\'abonnement (en mois)')
-                ->setHelp('Durée de l\'abonnement en mois.'),
+            ChoiceField::new('typeDuration', 'Type de durée')
+                ->setChoices([
+                    'Mois' => 'mois',
+                    'Jours' => 'jours',
+                ])
+                ->renderExpanded(false)
+                ->renderAsNativeWidget(),
+            IntegerField::new('duration', 'Durée d\'abonnement')
+                ->setHelp('Durée de l\'abonnement.'),
         ];
     }
 
@@ -107,7 +108,8 @@ class UserCrudController extends AbstractCrudController
                 $user->setStatus(true);
                 $user->setCreatedAt(new \DateTimeImmutable());
                 $user->setSubscribedAt(new \DateTimeImmutable());
-                $user->setDuration(6);
+                $user->setDuration(6); // 6 mois
+                $user->setTypeDuration('mois');
                 $user->setPassword($plainPassword);
 
                 $this->entityManager->persist($user);

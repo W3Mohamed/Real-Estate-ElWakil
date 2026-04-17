@@ -32,7 +32,13 @@ final class AgenceController extends AbstractController
 
         $now = new \DateTimeImmutable();
         // Calcul des jours restants
-        $subscriptionEnd = $utilisateur->getSubscribedAt()->add(new \DateInterval('P' . $utilisateur->getDuration() . 'M'));
+        $typeDuration = $utilisateur->getTypeDuration() ?? 'mois';
+        $duree = $utilisateur->getDuration() ?? 1;
+        if ($typeDuration === 'mois') {
+            $subscriptionEnd = $utilisateur->getSubscribedAt()->add(new \DateInterval('P' . $duree . 'M'));
+        } else {
+            $subscriptionEnd = $utilisateur->getSubscribedAt()->add(new \DateInterval('P' . $duree . 'D'));
+        }
         $daysRemaining = $now->diff($subscriptionEnd)->days;
 
         // Déterminer la classe CSS en fonction des jours restants

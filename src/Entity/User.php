@@ -40,6 +40,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?int $duration = null;
 
+    #[ORM\Column(length: 10)]
+    private ?string $typeDuration = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -151,6 +154,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setDuration(?int $duration): static
     {
         $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getTypeDuration(): ?string
+    {
+        return $this->typeDuration;
+    }
+
+    public function setTypeDuration(string $typeDuration): static
+    {
+        $this->typeDuration = $typeDuration;
 
         return $this;
     }

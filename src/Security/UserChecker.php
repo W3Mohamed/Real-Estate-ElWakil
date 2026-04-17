@@ -27,9 +27,15 @@ class UserChecker implements UserCheckerInterface
         }
 
         $now = new \DateTimeImmutable();
-        $dureeMois = $user->getDuration() ?? 1; // Utilise la durée stockée ou 1 mois par défaut
-        $subscriptionEnd = $subscribedAt->add(new \DateInterval('P'.$dureeMois.'M'));
-        
+        $duree = $user->getDuration() ?? 1; 
+        $typeDuration = $user->getTypeDuration() ?? 'mois';
+
+        if ($typeDuration === 'mois') {
+            $subscriptionEnd = $subscribedAt->add(new \DateInterval('P'.$duree.'M'));
+        } else {
+            $subscriptionEnd = $subscribedAt->add(new \DateInterval('P'.$duree.'D'));
+        }
+
         if ($now > $subscriptionEnd) {
             throw new CustomUserMessageAccountStatusException('Votre abonnement a expiré.');
         }
