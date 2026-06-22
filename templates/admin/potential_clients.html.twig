@@ -1,0 +1,106 @@
+{# templates/admin/potential_clients.html.twig #}
+{% extends '@EasyAdmin/layout.html.twig' %}
+
+{% block page_title %}
+    Clients potentiels pour {{ bien.libelle }}
+{% endblock %}
+
+{% block content_title %}
+    <h1 class="title">Clients potentiels pour {{ bien.libelle }}</h1>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fa fa-search"></i> Critères du bien
+                    </div>
+                    <div class="card-subtitle">
+                        Prix : {{ bien.prix }} Da
+                        | Wilaya : {{ bien.wilaya ? bien.wilaya.nom : 'N/A' }}
+                        | Commune : {{ bien.commune ? bien.commune.nom : 'N/A' }}
+                        | Type : {{ bien.type ? bien.type.libelle : 'N/A' }}
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    {% if clients|length > 0 %}
+                        <div class="table-responsive">
+                            <table class="table table-striped mb-0">
+                                <thead>
+                                    <tr>
+                                        <th width="60">ID</th>
+                                        <th>Nom</th>
+                                        <th width="150">Téléphone</th>
+                                        <th width="120">Budget min</th>
+                                        <th width="120">Budget max</th>
+                                        <th width="150">Wilaya(s)</th>
+                                        <th width="150">Type(s)</th>
+                                        <th width="100" class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for client in clients %}
+                                        <tr>
+                                            <td><span class="badge badge-primary">{{ client.id }}</span></td>
+                                            <td>{{ client.nom }}</td>
+                                            <td>{{ client.telephone }}</td>
+                                            <td><strong>{{ client.budjetMin }} Da</strong></td>
+                                            <td><strong>{{ client.budjetMax }} Da</strong></td>
+                                            <td>
+                                                {% if client.wilayas is not empty %}
+                                                    {% for wilaya in client.wilayas %}
+                                                        {{ wilaya.nom }}{% if not loop.last %}, {% endif %}
+                                                    {% endfor %}
+                                                {% else %}
+                                                    N/A
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if client.type is not empty %}
+                                                    {% for type in client.type %}
+                                                        {{ type.libelle }}{% if not loop.last %}, {% endif %}
+                                                    {% endfor %}
+                                                {% else %}
+                                                    N/A
+                                                {% endif %}
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="{{ ea_url()
+                                                    .setController('App\\Controller\\Admin\\ClientsCrudController')
+                                                    .setAction('detail')
+                                                    .setEntityId(client.id)
+                                                }}" class="btn btn-sm btn-primary" title="Voir">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="empty-collection">
+                            <i class="fa fa-info-circle"></i>
+                            <p>Aucun client ne correspond aux critères de ce bien.</p>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">
+                            <i class="fa fa-chart-bar"></i> Total : {{ clients|length }} client(s) trouvé(s)
+                        </span>
+                        <a href="{{ path('admin', {
+                            'crudAction': 'index',
+                            'crudControllerFqcn': 'App\\Controller\\Admin\\BienCrudController'
+                        }) }}" class="btn btn-secondary">
+                            <i class="fa fa-arrow-left"></i> Retour aux biens
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

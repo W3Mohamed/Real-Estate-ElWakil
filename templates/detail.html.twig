@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}ElWakil - {{bien.libelle}}{% endblock %}
+{% block description %}{{ bien.description }}{% endblock %}
+
 {% block stylesheets %}
     {{ parent() }}
     <style>

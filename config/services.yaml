@@ -31,5 +31,10 @@ services:
     App\Form\Extension\BienTypeExtension:
         tags:
             - { name: form.type_extension }
+    
+    App\Service\PriceFormatter: ~
+
+    App\Twig\AppExtension:
+        tags: ['twig.extension']
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

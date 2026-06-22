@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Bien;
+use App\Entity\Clients;
 use App\Form\FacebookFormType;
 use App\Repository\CommuneRepository;
 use Doctrine\ORM\EntityRepository;
@@ -16,6 +17,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use App\Form\ImageFormType;
+use App\Service\BienMatchingService;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
@@ -25,8 +29,7 @@ use Symfony\Component\HttpClient\HttpClient;
 class BienCrudController extends AbstractCrudController
 {
     private $logger;
-    
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger,private BienMatchingService $matchingService)
     {
         $this->logger = $logger;
     }
@@ -89,7 +92,7 @@ class BienCrudController extends AbstractCrudController
             ->setFormTypeOption('choice_label', 'nom')
             ->setFormTypeOption('query_builder', function (EntityRepository $er) {
                 return $er->createQueryBuilder('w')
-                    ->orderBy('w.id', 'ASC');
+                    ->orderBy('w.nom', 'ASC');
             })
             ->formatValue(function ($value, $entity) {
                 return $entity->getWilaya() ? $entity->getWilaya()->getNom() : '';
@@ -115,7 +118,17 @@ class BienCrudController extends AbstractCrudController
             ->setChoices([
                 'Acte de propriété' => 'Acte de propriété',
                 'Livret foncier' => 'Livret foncier',
+                'Acte et livret foncier' => 'Acte et livret foncier',
+                'Autre' => 'Autre',
             ]);
+
+        yield IntegerField::new('potentialBiensCount', 'Biens Potentiels')
+                ->setTemplatePath('admin/field/bien_potential_client.html.twig')
+                ->onlyOnIndex()
+                ->setSortable(false)
+                ->formatValue(function ($value, Bien $entity) {
+                    return $this->countPotentialClients($entity);
+                });
         // yield NumberField::new('latitude', 'Latitude')
         //     ->hideOnIndex()
         //     ->setLabel(' ')
@@ -332,6 +345,33 @@ class BienCrudController extends AbstractCrudController
         }
         
         return null;
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        // Ajoute une action pour voir les clients potentiels
+        $viewPotentialClients = Action::new('viewPotentialClients', 'Voir clients', 'fa fa-users')
+            ->linkToCrudAction('viewPotentialClients');
+
+        return $actions
+            ->add(Crud::PAGE_INDEX, $viewPotentialClients)
+            ->add(Crud::PAGE_DETAIL, $viewPotentialClients);
+    }
+
+    public function countPotentialClients(Bien $bien): int
+    {
+        return count($this->matchingService->findPotentialClientsForBien($bien));
+    }
+
+    public function viewPotentialClients()
+    {
+        $bien = $this->getContext()->getEntity()->getInstance();
+        $clients = $this->matchingService->findPotentialClientsForBien($bien);
+
+        return $this->render('admin/potential_clients.html.twig', [
+            'bien' => $bien,
+            'clients' => $clients,
+        ]);
     }
 
 }

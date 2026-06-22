@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}ElWakil - Agence Immobilière en Algérie{% endblock %}</title>
+    <meta name="description" content="{% block description %}Agence immobilière en Algérie spécialisée dans la vente et la location de biens immobiliers.{% endblock %}">
     {# <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>"> #}
     <link rel="icon" type="image/x-icon" href="{{ asset('img/logo2.jpg')}}">
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
@@ -33,7 +34,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
     <!-- Font Awesome pour les icônes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7231717993994670"
+     crossorigin="anonymous"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -248,7 +250,7 @@
     {% endblock %}
 
     <!-- Bouton principal Messenger -->
-    <a href="https://m.me/111107311979084" target="_blank" 
+    <a href="https://m.me/61559912434838" target="_blank" 
     class="fixed z-10 bottom-4 right-4 h-12 w-12 bg-blue-600 text-white px-3 py-3 rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 transition hidden"
     id="messenger-button">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="white" viewBox="0 0 24 24">
@@ -353,7 +355,9 @@
                 <div>
                     <h3 class="text-lg font-bold mb-4 text-yellow-500">Contact</h3>
                     <address class="not-italic">
-                        <p class="mb-2 flex items-center"><i class="fas fa-map-marker-alt mr-2 text-yellow-500"></i> {{parametres.adresse}}</p>
+                        <a href="{{parametres.google_maps}}" target="_blank" class="hover:text-yellow-500 transition">
+                            <p class="mb-2 flex items-center"><i class="fas fa-map-marker-alt mr-2 text-yellow-500"></i> {{parametres.adresse}}</p>
+                        </a>
                         <p class="mb-2 flex items-center"><i class="fas fa-phone mr-2 text-yellow-500"></i> {{parametres.telephone}}</p>
                         <p class="mb-2 flex items-center"><i class="fas fa-envelope mr-2 text-yellow-500"></i>{{parametres.email}}</p>
                     </address>

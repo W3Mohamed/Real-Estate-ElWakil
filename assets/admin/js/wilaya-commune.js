@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Utilisez les sélecteurs spécifiques à EasyAdmin
     const wilayaSelect = document.querySelector('#Bien_wilaya');
     const communeSelect = document.querySelector('#Bien_commune');
-    
+
     if (wilayaSelect && communeSelect) {
         // Initialiser avec un option vide
         communeSelect.innerHTML = '<option value="">Sélectionnez une wilaya d\'abord</option>';
@@ -41,4 +41,5 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
 });

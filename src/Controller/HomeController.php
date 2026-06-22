@@ -11,6 +11,7 @@ use App\Repository\ParamettreRepository;
 use App\Repository\SliderRepository;
 use App\Repository\TypeRepository;
 use App\Repository\WilayaRepository;
+use App\Service\BienMatchingService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,7 +25,8 @@ final class HomeController extends AbstractController
     public function index(TypeRepository $typeRepository,
         ParamettreRepository $paramettreRepository,
         SliderRepository $sliderRepository,
-        BienRepository $bienRepository): Response
+        BienRepository $bienRepository,
+        BienMatchingService $bienMatching): Response
     {
         $types = $typeRepository->findAll();
         $sliders = $sliderRepository->findBy([], ['ordre' => 'ASC']);
@@ -33,6 +35,7 @@ final class HomeController extends AbstractController
         // Formater les prix pour chaque bien
         foreach ($biens as $bien) {
             $bien->formattedPrix = $this->formatPrixDZD($bien->getPrix());
+            $bien->nbAcheteurs = count($bienMatching->findPotentialClientsForBien($bien));
         }
         // Récupérer les biens séparés par type de transaction
         $biensALouer = $bienRepository->findBiensALouer();
@@ -52,23 +55,27 @@ final class HomeController extends AbstractController
     public function biens(Request $request, 
         BienRepository $bienRepository, WilayaRepository $wilayaRepository,
         TypeRepository $typeRepository, CommuneRepository $communeRepository,
-        ParamettreRepository $paramettreRepository): Response
+        ParamettreRepository $paramettreRepository,
+        BienMatchingService $bienMatching): Response
     {
         $searchQuery = $request->query->get('query');
         // Récupération des paramètres de filtrage
         $transaction = $request->query->get('t');
-        $typeId = $request->query->get('type');
-        $wilayaId = $request->query->get('wilaya');
-        $commune = $request->query->get('commune');
+        $typeId = (int)$request->query->get('type');
+        $wilayaId = (int)$request->query->get('wilaya');
+        $commune = (int)$request->query->get('commune');
         $papier = $request->query->get('papier');
-        $priceMin = $request->query->get('price_min');
-        $priceMax = $request->query->get('price_max');
-        $areaMin = $request->query->get('area_min');
-        $areaMax = $request->query->get('area_max');
+        $priceMin = (int)$request->query->get('price_min') ?? null;
+        $priceMax = (int)$request->query->get('price_max') ?? null;
+        $areaMin = (int)$request->query->get('area_min') ?? null;
+        $areaMax = (int)$request->query->get('area_max') ?? null;
     
         $queryBuilder = $bienRepository->createQueryBuilder('b')
             ->leftJoin('b.images', 'i') // Charge TOUTES les images associées
-            ->addSelect('i') // Important pour éviter le N+1 problem
+            ->leftJoin('b.facebooks', 'f')
+            ->addSelect('i')
+            ->where('i.id IS NOT NULL') // Filtre les biens avec images
+            ->andWhere('(b.youtube IS NOT NULL OR b.insta IS NOT NULL OR b.tiktok IS NOT NULL OR f.id IS NOT NULL)')  // Important pour éviter le N+1 problem
             ->orderBy('b.id', 'DESC');
     
         if ($searchQuery) {
@@ -158,17 +165,98 @@ final class HomeController extends AbstractController
         foreach ($paginator as $bien) {
             $bien->formattedPrix = $this->formatPrixDZD($bien->getPrix());
             $biens[] = $bien;
+            $bien->nbAcheteurs = count($bienMatching->findPotentialClientsForBien($bien));
         }
 
         // Récupération des données pour les listes déroulantes
         $types = $typeRepository->findAll();
         $parametres = $paramettreRepository->find(1); 
-        $wilayas = $wilayaRepository->findAll();
-    
+        // par ordre alphabétique
+        $wilayas = $wilayaRepository->findBy([], ['nom' => 'ASC']);
+
         $communes = [];
         if ($wilayaId) {
-            $communes = $communeRepository->findBy(['wilaya' => $wilayaId]);
+            $communes = $communeRepository->findBy(['wilaya' => $wilayaId],['nom' => 'ASC']);
         }
+        // jusqu'à 20 milliards
+        $priceOptions = [
+            ['label' => '300 millions', 'value' => '3000000'],
+            ['label' => '600 millions', 'value' => '6000000'],
+            ['label' => '900 millions', 'value' => '9000000'],
+            ['label' => '1.2 milliard', 'value' => '12000000'],
+            ['label' => '1.5 milliard', 'value' => '15000000'],
+            ['label' => '1.8 milliard', 'value' => '18000000'],
+            ['label' => '2.1 milliards', 'value' => '21000000'],
+            ['label' => '2.4 milliards', 'value' => '24000000'],
+            ['label' => '2.7 milliards', 'value' => '27000000'],
+            ['label' => '3 milliards', 'value' => '30000000'],
+            ['label' => '3.5 milliards', 'value' => '35000000'],
+            ['label' => '4 milliards', 'value' => '40000000'],
+            ['label' => '4.5 milliards', 'value' => '45000000'],
+            ['label' => '5 milliards', 'value' => '50000000'],
+            ['label' => '5.5 milliards', 'value' => '55000000'],
+            ['label' => '6 milliards', 'value' => '60000000'],
+            ['label' => '6.5 milliards', 'value' => '65000000'],
+            ['label' => '7 milliards', 'value' => '70000000'],
+            ['label' => '7.5 milliards', 'value' => '75000000'],
+            ['label' => '8 milliards', 'value' => '80000000'],
+            ['label' => '8.5 milliards', 'value' => '85000000'],
+            ['label' => '9 milliards', 'value' => '90000000'],
+            ['label' => '9.5 milliards', 'value' => '95000000'],
+            ['label' => '10 milliards', 'value' => '100000000'],
+            ['label' => '11 milliards', 'value' => '110000000'],
+            ['label' => '12 milliards', 'value' => '120000000'],
+            ['label' => '13 milliards', 'value' => '130000000'],
+            ['label' => '14 milliards', 'value' => '140000000'],
+            ['label' => '15 milliards', 'value' => '150000000'],
+            ['label' => '16 milliards', 'value' => '160000000'],
+            ['label' => '17 milliards', 'value' => '170000000'],
+            ['label' => '18 milliards', 'value' => '180000000'],
+            ['label' => '19 milliards', 'value' => '190000000'],
+            ['label' => '20 milliards et plus', 'value' => '200000000-9999999999']
+        ];
+        // jusqu'à 20 hektares
+        $areaOptions = [
+            ['label' => '50 m²', 'value' => '50'],
+            ['label' => '100 m²', 'value' => '100'],
+            ['label' => '200 m²', 'value' => '200'],
+            ['label' => '300 m²', 'value' => '300'],
+            ['label' => '400 m²', 'value' => '400'],
+            ['label' => '500 m²', 'value' => '500'],
+            ['label' => '600 m²', 'value' => '600'],
+            ['label' => '700 m²', 'value' => '700'],
+            ['label' => '800 m²', 'value' => '800'],
+            ['label' => '900 m²', 'value' => '900'],
+            ['label' => '0.1 hectares', 'value' => '1000'],
+            ['label' => '0.2 hectares', 'value' => '2000'],
+            ['label' => '0.3 hectares', 'value' => '3000'],
+            ['label' => '0.4 hectares', 'value' => '4000'],
+            ['label' => '0.5 hectares', 'value' => '5000'],
+            ['label' => '0.6 hectares', 'value' => '6000'],
+            ['label' => '0.7 hectares', 'value' => '7000'],
+            ['label' => '0.8 hectares', 'value' => '8000'],
+            ['label' => '0.9 hectares', 'value' => '9000'],
+            ['label' => '1 hectare', 'value' => '10000'],
+            ['label' => '2 hectares', 'value' => '20000'],
+            ['label' => '3 hectares', 'value' => '30000'],
+            ['label' => '4 hectares', 'value' => '40000'],
+            ['label' => '5 hectares', 'value' => '50000'],
+            ['label' => '6 hectares', 'value' => '60000'],
+            ['label' => '7 hectares', 'value' => '70000'],
+            ['label' => '8 hectares', 'value' => '80000'],
+            ['label' => '9 hectares', 'value' => '90000'],
+            ['label' => '10 hectares', 'value' => '100000'],
+            ['label' => '11 hectares', 'value' => '110000'],
+            ['label' => '12 hectares', 'value' => '120000'],
+            ['label' => '13 hectares', 'value' => '130000'],
+            ['label' => '14 hectares', 'value' => '140000'],
+            ['label' => '15 hectares', 'value' => '150000'],
+            ['label' => '16 hectares', 'value' => '160000'],
+            ['label' => '17 hectares', 'value' => '170000'],
+            ['label' => '18 hectares', 'value' => '180000'],
+            ['label' => '19 hectares', 'value' => '190000'],
+            ['label' => '20 hectares et plus', 'value' => '200000']
+        ];
 
         return $this->render('biens.html.twig',[
             'types' => $types,
@@ -182,12 +270,15 @@ final class HomeController extends AbstractController
             'currentType' => $typeId,
             'currentWilaya' => $wilayaId,
             'currentCommune' => $commune,
+            'currentPapier' => $papier,
             'currentPriceMin' => $priceMin,
             'currentPriceMax' => $priceMax,
             'currentAreaMin' => $areaMin,
             'currentAreaMax' => $areaMax,
             'communes' => $communes,
-            'wilayas' => $wilayas
+            'wilayas' => $wilayas,
+            'priceOptions' => $priceOptions,
+            'areaOptions' => $areaOptions
         ]);
     }
 
@@ -264,7 +355,7 @@ final class HomeController extends AbstractController
     #[Route('/get-communes/{wilayaId}', name: 'get_communes')]
     public function getCommunes(int $wilayaId, CommuneRepository $communeRepository): JsonResponse
     {
-        $communes = $communeRepository->findBy(['wilaya' => $wilayaId]);
+        $communes = $communeRepository->findBy(['wilaya' => $wilayaId],['nom' => 'ASC']);
         
         if (empty($communes)) {
             return new JsonResponse([], 404);
@@ -325,7 +416,7 @@ final class HomeController extends AbstractController
             return '0 DZD';
         }
     
-        return $result . ' DZD';
+        return $result;
     } 
     
     private function formatPrixMap(?int $prixCentimes): string

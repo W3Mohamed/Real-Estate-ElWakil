@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Bien;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -92,13 +93,21 @@ class BienRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
-    public function findLastEight()
+   public function findLastEight()
     {
-        return $this->createQueryBuilder('b')
-            ->orderBy('b.id', 'DESC')  // Tri par ID décroissant
-            ->setMaxResults(8)         // Limite à 8 résultats
-            ->getQuery()
-            ->getResult();
+        $query = $this->createQueryBuilder('b')
+            ->leftJoin('b.images', 'i')
+            ->addSelect('i') // Charge la première image
+            ->leftJoin('b.facebooks', 'f')
+            ->addSelect('f') // Charge les liens Facebook
+            ->where('i.id IS NOT NULL') // Au moins une image
+            ->andWhere('(b.youtube IS NOT NULL OR b.insta IS NOT NULL OR b.tiktok IS NOT NULL OR f.id IS NOT NULL)') // Au moins un lien
+            ->orderBy('b.id', 'DESC')
+            ->setMaxResults(8)
+            ->getQuery();
+
+        $paginator = new Paginator($query);
+        return iterator_to_array($paginator);
     }
     
 }

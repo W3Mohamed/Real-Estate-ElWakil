@@ -87,4 +87,80 @@ document.addEventListener('DOMContentLoaded', function() {
             loadCommunes(initialWilayaId, selectedCommuneId);
         }
     }
+
+    // Sélecteurs modifiés pour ManyToMany (EasyAdmin utilise un nom différent)
+    const wilayasSelect = document.querySelector('select[name$="[wilayas][]"]');
+    
+    if (wilayasSelect && communeSelect) {
+        console.log('Selectors found');
+        
+        const wilayaTomSelect = wilayasSelect.tomselect;
+        const communeTomSelect = communeSelect.tomselect;
+        
+        if (!wilayaTomSelect || !communeTomSelect) {
+            console.error('Tom Select non trouvé');
+            return;
+        }
+        
+        // Fonction pour charger les communes basée sur la PREMIÈRE wilaya sélectionnée
+        async function loadCommunes(wilayaIds, communeIdToSelect = null) {
+            const firstWilayaId = wilayaIds?.[0];
+            console.log(`Loading communes for first wilaya ${firstWilayaId}, will select ${communeIdToSelect}`);
+            
+            communeTomSelect.disable();
+            communeTomSelect.clear();
+            communeTomSelect.clearOptions();
+            
+            if (!firstWilayaId) {
+                communeTomSelect.addOption({value: '', text: 'Sélectionnez au moins une wilaya d\'abord'});
+                communeTomSelect.enable();
+                return;
+            }
+
+            try {
+                const url = `/admin/api/communes?wilayaId=${firstWilayaId}`;
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Erreur réseau');
+                
+                const communes = await response.json();
+                
+                communeTomSelect.clearOptions();
+                communeTomSelect.addOption({value: '', text: 'Choisissez une commune'});
+                
+                communes.forEach(commune => {
+                    communeTomSelect.addOption({value: commune.id, text: commune.text});
+                });
+                
+                if (communeIdToSelect) {
+                    setTimeout(() => {
+                        communeTomSelect.setValue(communeIdToSelect, true);
+                    }, 100);
+                }
+                
+                communeTomSelect.enable();
+                
+            } catch (error) {
+                console.error('Erreur:', error);
+                communeTomSelect.addOption({value: '', text: 'Erreur de chargement'});
+                communeTomSelect.enable();
+            }
+        }
+        
+        // Initialisation
+        communeTomSelect.disable();
+        communeTomSelect.addOption({value: '', text: 'Sélectionnez une wilaya d\'abord'});
+        
+        // Écouteur modifié pour ManyToMany
+        wilayaTomSelect.on('change', function(selectedIds) {
+            loadCommunes(selectedIds || []);
+        });
+        
+        // Chargement initial
+        const initialWilayaIds = wilayaTomSelect.getValue() || [];
+        const initialCommuneId = communeTomSelect.getValue();
+        if (initialWilayaIds.length > 0) {
+            loadCommunes(initialWilayaIds, initialCommuneId);
+        }
+    }
+
 });

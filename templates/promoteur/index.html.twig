@@ -1,0 +1,140 @@
+{% extends 'promoteur/base.html.twig' %}
+
+{% block title %}Tableau de bord - Promoteur{% endblock %}
+
+{% block body %}
+<div class="max-w-7xl mx-auto">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800">Bienvenue, {{ promoteur.nom }}</h2>
+            <p class="text-gray-600">Voici les terrains correspondant à vos critères.</p>
+        </div>
+        <div class="px-4 py-2 rounded-lg font-medium {{ status_class }} flex items-center shadow-sm">
+            <i class="fas fa-calendar-alt mr-2"></i>
+            {{ status_text }} ({{ days_remaining }} jours restants)
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <div class="flex items-center">
+                <div class="p-3 bg-blue-50 text-blue-600 rounded-lg mr-4">
+                    <i class="fas fa-map-marked-alt fa-lg"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500 uppercase font-semibold">Terrains</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ totalTerrains }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <div class="flex items-center">
+                <div class="p-3 bg-purple-50 text-purple-600 rounded-lg mr-4">
+                    <i class="fas fa-vector-square fa-lg"></i>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500 uppercase font-semibold">Surface Ciblée</p>
+                    <p class="text-lg font-bold text-gray-900">{{ promoteur.superficieMin }} - {{ promoteur.superficieMax }} m²</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-6 border-b border-gray-100">
+            <h3 class="text-lg font-bold text-gray-800">Dernières opportunités</h3>
+        </div>
+        {# --- AFFICHAGE TABLEAU (Ordinateur - Desktop) --- #}
+        <div class="hidden md:block overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-gray-50 text-gray-600 text-sm uppercase">
+                    <tr>
+                        <th class="p-4 font-semibold">Référence</th>
+                        <th class="p-4 font-semibold">Téléphone</th>
+                        <th class="p-4 font-semibold">Localisation</th>
+                        <th class="p-4 font-semibold text-center">Superficie</th>
+                        <th class="p-4 font-semibold text-center">Prix</th>
+                        <th class="p-4 font-semibold text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    {% for terrain in terrains %}
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="p-4 font-medium text-gray-900">#TR-{{ terrain.id }}</td>
+                            <td class="p-4">
+                                <a href="tel:{{ terrain.telephone }}" class="text-blue-600 hover:underline">
+                                    <i class="fas fa-phone mr-1"></i>{{ terrain.telephone }}
+                                </a>
+                            </td>
+                            <td class="p-4">
+                                <div class="text-sm text-gray-900">{{ terrain.commune.nom }}</div>
+                                <div class="text-xs text-gray-500">{{ terrain.wilaya.nom }}</div>
+                            </td>
+                            <td class="p-4 text-center">
+                                <span class="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">
+                                    {{ terrain.superficie }} m²
+                                </span>
+                            </td>
+                            <td class="p-4 text-center font-bold text-gray-900">
+                                {{ terrain.prix|number_format(0, ',', ' ') }} Da
+                            </td>
+                            <td class="p-4 text-right">
+                                <a href="{{ path('detail', {id: terrain.id}) }}" class="text-blue-600 hover:text-blue-800 font-medium">Voir</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {# --- AFFICHAGE CARTES VERTICALES (Mobile) --- #}
+        <div class="md:hidden divide-y divide-gray-100">
+            {% for terrain in terrains %}
+                <div class="p-4 flex flex-col gap-3">
+                    <div class="flex justify-between items-start">
+                        <span class="font-bold text-gray-900">#TR-{{ terrain.id }}</span>
+                        <span class="text-blue-700 font-bold">{{ terrain.prix|number_format(0, ',', ' ') }} Da</span>
+                    </div>
+                    
+                    <div class="flex items-center text-gray-600 text-sm">
+                        <i class="fas fa-map-marker-alt w-5"></i>
+                        <span>{{ terrain.commune.nom }}, {{ terrain.wilaya.nom }}</span>
+                    </div>
+
+                    <div class="flex items-center text-gray-600 text-sm">
+                        <i class="fas fa-vector-square w-5"></i>
+                        <span>Superficie : <strong>{{ terrain.superficie }} m²</strong></span>
+                    </div>
+
+                    <div class="flex items-center text-gray-600 text-sm">
+                        <i class="fas fa-phone w-5"></i>
+                        <a href="tel:{{ terrain.telephone }}" class="text-blue-600 underline">{{ terrain.telephone }}</a>
+                    </div>
+
+                    <a href="{{ path('detail', {id: terrain.id}) }}" class="mt-2 w-full text-center bg-blue-600 text-white py-2 rounded-lg font-medium">
+                        Voir les détails
+                    </a>
+                </div>
+            {% else %}
+                <div class="p-8 text-center text-gray-500 italic">
+                    Aucun terrain disponible.
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if maxPages > 1 %}
+        <div class="p-4 border-t border-gray-100 flex justify-center gap-2">
+            {% if currentPage > 1 %}
+                <a href="{{ path('promoteur', {page: currentPage - 1}) }}" class="px-4 py-2 border rounded hover:bg-gray-50 text-gray-600 text-sm">Précédent</a>
+            {% endif %}
+            
+            <span class="px-4 py-2 bg-gray-50 rounded text-sm font-semibold">Page {{ currentPage }} sur {{ maxPages }}</span>
+
+            {% if currentPage < maxPages %}
+                <a href="{{ path('promoteur', {page: currentPage + 1}) }}" class="px-4 py-2 border rounded hover:bg-gray-50 text-gray-600 text-sm">Suivant</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
